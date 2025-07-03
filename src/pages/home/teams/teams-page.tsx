@@ -11,6 +11,7 @@ export const TeamsPage = () => {
       <main>
         <section>
           <Link to="/teams/create">Create</Link>
+          <Link to="/teams/join">Join</Link>
         </section>
         <section>
           <ul>
