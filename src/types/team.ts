@@ -4,3 +4,8 @@ export interface BasicTeam {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface CreateTeam {
+  name: string;
+  joinPassword: string;
+}

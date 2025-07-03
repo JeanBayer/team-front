@@ -1,13 +1,22 @@
 import { TeamService } from "@/services/team-service";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const MINUTE_IN_MS = 1000 * 60;
 
 export const useTeam = () => {
+  const queryClient = useQueryClient();
+
   const teamQuery = useQuery({
     queryKey: ["TEAMS"],
     queryFn: TeamService.getTeams,
     staleTime: 5 * MINUTE_IN_MS,
+  });
+
+  const teamCreate = useMutation({
+    mutationFn: TeamService.createTeam,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["TEAMS"] });
+    },
   });
 
   return {
@@ -15,6 +24,12 @@ export const useTeam = () => {
       isLoading: teamQuery.isLoading,
       isError: teamQuery.isError,
       data: teamQuery.data,
+    },
+    teamCreate: {
+      isPending: teamCreate.isPending,
+      isSuccess: teamCreate.isSuccess,
+      isError: teamCreate.isError,
+      mutate: teamCreate.mutate,
     },
   };
 };

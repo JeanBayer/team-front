@@ -7,9 +7,7 @@ export const useCreateAccount = () => {
 
   const mutation = useMutation({
     mutationFn: AuthService.createAccount,
-    onSuccess: () => {
-      navigate("/");
-    },
+    onSuccess: () => navigate("/"),
   });
 
   return {
