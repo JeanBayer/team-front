@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export const useVerify = (enabled: boolean = false) => {
   const verifyData = useQuery({
-    queryKey: ["auth"],
+    queryKey: ["AUTH"],
     queryFn: AuthService.verify,
     enabled,
   });

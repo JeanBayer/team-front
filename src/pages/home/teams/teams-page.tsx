@@ -1,14 +1,27 @@
-import { useState } from "react";
 import { Link } from "react-router";
+import { useTeam } from "./hooks/use-team";
 
 export const TeamsPage = () => {
-  const [counter, setCounter] = useState(0);
+  const { teamsData } = useTeam();
   return (
     <div>
-      <Link to="/">Home</Link>
-      <h1>TeamsPage</h1>
-      <p>{counter}</p>
-      <button onClick={() => setCounter(counter + 1)}>up</button>
+      <header>
+        <Link to="/">Home</Link>
+      </header>
+      <main>
+        <section>
+          <Link to="/teams/create">Create</Link>
+        </section>
+        <section>
+          <ul>
+            {teamsData.data?.map((team) => (
+              <li key={team.id}>
+                <Link to={`/teams/${team.id}`}>{team.name}</Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </main>
     </div>
   );
 };

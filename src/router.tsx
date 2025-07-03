@@ -3,6 +3,7 @@ import { ProtectedRoute } from "@/components/routes/protected-route";
 import { CreateAccountPage } from "@/pages/create-account/create-account-page";
 import { HomeLayout } from "@/pages/home/home-layout";
 import { HomePage } from "@/pages/home/home-page";
+import { CreateTeamPage } from "@/pages/home/teams/create/create-team-page";
 import { TeamsPage } from "@/pages/home/teams/teams-page";
 import { LandingPage } from "@/pages/landing/landing-page";
 import { LoginPage } from "@/pages/login/login-page";
@@ -48,6 +49,18 @@ export const router = createBrowserRouter([
       {
         path: "/teams",
         element: <TeamsPage />,
+      },
+      {
+        path: "/teams/:teamId",
+        element: <div>team id</div>,
+      },
+      {
+        path: "/teams/create",
+        element: <CreateTeamPage />,
+      },
+      {
+        path: "/teams/join",
+        element: <CreateTeamPage />,
       },
     ],
   },
