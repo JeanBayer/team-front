@@ -1,8 +1,5 @@
+import { extractAuthData } from "@/helper/extract-data";
 import { useState } from "react";
-
-function extractAuthData() {
-  return JSON.parse(localStorage.getItem("auth-data") || "{}");
-}
 
 export const userIsLogin = () => {
   const [isLogin, setIsLogin] = useState(() => {
