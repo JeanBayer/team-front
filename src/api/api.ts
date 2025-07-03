@@ -1,5 +1,5 @@
 import { envs } from "@/config/envs";
-import { extractAuthData } from "@/helper/extract-data";
+import { extractAuthData, updateAuthData } from "@/helper/extract-data";
 import axios from "axios";
 
 export const instance = axios.create({
@@ -9,11 +9,6 @@ export const instance = axios.create({
 instance.interceptors.request.use(
   function (config) {
     const authData = extractAuthData();
-
-    if (!authData?.token) {
-      throw new Error("Error no hay token");
-    }
-
     config.headers.set("Authorization", `Bearer ${authData?.token}`);
     return config;
   },
@@ -24,6 +19,9 @@ instance.interceptors.request.use(
 
 instance.interceptors.response.use(
   function (config) {
+    if (config.config.url?.includes("auth") && config?.data?.token)
+      updateAuthData(config?.data);
+
     return config;
   },
   function (error) {
