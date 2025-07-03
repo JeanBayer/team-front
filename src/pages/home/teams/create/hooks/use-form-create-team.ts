@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useFormData } from "@/hooks/use-form-data";
 import { useNavigate } from "react-router";
 import { useTeam } from "../../hooks/use-team";
 
@@ -8,23 +8,13 @@ const initialFormData = {
 };
 
 export const useFormCreateTeam = () => {
-  const [formData, setFormData] = useState(initialFormData);
   const { teamCreate } = useTeam();
   const navigate = useNavigate();
 
-  function updateField(key: string, value: string) {
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [key]: value,
-      };
-    });
-  }
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    teamCreate.mutate(formData);
-  }
+  const { formData, updateField, handleSubmit } = useFormData(
+    initialFormData,
+    (formData) => teamCreate.mutate(formData)
+  );
 
   if (teamCreate.isSuccess) navigate("/teams");
 

@@ -1,4 +1,4 @@
-import { userIsLogin } from "@/hooks/userIsLogin";
+import { userIsLogin } from "@/hooks/user-is-login";
 import { useEffect, type PropsWithChildren } from "react";
 import { Navigate, useLocation } from "react-router";
 

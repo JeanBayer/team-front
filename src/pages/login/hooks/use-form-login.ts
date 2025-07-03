@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useFormData } from "@/hooks/use-form-data";
 import { useLogin } from "./use-login";
 
 const initialFormData = {
@@ -7,22 +7,11 @@ const initialFormData = {
 };
 
 export const useFormLogin = () => {
-  const [formData, setFormData] = useState(initialFormData);
   const createMutation = useLogin();
-
-  function updateField(key: string, value: string) {
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [key]: value,
-      };
-    });
-  }
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    createMutation.mutate(formData);
-  }
+  const { formData, updateField, handleSubmit } = useFormData(
+    initialFormData,
+    (formData) => createMutation.mutate(formData)
+  );
 
   return {
     formData,

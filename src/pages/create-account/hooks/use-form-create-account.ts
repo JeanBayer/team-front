@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useFormData } from "@/hooks/use-form-data";
 import { useCreateAccount } from "./use-create-account";
 
 const initialFormData = {
@@ -8,22 +8,11 @@ const initialFormData = {
 };
 
 export const useFormCreateAccount = () => {
-  const [formData, setFormData] = useState(initialFormData);
   const createMutation = useCreateAccount();
-
-  function updateField(key: string, value: string) {
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [key]: value,
-      };
-    });
-  }
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    createMutation.mutate(formData);
-  }
+  const { formData, updateField, handleSubmit } = useFormData(
+    initialFormData,
+    (formData) => createMutation.mutate(formData)
+  );
 
   return {
     formData,

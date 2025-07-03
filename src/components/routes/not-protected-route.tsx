@@ -1,5 +1,5 @@
-import { userIsLogin } from "@/hooks/userIsLogin";
-import { useVerify } from "@/hooks/useVerify";
+import { userIsLogin } from "@/hooks/user-is-login";
+import { useVerify } from "@/hooks/use-verify";
 import { useEffect, type PropsWithChildren } from "react";
 import { Navigate, useLocation } from "react-router";
 
