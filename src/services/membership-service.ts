@@ -1,4 +1,5 @@
 import { instance } from "@/api/api";
+import type { MyMembership } from "@/types/membership";
 import type { BasicTeam, JoinTeam } from "@/types/team";
 
 export class MembershipService {
@@ -22,6 +23,18 @@ export class MembershipService {
       return data;
     } catch (error) {
       console.error("leaveTeam error", error);
+      throw new Error("error");
+    }
+  }
+
+  static async myMembership(teamId: string) {
+    try {
+      const { data } = await instance.get<MyMembership>(
+        `teams/${teamId}/users/my-membership`
+      );
+      return data;
+    } catch (error) {
+      console.error("myMembership error", error);
       throw new Error("error");
     }
   }

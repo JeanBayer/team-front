@@ -1,19 +1,18 @@
-import { useNavigate, useParams } from "react-router";
+import { useNavigate } from "react-router";
 import { useTeam } from "../../hooks/use-team";
 
 export const useLeaveTeam = () => {
   const { teamLeave } = useTeam();
-  const { teamId } = useParams();
+
   const navigate = useNavigate();
 
-  function handleLeave() {
+  function handleLeave(teamId: string) {
     teamLeave.mutate(teamId || "");
   }
 
   if (teamLeave.isSuccess) navigate("/teams");
 
   return {
-    teamId,
     handleLeave,
   };
 };
