@@ -1,4 +1,4 @@
-import { ProtectedRoute } from "@/components/protected-route";
+import { ProtectedRoute } from "@/components/routes/protected-route";
 import { CreateAccountPage } from "@/pages/create-account/create-account-page";
 import { HomeLayout } from "@/pages/home/home-layout";
 import { HomePage } from "@/pages/home/home-page";
