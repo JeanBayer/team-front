@@ -26,6 +26,13 @@ export const useTeam = () => {
     },
   });
 
+  const teamLeave = useMutation({
+    mutationFn: TeamService.leaveTeam,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["TEAMS"] });
+    },
+  });
+
   return {
     teamsData: {
       isLoading: teamQuery.isLoading,
@@ -43,6 +50,12 @@ export const useTeam = () => {
       isSuccess: teamJoin.isSuccess,
       isError: teamJoin.isError,
       mutate: teamJoin.mutate,
+    },
+    teamLeave: {
+      isPending: teamLeave.isPending,
+      isSuccess: teamLeave.isSuccess,
+      isError: teamLeave.isError,
+      mutate: teamLeave.mutate,
     },
   };
 };

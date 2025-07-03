@@ -8,6 +8,7 @@ import { TeamsPage } from "@/pages/home/teams/teams-page";
 import { LandingPage } from "@/pages/landing/landing-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { createBrowserRouter } from "react-router";
+import { TeamIdPage } from "./pages/home/teams/:teamId/team-id-page";
 import { JoinTeamPage } from "./pages/home/teams/join/join-team-page";
 
 export const router = createBrowserRouter([
@@ -53,7 +54,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/teams/:teamId",
-        element: <div>team id</div>,
+        element: <TeamIdPage />,
       },
       {
         path: "/teams/create",

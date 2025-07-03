@@ -31,7 +31,17 @@ export class TeamService {
       );
       return data;
     } catch (error) {
-      console.error("createTeam error", error);
+      console.error("joinTeam error", error);
+      throw new Error("error");
+    }
+  }
+
+  static async leaveTeam(teamId: string) {
+    try {
+      const { data } = await instance.delete(`teams/${teamId}/users`);
+      return data;
+    } catch (error) {
+      console.error("leaveTeam error", error);
       throw new Error("error");
     }
   }
