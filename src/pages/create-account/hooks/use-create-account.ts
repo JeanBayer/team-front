@@ -1,35 +1,23 @@
-import { instance } from "@/api/api";
-import { useState } from "react";
-
-const initialFormData = { name: "jhan", email: "jhanbayer@gmail.com", password: "123456" };
+import { AuthService } from "@/services/auth-service";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router";
 
 export const useCreateAccount = () => {
-  const [formData, setFormData] = useState(initialFormData);
+  const navigate = useNavigate();
 
-  function updateField(key: string, value: string) {
-    setFormData((prev) => {
-      return {
-        ...prev,
-        [key]: value,
-      };
-    });
-  }
-
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    // TODO: mutate
-
-    try {
-      const { data } = await instance.get("/auth/verify");
-      console.log({ data });
-    } catch (error) {
-      console.error({ error });
-    }
-  }
+  const mutation = useMutation({
+    mutationFn: AuthService.createAccount,
+    onSuccess: () => {
+      navigate("/");
+    },
+  });
 
   return {
-    formData,
-    updateField,
-    handleSubmit,
+    isPending: mutation.isPending,
+    isError: mutation.isError,
+    isSuccess: mutation.isSuccess,
+    error: mutation.error,
+    data: mutation.data,
+    mutate: mutation.mutate,
   };
 };

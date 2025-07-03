@@ -5,3 +5,7 @@ export function extractAuthData() {
 export function updateAuthData(data: any) {
   localStorage.setItem("auth-data", JSON.stringify(data));
 }
+
+export function deleteAuthData() {
+  localStorage.removeItem("auth-data");
+}

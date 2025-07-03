@@ -1,5 +1,9 @@
 import { envs } from "@/config/envs";
-import { extractAuthData, updateAuthData } from "@/helper/extract-data";
+import {
+  deleteAuthData,
+  extractAuthData,
+  updateAuthData,
+} from "@/helper/extract-data";
 import axios from "axios";
 
 export const instance = axios.create({
@@ -25,7 +29,10 @@ instance.interceptors.response.use(
     return config;
   },
   function (error) {
-    if (error.status === 401) window.location.href = "/landing";
+    if (error.status === 401) {
+      deleteAuthData();
+      window.location.href = "/landing";
+    }
     return Promise.reject(error);
   }
 );

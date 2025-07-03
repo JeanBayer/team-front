@@ -1,8 +1,9 @@
 import { Link } from "react-router";
-import { useCreateAccount } from "./hooks/use-create-account";
+import { useFormCreateAccount } from "./hooks/use-form-create-account";
 
 export const CreateAccountPage = () => {
-  const { formData, updateField, handleSubmit } = useCreateAccount();
+  const { formData, updateField, handleSubmit, isPending } =
+    useFormCreateAccount();
   return (
     <div>
       <header>
@@ -40,7 +41,7 @@ export const CreateAccountPage = () => {
             />
           </label>
 
-          <input type="submit" value="Crear" />
+          <input type="submit" value="Crear" disabled={isPending} />
         </form>
       </main>
     </div>
