@@ -1,3 +1,4 @@
+import { MembershipService } from "@/services/membership-service";
 import { TeamService } from "@/services/team-service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
@@ -20,14 +21,14 @@ export const useTeam = () => {
   });
 
   const teamJoin = useMutation({
-    mutationFn: TeamService.joinTeam,
+    mutationFn: MembershipService.joinTeam,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["TEAMS"] });
     },
   });
 
   const teamLeave = useMutation({
-    mutationFn: TeamService.leaveTeam,
+    mutationFn: MembershipService.leaveTeam,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["TEAMS"] });
     },

@@ -1,7 +1,7 @@
 import { extractAuthData } from "@/helper/extract-data";
 import { useState } from "react";
 
-export const userIsLogin = () => {
+export const useUserIsLogin = () => {
   const [isLogin, setIsLogin] = useState(() => {
     const authData = extractAuthData();
     if (!authData?.token) return false;

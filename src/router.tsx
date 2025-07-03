@@ -4,12 +4,12 @@ import { CreateAccountPage } from "@/pages/create-account/create-account-page";
 import { HomeLayout } from "@/pages/home/home-layout";
 import { HomePage } from "@/pages/home/home-page";
 import { CreateTeamPage } from "@/pages/home/teams/create/create-team-page";
+import { JoinTeamPage } from "@/pages/home/teams/join/join-team-page";
 import { TeamsPage } from "@/pages/home/teams/teams-page";
 import { LandingPage } from "@/pages/landing/landing-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { createBrowserRouter } from "react-router";
 import { TeamIdPage } from "./pages/home/teams/:teamId/team-id-page";
-import { JoinTeamPage } from "./pages/home/teams/join/join-team-page";
 
 export const router = createBrowserRouter([
   {
@@ -50,19 +50,29 @@ export const router = createBrowserRouter([
       },
       {
         path: "/teams",
-        element: <TeamsPage />,
-      },
-      {
-        path: "/teams/:teamId",
-        element: <TeamIdPage />,
-      },
-      {
-        path: "/teams/create",
-        element: <CreateTeamPage />,
-      },
-      {
-        path: "/teams/join",
-        element: <JoinTeamPage />,
+        children: [
+          {
+            index: true,
+            element: <TeamsPage />,
+          },
+          {
+            path: ":teamId",
+            children: [
+              {
+                index: true,
+                element: <TeamIdPage />,
+              },
+            ],
+          },
+          {
+            path: "create",
+            element: <CreateTeamPage />,
+          },
+          {
+            path: "join",
+            element: <JoinTeamPage />,
+          },
+        ],
       },
     ],
   },

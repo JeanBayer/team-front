@@ -1,9 +1,9 @@
-import { userIsLogin } from "@/hooks/user-is-login";
+import { useUserIsLogin } from "@/hooks/use-user-is-login";
 import { useEffect, type PropsWithChildren } from "react";
 import { Navigate, useLocation } from "react-router";
 
 export const ProtectedRoute = ({ children }: PropsWithChildren) => {
-  const [isLogin, reevaluate] = userIsLogin();
+  const [isLogin, reevaluate] = useUserIsLogin();
   const location = useLocation();
 
   useEffect(() => {
