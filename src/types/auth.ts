@@ -4,6 +4,8 @@ export interface AuthCreate {
   password: string;
 }
 
+export interface AuthLogin extends Pick<AuthCreate, "email" | "password"> {}
+
 export interface AuthResponse {
   user: User;
   token: string;

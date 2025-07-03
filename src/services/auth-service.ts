@@ -1,5 +1,5 @@
 import { instance } from "@/api/api";
-import type { AuthCreate, AuthResponse } from "@/types/auth";
+import type { AuthCreate, AuthLogin, AuthResponse } from "@/types/auth";
 
 export class AuthService {
   static async createAccount(authCreate: AuthCreate) {
@@ -11,6 +11,19 @@ export class AuthService {
       return data;
     } catch (error) {
       console.error("createAccount error", error);
+      throw new Error("error");
+    }
+  }
+
+  static async login(authLogin: AuthLogin) {
+    try {
+      const { data } = await instance.post<AuthResponse>(
+        "/auth/login",
+        authLogin
+      );
+      return data;
+    } catch (error) {
+      console.error("login error", error);
       throw new Error("error");
     }
   }
