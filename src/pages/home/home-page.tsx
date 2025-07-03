@@ -1,3 +1,10 @@
+import { Link } from "react-router";
+
 export const HomePage = () => {
-  return <div>HomePage</div>;
+  return (
+    <div>
+      <Link to="/landing">Landing</Link>
+      HomePage
+    </div>
+  );
 };

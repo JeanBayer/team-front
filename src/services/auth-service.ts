@@ -27,4 +27,14 @@ export class AuthService {
       throw new Error("error");
     }
   }
+
+  static async verify() {
+    try {
+      const { data } = await instance.get<AuthResponse>("/auth/verify");
+      return data;
+    } catch (error) {
+      console.error("login error", error);
+      throw new Error("error");
+    }
+  }
 }

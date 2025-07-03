@@ -1,3 +1,4 @@
+import { NotProtectedRoute } from "@/components/routes/not-protected-route";
 import { ProtectedRoute } from "@/components/routes/protected-route";
 import { CreateAccountPage } from "@/pages/create-account/create-account-page";
 import { HomeLayout } from "@/pages/home/home-layout";
@@ -10,15 +11,27 @@ import { createBrowserRouter } from "react-router";
 export const router = createBrowserRouter([
   {
     path: "/landing",
-    element: <LandingPage />,
+    element: (
+      <NotProtectedRoute>
+        <LandingPage />
+      </NotProtectedRoute>
+    ),
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: (
+      <NotProtectedRoute>
+        <LoginPage />
+      </NotProtectedRoute>
+    ),
   },
   {
     path: "/create-account",
-    element: <CreateAccountPage />,
+    element: (
+      <NotProtectedRoute>
+        <CreateAccountPage />
+      </NotProtectedRoute>
+    ),
   },
   {
     path: "/",
