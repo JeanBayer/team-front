@@ -15,10 +15,12 @@ export const CounterPage = () => {
       <main>
         <section>
           {counters.data?.map((counter) => (
-            <div key={counter.id}>
-              <h3>{counter.name}</h3>
-              <p>{counter.currentCount}</p>
-            </div>
+            <Link to={`${counter.id}`} key={counter.id}>
+              <div>
+                <h3>{counter.name}</h3>
+                <p>{counter.currentCount}</p>
+              </div>
+            </Link>
           ))}
         </section>
       </main>

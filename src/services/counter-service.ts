@@ -26,4 +26,16 @@ export class CounterService {
       throw new Error("error");
     }
   }
+
+  static async getCounter(teamId: string, counterId: string) {
+    try {
+      const { data } = await instance.get<Counter>(
+        `/teams/${teamId}/counters/${counterId}`
+      );
+      return data;
+    } catch (error) {
+      console.error("getCounters error", error);
+      throw new Error("error");
+    }
+  }
 }

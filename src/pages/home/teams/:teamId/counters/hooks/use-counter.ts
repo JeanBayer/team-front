@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const MINUTE_IN_MS = 1000 * 60;
 
-export const useCounter = (teamId: string = "") => {
+export const useCounter = (teamId: string = "", counterId: string = "") => {
   const queryClient = useQueryClient();
 
   // pm: listar-counters
@@ -13,6 +13,14 @@ export const useCounter = (teamId: string = "") => {
     queryFn: () => CounterService.getCounters(teamId),
     staleTime: 5 * MINUTE_IN_MS,
     enabled: !!teamId,
+  });
+
+  // pm: listar-counter
+  const counterQuery = useQuery({
+    queryKey: ["TEAMS", teamId, "COUNTER", counterId],
+    queryFn: () => CounterService.getCounter(teamId, counterId),
+    staleTime: 5 * MINUTE_IN_MS,
+    enabled: !!counterId,
   });
 
   // pm: crear-counter
@@ -29,6 +37,11 @@ export const useCounter = (teamId: string = "") => {
       isLoading: countersQuery.isLoading,
       isError: countersQuery.isError,
       data: countersQuery.data,
+    },
+    counter: {
+      isLoading: counterQuery.isLoading,
+      isError: counterQuery.isError,
+      data: counterQuery.data,
     },
     counterCreate: {
       isPending: counterCreate.isPending,
