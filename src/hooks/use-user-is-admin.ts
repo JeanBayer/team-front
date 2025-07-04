@@ -5,7 +5,7 @@ const MINUTE_IN_MS = 1000 * 60;
 
 export const useUserIsAdmin = (teamId: string = "") => {
   const verifyData = useQuery({
-    queryKey: ["MY_MEMBERSHIP", teamId],
+    queryKey: ["TEAMS", teamId, "MY_MEMBERSHIP"],
     queryFn: () => MembershipService.myMembership(teamId),
     staleTime: 10 * MINUTE_IN_MS,
     enabled: !!teamId,

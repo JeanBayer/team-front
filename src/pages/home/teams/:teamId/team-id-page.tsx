@@ -1,10 +1,12 @@
 import { AdminConditional } from "@/components/membership/admin-conditional";
 import { Link, useParams } from "react-router";
+import { useTeam } from "../hooks/use-team";
 import { useLeaveTeam } from "./hooks/use-leave-team";
 
 export const TeamIdPage = () => {
   const { teamId } = useParams();
   const { handleLeave } = useLeaveTeam();
+  const { teamRanking } = useTeam(teamId);
 
   if (!teamId) return <div>sin id</div>;
 
@@ -30,7 +32,17 @@ export const TeamIdPage = () => {
             <Link to="members">Miembros</Link>
           </div>
         </section>
-        <section></section>
+
+        <section>
+          <ol>
+            {teamRanking.data?.map((user) => (
+              <li key={user.id}>
+                <span>{user.name}</span>
+                <span>{user.teamSprintWinner}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
       </main>
     </div>
   );

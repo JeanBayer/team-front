@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router";
-import { useTeam } from "../../hooks/use-team";
+import { useMembership } from "../../hooks/use-membership";
 
 export const useLeaveTeam = () => {
-  const { teamLeave } = useTeam();
+  const { teamLeave } = useMembership();
 
   const navigate = useNavigate();
 

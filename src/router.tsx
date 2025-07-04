@@ -62,6 +62,22 @@ export const router = createBrowserRouter([
                 index: true,
                 element: <TeamIdPage />,
               },
+              {
+                path: "edit",
+                element: <TeamIdPage />,
+              },
+              {
+                path: "retrospectives",
+                element: <TeamIdPage />,
+              },
+              {
+                path: "counters",
+                element: <TeamIdPage />,
+              },
+              {
+                path: "members",
+                element: <TeamIdPage />,
+              },
             ],
           },
           {
