@@ -4,7 +4,7 @@ import { useCounter } from "../hooks/use-counter";
 
 export const CounterIdPage = () => {
   const { teamId, counterId } = useParams();
-  const { counter } = useCounter(teamId, counterId);
+  const { counter, counterIncrement } = useCounter(teamId, counterId);
 
   if (counter.isLoading) return <div>loading...</div>;
   if (counter.isError) return <div>error...</div>;
@@ -24,7 +24,9 @@ export const CounterIdPage = () => {
           <h5>{counter.data?.currentCount}</h5>
           {counter.data?.alreadyModifiedToday ? null : (
             <>
-              <button>{counter.data?.incrementButtonLabel}</button>
+              <button onClick={counterIncrement.mutate}>
+                {counter.data?.incrementButtonLabel}
+              </button>
               <button>{counter.data?.resetButtonLabel}</button>
             </>
           )}

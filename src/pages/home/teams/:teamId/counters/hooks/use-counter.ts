@@ -1,5 +1,6 @@
+import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { CounterService } from "@/services/counter-service";
-import type { CreateCounter } from "@/types/counter";
+import type { Counter, CreateCounter } from "@/types/counter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 const MINUTE_IN_MS = 1000 * 60;
@@ -16,8 +17,9 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
   });
 
   // pm: listar-counter
+  const COUNTER_KEY = ["TEAMS", teamId, "COUNTER", counterId];
   const counterQuery = useQuery({
-    queryKey: ["TEAMS", teamId, "COUNTER", counterId],
+    queryKey: COUNTER_KEY,
     queryFn: () => CounterService.getCounter(teamId, counterId),
     staleTime: 5 * MINUTE_IN_MS,
     enabled: !!counterId,
@@ -30,6 +32,24 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["TEAMS", teamId, "COUNTER"] });
     },
+  });
+
+  // pm: incrementar-counter
+  const counterIncrementOptimistic = useHandlerOptimistic<Counter>({
+    queryKey: COUNTER_KEY,
+    onMutate: (old) => ({
+      ...old,
+      currentCount: old.currentCount + 1,
+      alreadyModifiedToday: true,
+    }),
+  });
+
+  const counterIncrement = useMutation({
+    mutationFn: () => CounterService.incrementCounter(teamId, counterId),
+    onSuccess: counterIncrementOptimistic.onSuccess,
+    onMutate: counterIncrementOptimistic.onMutate,
+    onError: counterIncrementOptimistic.onError,
+    onSettled: counterIncrementOptimistic.onSettled,
   });
 
   return {
@@ -48,6 +68,12 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       isSuccess: counterCreate.isSuccess,
       isError: counterCreate.isError,
       mutate: counterCreate.mutate,
+    },
+    counterIncrement: {
+      isPending: counterIncrement.isPending,
+      isSuccess: counterIncrement.isSuccess,
+      isError: counterIncrement.isError,
+      mutate: counterIncrement.mutate as () => void,
     },
   };
 };
