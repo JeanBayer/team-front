@@ -1,5 +1,5 @@
 import { instance } from "@/api/api";
-import type { Counter, CreateCounter } from "@/types/counter";
+import type { Counter, CreateCounter, ResetCounter } from "@/types/counter";
 
 export class CounterService {
   static async createCounter(teamId: string, createCounter: CreateCounter) {
@@ -48,6 +48,26 @@ export class CounterService {
       return data;
     } catch (error) {
       console.error("incrementCounter error", error);
+      throw new Error("error");
+    }
+  }
+
+  static async resetCounter(
+    teamId: string,
+    counterId: string,
+    resetCounter: ResetCounter
+  ) {
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+
+      throw new Error("aa");
+      const { data } = await instance.post<Counter>(
+        `/teams/${teamId}/counters/${counterId}/reset`,
+        resetCounter
+      );
+      return data;
+    } catch (error) {
+      console.error("resetCounter error", error);
       throw new Error("error");
     }
   }

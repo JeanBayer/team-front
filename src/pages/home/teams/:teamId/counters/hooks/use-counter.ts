@@ -34,7 +34,7 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
     },
   });
 
-  // pm: incrementar-counter
+  // pm: increment-counter
   const counterIncrementOptimistic = useHandlerOptimistic<Counter>({
     queryKey: COUNTER_KEY,
     onMutate: (old) => ({
@@ -50,6 +50,26 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
     onMutate: counterIncrementOptimistic.onMutate,
     onError: counterIncrementOptimistic.onError,
     onSettled: counterIncrementOptimistic.onSettled,
+  });
+
+  // pm: reset-counter
+  const counterResetOptimistic = useHandlerOptimistic<Counter>({
+    queryKey: COUNTER_KEY,
+    onMutate: (old) => ({
+      ...old,
+      currentCount: 0,
+      lastResetDuration: old.currentCount,
+      alreadyModifiedToday: true,
+    }),
+  });
+
+  const counterReset = useMutation({
+    mutationFn: () =>
+      CounterService.resetCounter(teamId, counterId, { nameEvent: "sacar" }),
+    onSuccess: counterResetOptimistic.onSuccess,
+    onMutate: counterResetOptimistic.onMutate,
+    onError: counterResetOptimistic.onError,
+    onSettled: counterResetOptimistic.onSettled,
   });
 
   return {
@@ -74,6 +94,12 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       isSuccess: counterIncrement.isSuccess,
       isError: counterIncrement.isError,
       mutate: counterIncrement.mutate as () => void,
+    },
+    counterReset: {
+      isPending: counterReset.isPending,
+      isSuccess: counterReset.isSuccess,
+      isError: counterReset.isError,
+      mutate: counterReset.mutate as () => void,
     },
   };
 };

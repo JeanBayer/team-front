@@ -17,3 +17,7 @@ export interface Counter {
   updatedAt: Date;
   alreadyModifiedToday: boolean;
 }
+
+export interface ResetCounter {
+  nameEvent: string;
+}

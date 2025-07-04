@@ -4,7 +4,10 @@ import { useCounter } from "../hooks/use-counter";
 
 export const CounterIdPage = () => {
   const { teamId, counterId } = useParams();
-  const { counter, counterIncrement } = useCounter(teamId, counterId);
+  const { counter, counterIncrement, counterReset } = useCounter(
+    teamId,
+    counterId
+  );
 
   if (counter.isLoading) return <div>loading...</div>;
   if (counter.isError) return <div>error...</div>;
@@ -27,14 +30,16 @@ export const CounterIdPage = () => {
               <button onClick={counterIncrement.mutate}>
                 {counter.data?.incrementButtonLabel}
               </button>
-              <button>{counter.data?.resetButtonLabel}</button>
+              <button onClick={counterReset.mutate}>
+                {counter.data?.resetButtonLabel}
+              </button>
             </>
           )}
         </section>
 
         <section>
           <p>Contador mas alto: {counter.data?.longestStreak}</p>
-          <p>Contador mas reciente {counter.data?.longestStreak}</p>
+          <p>Contador mas reciente {counter.data?.lastResetDuration}</p>
         </section>
       </main>
     </div>
