@@ -8,7 +8,7 @@ export const CounterPage = () => {
   return (
     <div>
       <header>
-        <Link to="-1">Volver</Link>
+        <Link to="..">Volver</Link>
         <h1>counterPage</h1>
         <Link to="create">Crear</Link>
       </header>

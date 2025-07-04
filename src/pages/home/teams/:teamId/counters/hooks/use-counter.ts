@@ -20,7 +20,7 @@ export const useCounter = (teamId: string = "") => {
     mutationFn: (createCounter: CreateCounter) =>
       CounterService.createCounter(teamId, createCounter),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["COUNTER"] });
+      queryClient.invalidateQueries({ queryKey: ["TEAMS", teamId, "COUNTER"] });
     },
   });
 

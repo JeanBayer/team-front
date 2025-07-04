@@ -10,6 +10,7 @@ import { LandingPage } from "@/pages/landing/landing-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { createBrowserRouter } from "react-router";
 import { CounterPage } from "./pages/home/teams/:teamId/counters/counter-page";
+import { CreateCounterPage } from "./pages/home/teams/:teamId/counters/create/create-counter-page";
 import { TeamIdPage } from "./pages/home/teams/:teamId/team-id-page";
 
 export const router = createBrowserRouter([
@@ -75,7 +76,7 @@ export const router = createBrowserRouter([
                 path: "counters",
                 children: [
                   { index: true, element: <CounterPage /> },
-                  { path: "create", element: <TeamIdPage /> },
+                  { path: "create", element: <CreateCounterPage /> },
                 ],
               },
               {
