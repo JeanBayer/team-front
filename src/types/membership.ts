@@ -1,4 +1,4 @@
-export interface MyMembership {
+export interface Membership {
   userId: string;
   teamId: string;
   isAdmin: boolean;

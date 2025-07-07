@@ -1,35 +1,36 @@
 import { useQueryClient } from "@tanstack/react-query";
 
-type UseHandlerOptimisticProps<T> = {
+type UseHandlerOptimisticProps<T, E> = {
   queryKey: string[];
-  onMutate: (old: T) => T;
+  onMutate: (mutateData: E) => (old: T) => T;
   onError?: () => void;
   onSettled?: () => void;
   onSuccess?: () => void;
 };
-export const useHandlerOptimistic = <T>({
+export const useHandlerOptimistic = <T, E>({
   queryKey,
   onMutate,
   onError = () => {},
   onSettled = () => {},
   onSuccess = () => {},
-}: UseHandlerOptimisticProps<T>) => {
+}: UseHandlerOptimisticProps<T, E>) => {
   const queryClient = useQueryClient();
 
-  async function handleOnMutate() {
+  async function handleOnMutate(mutateData: E) {
+    console.log({ mutateData });
     await queryClient.cancelQueries({ queryKey });
     const previousData = queryClient.getQueryData<T>(queryKey);
 
     if (!previousData) return { previousData };
 
-    queryClient.setQueryData(queryKey, onMutate);
+    queryClient.setQueryData(queryKey, onMutate(mutateData));
 
     return { previousData };
   }
 
   function handleOnError(
     _err: Error,
-    _variables: void,
+    _variables: void | E,
     context:
       | {
           previousData: T | undefined;

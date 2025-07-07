@@ -35,9 +35,9 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
   });
 
   // pm: increment-counter
-  const counterIncrementOptimistic = useHandlerOptimistic<Counter>({
+  const counterIncrementOptimistic = useHandlerOptimistic<Counter, any>({
     queryKey: COUNTER_KEY,
-    onMutate: (old) => ({
+    onMutate: (_mutateData) => (old) => ({
       ...old,
       currentCount: old.currentCount + 1,
       alreadyModifiedToday: true,
@@ -53,9 +53,9 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
   });
 
   // pm: reset-counter
-  const counterResetOptimistic = useHandlerOptimistic<Counter>({
+  const counterResetOptimistic = useHandlerOptimistic<Counter, any>({
     queryKey: COUNTER_KEY,
-    onMutate: (old) => ({
+    onMutate: (_mutateData) => (old) => ({
       ...old,
       currentCount: 0,
       lastResetDuration: old.currentCount,

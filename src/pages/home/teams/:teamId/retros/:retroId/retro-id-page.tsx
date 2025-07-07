@@ -1,13 +1,29 @@
 import { AdminConditional } from "@/components/membership/admin-conditional";
+import { useMembershipList } from "@/hooks/use-membership-list";
+import { useEffect } from "react";
 import { Link, useParams } from "react-router";
 import { useRetro } from "../hooks/use-retro";
+import { useFormSprintWinnerVote } from "./hooks/use-form-sprint-winner-vote";
+import { useVoteSprint } from "./hooks/use-vote-sprint";
 
 export const RetroIdPage = () => {
   const { teamId, retroId } = useParams();
   const { retro } = useRetro(teamId, retroId);
+  const { memberships } = useMembershipList(teamId);
+  const { formData, handleSubmit, updateField, isPending, isError } =
+    useFormSprintWinnerVote();
+  const { voteStatus } = useVoteSprint(teamId, retroId);
+
+  useEffect(() => {
+    if (!!voteStatus.data?.myVote?.id)
+      updateField("userId", voteStatus.data.myVote.votedForId);
+  }, [voteStatus.data?.myVote?.id]);
 
   if (retro.isLoading) return <div>loading...</div>;
   if (retro.isError) return <div>error...</div>;
+
+  const isDisabledSprintWinnerSubmit =
+    !!voteStatus.data?.myVote?.id || isPending;
 
   return (
     <div>
@@ -19,9 +35,44 @@ export const RetroIdPage = () => {
         </AdminConditional>
       </header>
       <main>
-        <section></section>
+        <section>sprint winner</section>
 
-        <section></section>
+        <section>
+          <h3>sprint votes</h3>
+          <form onSubmit={handleSubmit}>
+            <fieldset>
+              <legend>
+                Select a sprint winner:
+                <span>
+                  votes: {voteStatus.data?.totalVotes} /{" "}
+                  {voteStatus.data?.totalMembers}
+                </span>
+              </legend>
+              {memberships.data?.map(({ userId, user }) => {
+                return (
+                  <div key={userId}>
+                    <input
+                      type="radio"
+                      name="sprint-winner-vote"
+                      id={userId}
+                      value={userId}
+                      onChange={(e) => updateField("userId", e.target.value)}
+                      checked={userId === formData.userId}
+                      disabled={isDisabledSprintWinnerSubmit}
+                    />
+                    <label htmlFor={userId}>{user.name}</label>
+                  </div>
+                );
+              })}
+
+              <input
+                type="submit"
+                value="Votar"
+                disabled={isDisabledSprintWinnerSubmit}
+              />
+            </fieldset>
+          </form>
+        </section>
       </main>
     </div>
   );
