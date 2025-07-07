@@ -10,7 +10,7 @@ export const RetroIdPage = () => {
   const { teamId, retroId } = useParams();
   const { retro } = useRetro(teamId, retroId);
   const { memberships } = useMembershipList(teamId);
-  const { formData, handleSubmit, updateField, isPending, isError } =
+  const { formData, handleSubmit, updateField, isPending } =
     useFormSprintWinnerVote();
   const { voteStatus } = useVoteSprint(teamId, retroId);
 
