@@ -6,6 +6,9 @@ import { HomePage } from "@/pages/home/home-page";
 import { CounterIdPage } from "@/pages/home/teams/:teamId/counters/:counterId/counter-id-page";
 import { CounterPage } from "@/pages/home/teams/:teamId/counters/counter-page";
 import { CreateCounterPage } from "@/pages/home/teams/:teamId/counters/create/create-counter-page";
+import { RetroIdPage } from "@/pages/home/teams/:teamId/retros/:retroId/retro-id-page";
+import { CreateRetroPage } from "@/pages/home/teams/:teamId/retros/create/create-retro-page";
+import { RetrosPage } from "@/pages/home/teams/:teamId/retros/retros-page";
 import { TeamIdPage } from "@/pages/home/teams/:teamId/team-id-page";
 import { CreateTeamPage } from "@/pages/home/teams/create/create-team-page";
 import { JoinTeamPage } from "@/pages/home/teams/join/join-team-page";
@@ -71,7 +74,14 @@ export const router = createBrowserRouter([
               },
               {
                 path: "retrospectives",
-                element: <TeamIdPage />,
+                children: [
+                  { index: true, element: <RetrosPage /> },
+                  { path: "create", element: <CreateRetroPage /> },
+                  {
+                    path: ":retroId",
+                    children: [{ index: true, element: <RetroIdPage /> }],
+                  },
+                ],
               },
               {
                 path: "counters",
