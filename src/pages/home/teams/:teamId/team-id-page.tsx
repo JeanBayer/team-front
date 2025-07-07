@@ -34,6 +34,7 @@ export const TeamIdPage = () => {
         </section>
 
         <section>
+          <h3>Ranking elegido del sprint</h3>
           <ol>
             {teamRanking.data?.map((user) => (
               <li key={user.id}>

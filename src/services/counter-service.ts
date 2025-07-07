@@ -58,9 +58,6 @@ export class CounterService {
     resetCounter: ResetCounter
   ) {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      throw new Error("aa");
       const { data } = await instance.post<Counter>(
         `/teams/${teamId}/counters/${counterId}/reset`,
         resetCounter
