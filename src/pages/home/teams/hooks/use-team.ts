@@ -7,14 +7,19 @@ export const useTeam = (teamId: string = "") => {
   const queryClient = useQueryClient();
 
   // pm: listar-teams
-  const teamQuery = useQuery({
+  const teamsQuery = useQuery({
     queryKey: ["TEAMS"],
     queryFn: TeamService.getTeams,
     staleTime: 5 * MINUTE_IN_MS,
   });
 
   // pm: listar-team
-  // TODO:
+  const teamQuery = useQuery({
+    queryKey: ["TEAMS", teamId],
+    queryFn: () => TeamService.getTeam(teamId),
+    staleTime: 5 * MINUTE_IN_MS,
+    enabled: !!teamId,
+  });
 
   // pm: editar-team [ADMIN]
   // TODO:
@@ -37,6 +42,11 @@ export const useTeam = (teamId: string = "") => {
 
   return {
     teamsData: {
+      isLoading: teamsQuery.isLoading,
+      isError: teamsQuery.isError,
+      data: teamsQuery.data,
+    },
+    teamData: {
       isLoading: teamQuery.isLoading,
       isError: teamQuery.isError,
       data: teamQuery.data,

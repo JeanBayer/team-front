@@ -12,6 +12,16 @@ export class TeamService {
     }
   }
 
+  static async getTeam(teamId: string) {
+    try {
+      const { data } = await instance.get<BasicTeam>(`/teams/${teamId}`);
+      return data;
+    } catch (error) {
+      console.error("getTeam error", error);
+      throw new Error("error");
+    }
+  }
+
   static async createTeam(createTeam: CreateTeam) {
     try {
       const { data } = await instance.post<BasicTeam>("/teams", createTeam);

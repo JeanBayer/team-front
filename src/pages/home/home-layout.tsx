@@ -18,24 +18,11 @@ import {
 import { deleteAuthData } from "@/helper/extract-data";
 import { useUser } from "@/hooks/use-user";
 import { ChevronDown, LogOut } from "lucide-react";
-import { NavLink, Outlet, useNavigate } from "react-router";
+import { NavLink, Outlet, useNavigate, useParams } from "react-router";
 import { useTeam } from "./teams/hooks/use-team";
 
 export const HomeLayout = () => {
   return (
-    // <div>
-    //   <nav>
-    //     <Link to="/user">Usuario</Link>
-    //     <Link to="/teams">Teams</Link>
-    //     <Link to="/thank-you">Agradecimientos</Link>
-
-    //     <button onClick={handleLogout}>Logout</button>
-    //   </nav>
-    //   <main>
-
-    //   </main>
-    // </div>
-
     <SidebarProvider>
       <AppSidebar />
       <main>
@@ -48,12 +35,6 @@ export const HomeLayout = () => {
 
 const AppSidebar = () => {
   const userData = useUser();
-  const navigate = useNavigate();
-
-  function handleLogout() {
-    deleteAuthData();
-    navigate("/landing");
-  }
 
   return (
     <Sidebar>
@@ -64,24 +45,124 @@ const AppSidebar = () => {
         <CollapsibleUsersMenu />
         <CollapsibleTeamsMenu />
         <ThankYouMenu />
+        <CollapsibleSelectedTeamMenu />
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenuItem className="list-none">
-          <SidebarMenuButton
-            onClick={handleLogout}
-            className="flex cursor-pointer text-sm w-full p-2 text-center rounded-sm border-2 border-transparent hover:border-blue-300 bg-blue-300 transition-all duration-500"
-          >
-            <span className="flex-1">Cerrar sesión</span>
-            <LogOut />
-          </SidebarMenuButton>
-        </SidebarMenuItem>
-      </SidebarFooter>
+      <FooterMenu />
     </Sidebar>
   );
 };
 
+const CollapsibleSelectedTeamMenu = () => {
+  const { teamId } = useParams();
+  const { teamData } = useTeam(teamId);
+
+  const classNameElement =
+    "inline-block text-sm w-full p-1 pl-2 rounded-sm border-2 transition-all duration-500";
+
+  if (!teamId || !teamData.data) return null;
+
+  return (
+    <Collapsible defaultOpen className="group/collapsible">
+      <SidebarMenuItem className="list-none">
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton>
+            <NavLink
+              to={`/teams/${teamId}`}
+              className={({ isActive }) =>
+                isActive
+                  ? `${classNameElement} text-lg border-blue-200 bg-blue-200`
+                  : `${classNameElement} text-lg border-transparent hover:border-blue-200`
+              }
+            >
+              {teamData.data?.name}
+            </NavLink>
+            <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            <SidebarMenuSubItem>
+              <NavLink
+                to={`/teams/${teamId}/edit`}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${classNameElement} border-blue-200`
+                    : `${classNameElement} border-transparent hover:border-blue-200`
+                }
+              >
+                Editar
+              </NavLink>
+            </SidebarMenuSubItem>
+
+            <SidebarMenuSubItem>
+              <NavLink
+                to={`/teams/${teamId}/retrospectives`}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${classNameElement} border-blue-200`
+                    : `${classNameElement} border-transparent hover:border-blue-200`
+                }
+              >
+                Retrospectivas
+              </NavLink>
+            </SidebarMenuSubItem>
+
+            <SidebarMenuSubItem>
+              <NavLink
+                to={`/teams/${teamId}/counters`}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${classNameElement} border-blue-200`
+                    : `${classNameElement} border-transparent hover:border-blue-200`
+                }
+              >
+                Contadores
+              </NavLink>
+            </SidebarMenuSubItem>
+
+            <SidebarMenuSubItem>
+              <NavLink
+                to={`/teams/${teamId}/members`}
+                className={({ isActive }) =>
+                  isActive
+                    ? `${classNameElement} border-blue-200`
+                    : `${classNameElement} border-transparent hover:border-blue-200`
+                }
+              >
+                Miembros
+              </NavLink>
+            </SidebarMenuSubItem>
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
+    </Collapsible>
+  );
+};
+
+const FooterMenu = () => {
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    deleteAuthData();
+    navigate("/landing");
+  }
+
+  return (
+    <SidebarFooter>
+      <SidebarMenuItem className="list-none">
+        <SidebarMenuButton
+          onClick={handleLogout}
+          className="flex cursor-pointer text-sm w-full p-2 text-center rounded-sm border-2 border-transparent hover:border-blue-300 bg-blue-300 transition-all duration-500"
+        >
+          <span className="flex-1">Cerrar sesión</span>
+          <LogOut />
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    </SidebarFooter>
+  );
+};
+
 const CollapsibleTeamsMenu = () => {
-  const { teamsData } = useTeam();
   const classNameElement =
     "inline-block text-sm w-full p-1 pl-2 rounded-sm border-2 transition-all duration-500";
 
@@ -143,20 +224,6 @@ const CollapsibleTeamsMenu = () => {
               >
                 Listar equipos
               </NavLink>
-              {teamsData.data?.map((team) => (
-                <SidebarMenuSubItem key={team.id}>
-                  <NavLink
-                    to={`/teams/${team.id}`}
-                    className={({ isActive }) =>
-                      isActive
-                        ? `${classNameElement} border-blue-200`
-                        : `${classNameElement} border-transparent hover:border-blue-200`
-                    }
-                  >
-                    {team.name}
-                  </NavLink>
-                </SidebarMenuSubItem>
-              ))}
             </SidebarMenuSubItem>
           </SidebarMenuSub>
         </CollapsibleContent>
