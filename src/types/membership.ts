@@ -1,12 +1,11 @@
+import type { User } from "./user";
+
 export interface Membership {
   userId: string;
   teamId: string;
   isAdmin: boolean;
   joinedAt: Date;
-  user: User;
+  user: UserMembership;
 }
 
-export interface User {
-  name: string;
-  email: string;
-}
+export interface UserMembership extends Pick<User, "email" | "name"> {}

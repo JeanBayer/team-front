@@ -1,3 +1,5 @@
+import type { User } from "./user";
+
 export interface AuthCreate {
   name: string;
   email: string;
@@ -7,12 +9,8 @@ export interface AuthCreate {
 export interface AuthLogin extends Pick<AuthCreate, "email" | "password"> {}
 
 export interface AuthResponse {
-  user: User;
+  user: UserAuth;
   token: string;
 }
 
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-}
+export interface UserAuth extends Pick<User, "id" | "email" | "name"> {}
