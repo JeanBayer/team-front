@@ -6,7 +6,7 @@ export const HomeLayout = () => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main>
+      <main className="p-4 w-full">
         <SidebarTrigger />
         <Outlet />
       </main>
