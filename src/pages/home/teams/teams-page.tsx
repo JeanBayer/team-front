@@ -19,6 +19,13 @@ export const TeamsPage = () => {
             label: "Unirse",
           },
         ]}
+        breadcrumbList={[
+          {
+            to: "/",
+            label: "Home",
+          },
+        ]}
+        breadcrumbPage="Mis equipos"
       />
       <section className="flex gap-8 flex-wrap justify-center py-8 px-12 max-w-2xl mx-auto">
         {teamsData.data?.map((team) => (

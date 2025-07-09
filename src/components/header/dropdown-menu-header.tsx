@@ -21,7 +21,7 @@ export function DropdownMenuHeader({ menuItems }: DropdownMenuProps) {
         <EllipsisVertical size={16} className="cursor-pointer" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start">
-        {menuItems?.map((item) => (
+        {menuItems?.map((item, index) => (
           <React.Fragment key={item.label}>
             <DropdownMenuItem disabled={item.isDisabled}>
               <Link
@@ -32,7 +32,7 @@ export function DropdownMenuHeader({ menuItems }: DropdownMenuProps) {
                 <Link2 size={16} />
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            {menuItems.length - 1 === index ? null : <DropdownMenuSeparator />}
           </React.Fragment>
         ))}
       </DropdownMenuContent>
