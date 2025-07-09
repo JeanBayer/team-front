@@ -1,5 +1,6 @@
 import {
   FooterMenu,
+  HomeMenu,
   SelectedTeamMenu,
   TeamsMenu,
   ThankYouMenu,
@@ -21,6 +22,7 @@ export const AppSidebar = () => {
         <h3 className="text-center p-2">{userData.data?.name}</h3>
       </SidebarHeader>
       <SidebarContent>
+        <HomeMenu />
         <UsersMenu />
         <TeamsMenu />
         <ThankYouMenu />

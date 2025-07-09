@@ -14,6 +14,28 @@ import { useTeam } from "@/pages/home/teams/hooks/use-team";
 import { LogOut } from "lucide-react";
 import { NavLink, useNavigate, useParams } from "react-router";
 
+export const HomeMenu = () => {
+  const classNameElement =
+    "inline-block text-sm w-full p-1 pl-2 rounded-sm border-2 transition-all duration-500";
+
+  return (
+    <SidebarMenuItem className="list-none">
+      <SidebarMenuButton>
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive
+              ? `${classNameElement} text-lg border-blue-200 bg-blue-200`
+              : `${classNameElement} text-lg border-transparent hover:border-blue-200`
+          }
+        >
+          Home
+        </NavLink>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+};
+
 export const UsersMenu = () => {
   const userNavList = getUserNavList();
   return <CollapsibleMenu listNav={userNavList} />;
