@@ -7,8 +7,7 @@ import { Loader2Icon } from "lucide-react";
 import { useFormJoinTeam } from "./hooks/use-form-join-team";
 
 export const JoinTeamPage = () => {
-  const { formData, updateField, handleSubmit, isPending, isError } =
-    useFormJoinTeam();
+  const { formData, updateField, handleSubmit, isPending } = useFormJoinTeam();
   return (
     <div>
       <Header
@@ -20,7 +19,7 @@ export const JoinTeamPage = () => {
           },
           {
             to: "/teams",
-            label: "Mi equipo",
+            label: "Mis equipos",
           },
         ]}
         breadcrumbPage="Unirse a un equipo"
