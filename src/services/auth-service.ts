@@ -1,5 +1,6 @@
 import { instance } from "@/api/api";
 import type { AuthCreate, AuthLogin, AuthResponse } from "@/types/auth";
+import { AxiosError } from "axios";
 
 export class AuthService {
   static async createAccount(authCreate: AuthCreate) {
@@ -23,8 +24,9 @@ export class AuthService {
       );
       return data;
     } catch (error) {
-      console.error("login error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
