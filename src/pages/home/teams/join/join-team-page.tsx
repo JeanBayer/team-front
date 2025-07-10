@@ -1,4 +1,8 @@
 import { Header } from "@/components/header/header";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { useFormJoinTeam } from "./hooks/use-form-join-team";
 
 export const JoinTeamPage = () => {
@@ -19,30 +23,50 @@ export const JoinTeamPage = () => {
         ]}
         breadcrumbPage="Unirse a un equipo"
       />
-      <section className="flex gap-8 flex-wrap justify-center py-8 px-12 max-w-2xl mx-auto">
-        <form onSubmit={handleSubmit}>
-          <label>
-            <span>ID equipo</span>
-            <input
-              type="text"
-              value={formData.id}
-              onChange={(e) => updateField("id", e.target.value)}
-              required
-            />
-          </label>
+      <section className="flex gap-8 flex-wrap justify-center py-8 px-4 md:px-12 max-w-xl mx-auto">
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Formulario</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form
+              onSubmit={handleSubmit}
+              className="w-full flex flex-col gap-8"
+            >
+              <div className="grid w-full max-w-md items-center gap-3">
+                <Label htmlFor="id-equipo">ID equipo</Label>
+                <Input
+                  type="text"
+                  id="id-equipo"
+                  placeholder="abcde123"
+                  value={formData.id}
+                  onChange={(e) => updateField("id", e.target.value)}
+                  required
+                />
+              </div>
 
-          <label>
-            <span>Contraseña equipo</span>
-            <input
-              type="password"
-              value={formData.joinPassword}
-              onChange={(e) => updateField("password", e.target.value)}
-              required
-            />
-          </label>
+              <div className="grid w-full max-w-xs items-center gap-3">
+                <Label htmlFor="password-equipo">Password</Label>
+                <Input
+                  type="password"
+                  id="password-equipo"
+                  placeholder="password"
+                  value={formData.joinPassword}
+                  onChange={(e) => updateField("password", e.target.value)}
+                  required
+                />
+              </div>
 
-          <input type="submit" value="Unirme" disabled={isPending} />
-        </form>
+              <Button
+                type="submit"
+                disabled={isPending}
+                className="cursor-pointer"
+              >
+                Unirme
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );
