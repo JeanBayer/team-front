@@ -10,7 +10,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import { ChevronDown } from "lucide-react";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 
 type ListNav = {
   title: {
@@ -70,16 +70,12 @@ const CollapsibleMenuButton = ({
   return (
     <CollapsibleTrigger asChild>
       <SidebarMenuButton>
-        <NavLink
+        <Link
           to={to}
-          className={({ isActive }) =>
-            isActive
-              ? `${classNameElement} text-lg border-blue-200 bg-blue-200`
-              : `${classNameElement} text-lg border-transparent hover:border-blue-200`
-          }
+          className={`${classNameElement} text-lg border-transparent hover:border-blue-200`}
         >
           {text}
-        </NavLink>
+        </Link>
         <ChevronDown className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
       </SidebarMenuButton>
     </CollapsibleTrigger>
