@@ -11,8 +11,9 @@ export class AuthService {
       );
       return data;
     } catch (error) {
-      console.error("createAccount error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 

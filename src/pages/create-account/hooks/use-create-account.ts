@@ -1,6 +1,7 @@
 import { AuthService } from "@/services/auth-service";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
+import { toast } from "sonner";
 
 export const useCreateAccount = () => {
   const navigate = useNavigate();
@@ -8,6 +9,7 @@ export const useCreateAccount = () => {
   const mutation = useMutation({
     mutationFn: AuthService.createAccount,
     onSuccess: () => navigate("/"),
+    onError: (error) => toast.error(error.message, { richColors: true }),
   });
 
   return {
