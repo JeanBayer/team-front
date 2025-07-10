@@ -1,7 +1,8 @@
 import type { MenuItem } from "@/types/header";
-import { EllipsisVertical, Link2 } from "lucide-react";
+import { EllipsisVertical } from "lucide-react";
 import React from "react";
 import { Link } from "react-router";
+import { FlexibleIcon } from "../icon/flexible-icon";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,9 +28,10 @@ export function DropdownMenuHeader({ menuItems }: DropdownMenuProps) {
               <Link
                 to={item.to}
                 className="flex justify-between items-center w-full"
+                onClick={item?.onClick}
               >
                 {item.label}
-                <Link2 size={16} />
+                <FlexibleIcon size={16} type={item.type || "link"} />
               </Link>
             </DropdownMenuItem>
             {menuItems.length - 1 === index ? null : <DropdownMenuSeparator />}
