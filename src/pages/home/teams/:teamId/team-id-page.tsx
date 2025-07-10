@@ -1,5 +1,5 @@
 import { Header } from "@/components/header/header";
-import { AdminConditional } from "@/components/membership/admin-conditional";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import { Link, useParams } from "react-router";
 import { useTeam } from "../hooks/use-team";
@@ -15,13 +15,6 @@ export const TeamIdPage = () => {
 
   return (
     <div>
-      <header>
-        <button onClick={() => handleLeave(teamId)}>leave</button>
-        <AdminConditional>
-          <Link to="edit">edit</Link>
-        </AdminConditional>
-      </header>
-
       <Header
         title={teamData.data?.name || ""}
         menuItems={[
@@ -42,7 +35,7 @@ export const TeamIdPage = () => {
           },
           {
             to: "counters",
-            label: "Counters",
+            label: "Contadores",
           },
           {
             to: "members",
@@ -62,31 +55,57 @@ export const TeamIdPage = () => {
         breadcrumbPage={teamData.data?.name || ""}
       />
 
-      <main>
-        <section>
-          <div>
-            <Link to="retrospectives">Retros</Link>
-          </div>
-          <div>
-            <Link to="counters">Counters</Link>
-          </div>
-          <div>
-            <Link to="members">Miembros</Link>
-          </div>
+      <div className="flex gap-8 flex-wrap justify-center p-8 max-w-3xl mx-auto">
+        <section className="flex flex-wrap gap-4 max-w-sm">
+          <Link to="retrospectives" className="inline-block cursor-pointer">
+            <Card className="w-32 h-32 hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col items-center justify-center">
+              <CardContent className="">
+                <h4 className="text-center text-lg font-semibold text-blue-500">
+                  Retros
+                </h4>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="counters" className="inline-block cursor-pointer">
+            <Card className="w-32 h-32 hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col items-center justify-center">
+              <CardContent className="">
+                <h4 className="text-center text-lg font-semibold text-blue-500">
+                  Counters
+                </h4>
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link to="miembros" className="inline-block cursor-pointer">
+            <Card className="w-32 h-32 hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col items-center justify-center">
+              <CardContent className="">
+                <h4 className="text-center text-lg font-semibold text-blue-500">
+                  Miembros
+                </h4>
+              </CardContent>
+            </Card>
+          </Link>
         </section>
 
-        <section>
-          <h3>Ranking elegido del sprint</h3>
-          <ol>
-            {teamRanking.data?.map((user) => (
-              <li key={user.id}>
-                <span>{user.name}</span>
-                <span>{user.teamSprintWinner}</span>
-              </li>
-            ))}
-          </ol>
+        <section className="w-2xs">
+          <Card className="w-full p-4">
+            <CardHeader>
+              <CardTitle>Ranking elegido del sprint</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ol className="flex flex-col gap-4">
+                {teamRanking.data?.map((user) => (
+                  <li key={user.id} className="flex">
+                    <span className="flex-1">{user.name}</span>
+                    <span>{user.teamSprintWinner}</span>
+                  </li>
+                ))}
+              </ol>
+            </CardContent>
+          </Card>
         </section>
-      </main>
+      </div>
     </div>
   );
 };
