@@ -1,5 +1,6 @@
 import { MembershipService } from "@/services/membership-service";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export const useMembership = () => {
   const queryClient = useQueryClient();
@@ -10,6 +11,7 @@ export const useMembership = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["TEAMS"] });
     },
+    onError: (error) => toast.error(error.message, { richColors: true }),
   });
 
   // pm: dejar-team

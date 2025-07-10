@@ -1,6 +1,7 @@
 import { instance } from "@/api/api";
 import type { Membership } from "@/types/membership";
 import type { BasicTeam, JoinTeam } from "@/types/team";
+import { AxiosError } from "axios";
 
 export class MembershipService {
   static async joinTeam(joinTeam: JoinTeam) {
@@ -12,8 +13,9 @@ export class MembershipService {
       );
       return data;
     } catch (error) {
-      console.error("joinTeam error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
