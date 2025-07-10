@@ -1,5 +1,6 @@
 import { TeamService } from "@/services/team-service";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const MINUTE_IN_MS = 1000 * 60;
 
@@ -35,9 +36,8 @@ export const useTeam = (teamId: string = "") => {
   // pm: crear-team
   const teamCreate = useMutation({
     mutationFn: TeamService.createTeam,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["TEAMS"] });
-    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["TEAMS"] }),
+    onError: (error) => toast.error(error.message, { richColors: true }),
   });
 
   return {

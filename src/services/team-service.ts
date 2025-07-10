@@ -1,5 +1,6 @@
 import { instance } from "@/api/api";
 import type { BasicTeam, CreateTeam, RankingUser } from "@/types/team";
+import { AxiosError } from "axios";
 
 export class TeamService {
   static async getTeams() {
@@ -27,8 +28,9 @@ export class TeamService {
       const { data } = await instance.post<BasicTeam>("/teams", createTeam);
       return data;
     } catch (error) {
-      console.error("createTeam error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
