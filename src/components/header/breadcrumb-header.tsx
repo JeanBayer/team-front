@@ -1,14 +1,11 @@
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
-  BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import type { BreadcrumbItemList } from "@/types/breadcrumb";
-import React from "react";
-import { Link } from "react-router";
+import { CustomBreadCrumbItem } from "./custom-breadcrumb-item";
 
 type BreadcrumbHeaderProps = {
   breadcrumbList?: BreadcrumbItemList[];
@@ -22,15 +19,8 @@ export function BreadcrumbHeader({
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {breadcrumbList?.map(({ to, label }) => (
-          <React.Fragment>
-            <BreadcrumbItem>
-              <BreadcrumbLink asChild>
-                <Link to={to}>{label}</Link>
-              </BreadcrumbLink>
-            </BreadcrumbItem>
-            <BreadcrumbSeparator />
-          </React.Fragment>
+        {breadcrumbList?.map((item) => (
+          <CustomBreadCrumbItem breadcrumbList={item} />
         ))}
         <BreadcrumbItem>
           <BreadcrumbPage>{breadcrumbPage}</BreadcrumbPage>
