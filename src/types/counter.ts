@@ -4,6 +4,8 @@ export interface CreateCounter {
   resetButtonLabel: string;
 }
 
+export interface UpdateCounter extends Partial<CreateCounter> {}
+
 export interface Counter {
   id: string;
   teamId: string;

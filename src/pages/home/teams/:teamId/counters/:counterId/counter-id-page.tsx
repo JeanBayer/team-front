@@ -33,7 +33,7 @@ export const CounterIdPage = () => {
         title={counter.data?.name || ""}
         menuItems={[
           {
-            to: "editar",
+            to: "edit",
             label: "Editar",
             isDisabled: !isAdmin,
           },

@@ -1,5 +1,10 @@
 import { instance } from "@/api/api";
-import type { Counter, CreateCounter, ResetCounter } from "@/types/counter";
+import type {
+  Counter,
+  CreateCounter,
+  ResetCounter,
+  UpdateCounter,
+} from "@/types/counter";
 import { AxiosError } from "axios";
 
 export class CounterService {
@@ -8,6 +13,24 @@ export class CounterService {
       const { data } = await instance.post<Counter>(
         `/teams/${teamId}/counters`,
         createCounter
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async updateCounter(
+    teamId: string,
+    counterId: string,
+    updateCounter: UpdateCounter
+  ) {
+    try {
+      const { data } = await instance.patch<Counter>(
+        `/teams/${teamId}/counters/${counterId}`,
+        updateCounter
       );
       return data;
     } catch (error) {

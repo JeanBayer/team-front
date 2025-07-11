@@ -1,6 +1,6 @@
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { CounterService } from "@/services/counter-service";
-import type { Counter, CreateCounter } from "@/types/counter";
+import type { Counter, CreateCounter, UpdateCounter } from "@/types/counter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -119,6 +119,29 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
     onSettled: deleteCreateOptimistic.onSettled,
   });
 
+  // pm: update-counter
+  const counterUpdateOptimistic = useHandlerOptimistic<Counter, UpdateCounter>({
+    queryKey: COUNTER_KEY,
+    onMutate: (mutateData) => (old) => ({
+      ...old,
+      ...mutateData,
+    }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: COUNTERS_KEY });
+      toast.success("Counter actualizado correctamente", { richColors: true });
+    },
+    onError: (error) => toast.error(error?.message, { richColors: true }),
+  });
+
+  const counterUpdate = useMutation({
+    mutationFn: (updateCounter: UpdateCounter) =>
+      CounterService.updateCounter(teamId, counterId, updateCounter),
+    onSuccess: counterUpdateOptimistic.onSuccess,
+    onMutate: counterUpdateOptimistic.onMutate,
+    onError: counterUpdateOptimistic.onError,
+    onSettled: counterUpdateOptimistic.onSettled,
+  });
+
   return {
     counters: {
       isLoading: countersQuery.isLoading,
@@ -153,6 +176,12 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       isSuccess: counterDelete.isSuccess,
       isError: counterDelete.isError,
       mutate: counterDelete.mutate as () => void,
+    },
+    counterUpdate: {
+      isPending: counterUpdate.isPending,
+      isSuccess: counterUpdate.isSuccess,
+      isError: counterUpdate.isError,
+      mutate: counterUpdate.mutate,
     },
   };
 };

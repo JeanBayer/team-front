@@ -4,6 +4,7 @@ import { CreateAccountPage } from "@/pages/create-account/create-account-page";
 import { HomeLayout } from "@/pages/home/home-layout";
 import { HomePage } from "@/pages/home/home-page";
 import { CounterIdPage } from "@/pages/home/teams/:teamId/counters/:counterId/counter-id-page";
+import { EditCounterPage } from "@/pages/home/teams/:teamId/counters/:counterId/edit/edit-counter-page";
 import { CounterPage } from "@/pages/home/teams/:teamId/counters/counter-page";
 import { CreateCounterPage } from "@/pages/home/teams/:teamId/counters/create/create-counter-page";
 import { RetroIdPage } from "@/pages/home/teams/:teamId/retros/:retroId/retro-id-page";
@@ -90,7 +91,10 @@ export const router = createBrowserRouter([
                   { path: "create", element: <CreateCounterPage /> },
                   {
                     path: ":counterId",
-                    children: [{ index: true, element: <CounterIdPage /> }],
+                    children: [
+                      { index: true, element: <CounterIdPage /> },
+                      { path: "edit", element: <EditCounterPage /> },
+                    ],
                   },
                 ],
               },
