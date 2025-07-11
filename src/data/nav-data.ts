@@ -51,10 +51,6 @@ const LIST_NAV_SELECTED_TEAM = {
   },
   options: [
     {
-      to: "/teams/%teamId%/edit",
-      text: "Editar",
-    },
-    {
       to: "/teams/%teamId%/retrospectives",
       text: "Retrospectivas",
     },
