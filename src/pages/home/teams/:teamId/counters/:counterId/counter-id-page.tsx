@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useTeam } from "../../../hooks/use-team";
 import { useCounter } from "../hooks/use-counter";
 
@@ -16,13 +16,16 @@ export const CounterIdPage = () => {
   const { teamId, counterId } = useParams();
   const { isAdmin } = useUserIsAdmin(teamId);
   const { teamData } = useTeam(teamId);
-  const { counter, counterIncrement, counterReset } = useCounter(
+  const navigate = useNavigate();
+  const { counter, counterIncrement, counterReset, counterDelete } = useCounter(
     teamId,
     counterId
   );
 
   if (counter.isLoading) return <div>loading...</div>;
   if (counter.isError) return <div>error...</div>;
+
+  if (counterDelete.isSuccess) navigate(`/teams/${teamId}/counters`);
 
   return (
     <div>
@@ -33,6 +36,13 @@ export const CounterIdPage = () => {
             to: "editar",
             label: "Editar",
             isDisabled: !isAdmin,
+          },
+          {
+            to: "",
+            label: "Eliminar",
+            type: "delete",
+            onClick: counterDelete.mutate,
+            isDisabled: !isAdmin || counterDelete.isPending,
           },
         ]}
         breadcrumbList={[

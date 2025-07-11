@@ -1,12 +1,14 @@
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { CounterService } from "@/services/counter-service";
 import type { Counter, CreateCounter } from "@/types/counter";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 const MINUTE_IN_MS = 1000 * 60;
 
 export const useCounter = (teamId: string = "", counterId: string = "") => {
+  const queryClient = useQueryClient();
+
   // pm: listar-counters
   const COUNTERS_KEY = ["TEAMS", teamId, "COUNTER"];
   const countersQuery = useQuery({
@@ -69,6 +71,7 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       currentCount: old.currentCount + 1,
       alreadyModifiedToday: true,
     }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: COUNTERS_KEY }),
   });
 
   const counterIncrement = useMutation({
@@ -88,6 +91,7 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       lastResetDuration: old.currentCount,
       alreadyModifiedToday: true,
     }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: COUNTERS_KEY }),
   });
 
   const counterReset = useMutation({
@@ -97,6 +101,22 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
     onMutate: counterResetOptimistic.onMutate,
     onError: counterResetOptimistic.onError,
     onSettled: counterResetOptimistic.onSettled,
+  });
+
+  // pm: delete counter
+  const deleteCreateOptimistic = useHandlerOptimistic<Counter[], null>({
+    queryKey: COUNTERS_KEY,
+    onMutate: () => (old) => old.filter((counter) => counter.id !== counterId),
+    onSuccess: () => toast.success("Counter eliminado", { richColors: true }),
+    onError: (error) => toast.error(error?.message, { richColors: true }),
+  });
+
+  const counterDelete = useMutation({
+    mutationFn: () => CounterService.deleteCounter(teamId, counterId),
+    onSuccess: deleteCreateOptimistic.onSuccess,
+    onMutate: deleteCreateOptimistic.onMutate,
+    onError: deleteCreateOptimistic.onError,
+    onSettled: deleteCreateOptimistic.onSettled,
   });
 
   return {
@@ -127,6 +147,12 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       isSuccess: counterReset.isSuccess,
       isError: counterReset.isError,
       mutate: counterReset.mutate as () => void,
+    },
+    counterDelete: {
+      isPending: counterDelete.isPending,
+      isSuccess: counterDelete.isSuccess,
+      isError: counterDelete.isError,
+      mutate: counterDelete.mutate as () => void,
     },
   };
 };

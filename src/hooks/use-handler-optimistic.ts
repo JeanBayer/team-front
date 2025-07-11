@@ -17,7 +17,6 @@ export const useHandlerOptimistic = <T, E>({
   const queryClient = useQueryClient();
 
   async function handleOnMutate(mutateData: E) {
-    console.log({ mutateData });
     await queryClient.cancelQueries({ queryKey });
     const previousData = queryClient.getQueryData<T>(queryKey);
 

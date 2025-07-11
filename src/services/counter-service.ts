@@ -41,6 +41,19 @@ export class CounterService {
     }
   }
 
+  static async deleteCounter(teamId: string, counterId: string) {
+    try {
+      const { data } = await instance.delete<null>(
+        `/teams/${teamId}/counters/${counterId}`
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
   static async incrementCounter(teamId: string, counterId: string) {
     try {
       //await new Promise((resolve) => setTimeout(resolve, 3000));
@@ -49,8 +62,9 @@ export class CounterService {
       );
       return data;
     } catch (error) {
-      console.error("incrementCounter error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
@@ -66,8 +80,9 @@ export class CounterService {
       );
       return data;
     } catch (error) {
-      console.error("resetCounter error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 }

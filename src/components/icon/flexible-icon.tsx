@@ -1,15 +1,16 @@
-import { Link2, LogOut } from "lucide-react";
+import { Delete, Link2, LogOut } from "lucide-react";
 
 type FlexibleIconProps = {
   size?: string | number;
   color?: string;
   className?: string;
-  type: "link" | "out";
+  type: "link" | "out" | "delete";
 };
 
 const ICONS = {
   link: Link2,
   out: LogOut,
+  delete: Delete,
 };
 
 export const FlexibleIcon = ({
