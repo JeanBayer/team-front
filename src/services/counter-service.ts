@@ -1,5 +1,6 @@
 import { instance } from "@/api/api";
 import type { Counter, CreateCounter, ResetCounter } from "@/types/counter";
+import { AxiosError } from "axios";
 
 export class CounterService {
   static async createCounter(teamId: string, createCounter: CreateCounter) {
@@ -10,8 +11,9 @@ export class CounterService {
       );
       return data;
     } catch (error) {
-      console.error("createCounter error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 

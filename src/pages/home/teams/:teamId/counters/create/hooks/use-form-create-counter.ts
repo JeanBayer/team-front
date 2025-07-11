@@ -18,9 +18,9 @@ export const useFormCreateCounter = () => {
     (formData) => counterCreate.mutate(formData)
   );
 
-  console.log({ counterCreate });
-
-  if (counterCreate.isSuccess) navigate(-1);
+  if (counterCreate.isSuccess) {
+    navigate(`/teams/${teamId}/counters`);
+  }
 
   return {
     formData,

@@ -1,16 +1,16 @@
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { CounterService } from "@/services/counter-service";
 import type { Counter, CreateCounter } from "@/types/counter";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 const MINUTE_IN_MS = 1000 * 60;
 
 export const useCounter = (teamId: string = "", counterId: string = "") => {
-  const queryClient = useQueryClient();
-
   // pm: listar-counters
+  const COUNTERS_KEY = ["TEAMS", teamId, "COUNTER"];
   const countersQuery = useQuery({
-    queryKey: ["TEAMS", teamId, "COUNTER"],
+    queryKey: COUNTERS_KEY,
     queryFn: () => CounterService.getCounters(teamId),
     staleTime: 5 * MINUTE_IN_MS,
     enabled: !!teamId,
@@ -26,18 +26,45 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
   });
 
   // pm: crear-counter
+  const counterCreateOptimistic = useHandlerOptimistic<
+    Counter[],
+    CreateCounter
+  >({
+    queryKey: COUNTERS_KEY,
+    onMutate: (mutateData) => (old) =>
+      [
+        ...old,
+        {
+          id: "123",
+          alreadyModifiedToday: false,
+          currentCount: 0,
+          name: mutateData.name,
+          incrementButtonLabel: mutateData.incrementButtonLabel,
+          resetButtonLabel: mutateData.resetButtonLabel,
+          longestStreak: 0,
+          lastResetDuration: 0,
+          teamId,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ],
+    onSuccess: () => toast.success("Counter creado", { richColors: true }),
+    onError: (error) => toast.error(error?.message, { richColors: true }),
+  });
+
   const counterCreate = useMutation({
     mutationFn: (createCounter: CreateCounter) =>
       CounterService.createCounter(teamId, createCounter),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["TEAMS", teamId, "COUNTER"] });
-    },
+    onSuccess: counterCreateOptimistic.onSuccess,
+    onMutate: counterCreateOptimistic.onMutate,
+    onError: counterCreateOptimistic.onError,
+    onSettled: counterCreateOptimistic.onSettled,
   });
 
   // pm: increment-counter
   const counterIncrementOptimistic = useHandlerOptimistic<Counter, any>({
     queryKey: COUNTER_KEY,
-    onMutate: (_mutateData) => (old) => ({
+    onMutate: () => (old) => ({
       ...old,
       currentCount: old.currentCount + 1,
       alreadyModifiedToday: true,
@@ -55,7 +82,7 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
   // pm: reset-counter
   const counterResetOptimistic = useHandlerOptimistic<Counter, any>({
     queryKey: COUNTER_KEY,
-    onMutate: (_mutateData) => (old) => ({
+    onMutate: () => (old) => ({
       ...old,
       currentCount: 0,
       lastResetDuration: old.currentCount,

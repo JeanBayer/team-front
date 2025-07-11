@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 type UseHandlerOptimisticProps<T, E> = {
   queryKey: string[];
   onMutate: (mutateData: E) => (old: T) => T;
-  onError?: () => void;
+  onError?: (error?: Error) => void;
   onSettled?: () => void;
   onSuccess?: () => void;
 };
@@ -38,7 +38,7 @@ export const useHandlerOptimistic = <T, E>({
       | undefined
   ) {
     queryClient.setQueryData(queryKey, context?.previousData);
-    onError();
+    onError(_err);
   }
 
   function handleOnSettled() {
