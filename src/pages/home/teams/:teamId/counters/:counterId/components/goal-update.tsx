@@ -16,20 +16,14 @@ export const GoalUpdate = ({
   handleCancel = () => {},
   handleSuccess = () => {},
 }: GoalUpdateProps) => {
-  const {
-    formData,
-    updateField,
-    handleSubmit,
-    resetFormData,
-    isPending,
-    isSuccess,
-  } = useFormUpdateGoal({
-    initialData: {
-      id: goal.id,
-      description: goal.description,
-      targetDays: goal.targetDays,
-    },
-  });
+  const { formData, updateField, handleSubmit, resetFormData, isPending } =
+    useFormUpdateGoal({
+      initialData: {
+        id: goal.id,
+        description: goal.description,
+        targetDays: goal.targetDays,
+      },
+    });
 
   function onClickCancelEditGoal() {
     resetFormData();

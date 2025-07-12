@@ -21,6 +21,7 @@ export const MembersPage = () => {
   const { isAdmin } = useUserIsAdmin(teamId);
   const { teamData } = useTeam(teamId);
 
+  console.log({ isAdmin });
   return (
     <div>
       <Header
