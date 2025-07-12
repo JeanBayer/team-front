@@ -1,5 +1,4 @@
 import { DropdownMenuHeader } from "@/components/header/dropdown-menu-header";
-import { CustomTooltip } from "@/components/tooltip/custom-tooltip";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,12 +8,11 @@ import {
   type ModeGoal,
   type TypeGoals,
 } from "@/data/goal-enum";
-import { ICONS_KEYS } from "@/data/icon-enum";
-import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useGoal } from "../hooks/use-goal";
 import { GoalCreate } from "./goal-create";
+import { GoalsAchieved } from "./goals-achieved";
 import { GoalsAvailable } from "./goals-available";
 
 type GoalsSectionProps = {
@@ -23,13 +21,8 @@ type GoalsSectionProps = {
 
 export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
   const { teamId, counterId } = useParams();
-  const { isAdmin } = useUserIsAdmin(teamId);
   const [typeGoals, setTypeGoals] = useState<TypeGoals>(TYPE_GOALS.AVAILABLE);
-  const { goals, goalDelete, goalClone, goalReactivate } = useGoal(
-    teamId,
-    counterId,
-    typeGoals
-  );
+  const { goals } = useGoal(teamId, counterId, typeGoals);
   const [modeGoal, setModeGoal] = useState<ModeGoal>(MODE_GOAL.EMPTY);
 
   function changeModeGoal(modeGoal: ModeGoal) {
@@ -85,54 +78,8 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                   currentCount={currentCount}
                 />
               </TabsContent>
-
               <TabsContent value={TYPE_GOALS.ACHIEVED}>
-                {goals.data?.map((goal) => (
-                  <div
-                    className="flex items-center mb-2 justify-between bg-green-100 p-4 rounded-b-lg"
-                    key={goal.id}
-                  >
-                    <div className="flex-1">
-                      <CustomTooltip label={goal.description}>
-                        <p>
-                          <strong className="line-clamp-2">
-                            {goal.description}
-                          </strong>
-                        </p>
-                      </CustomTooltip>
-                      <p className="text-xs text-gray-600">
-                        Meta cumplida: {goal.targetDays} días
-                      </p>
-                      <p className="text-xs text-gray-600 text-end">
-                        {new Date(goal.achievedAt!).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <DropdownMenuHeader
-                      menuItems={[
-                        {
-                          to: "",
-                          label: "Eliminar",
-                          type: ICONS_KEYS.DELETE,
-                          isDisabled: !isAdmin,
-                          onClick: () => goalDelete.mutate(goal.id),
-                        },
-                        {
-                          to: "",
-                          label: "Reactivar",
-                          type: ICONS_KEYS.REACTIVATE,
-                          isDisabled: !isAdmin,
-                          onClick: () => goalReactivate.mutate(goal.id),
-                        },
-                        {
-                          to: "",
-                          label: "Clonar",
-                          type: ICONS_KEYS.COPY,
-                          onClick: () => goalClone.mutate(goal.id),
-                        },
-                      ]}
-                    />
-                  </div>
-                ))}
+                <GoalsAchieved goals={goals.data || []} />
               </TabsContent>
             </ScrollArea>
             <div>

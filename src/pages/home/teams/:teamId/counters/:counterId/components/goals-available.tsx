@@ -42,6 +42,7 @@ export const GoalsAvailable = ({
         if (modeGoal === MODE_GOAL.EDIT && selectedGoal?.id === goal.id)
           return (
             <GoalUpdate
+              key={goal.id}
               goal={selectedGoal}
               handleCancel={() => changeModeGoal(MODE_GOAL.EMPTY)}
               handleSuccess={() => changeModeGoal(MODE_GOAL.EMPTY)}
