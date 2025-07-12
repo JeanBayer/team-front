@@ -8,4 +8,5 @@ export interface Membership {
   user: UserMembership;
 }
 
-export interface UserMembership extends Pick<User, "email" | "name"> {}
+export interface UserMembership
+  extends Pick<User, "email" | "name" | "sprintWins"> {}

@@ -17,6 +17,7 @@ import { TeamsPage } from "@/pages/home/teams/teams-page";
 import { LandingPage } from "@/pages/landing/landing-page";
 import { LoginPage } from "@/pages/login/login-page";
 import { createBrowserRouter } from "react-router";
+import { MembersPage } from "./pages/home/teams/:teamId/members/members-page";
 
 export const router = createBrowserRouter([
   {
@@ -100,7 +101,7 @@ export const router = createBrowserRouter([
               },
               {
                 path: "members",
-                element: <TeamIdPage />,
+                element: <MembersPage />,
               },
             ],
           },
