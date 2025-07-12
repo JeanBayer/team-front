@@ -1,0 +1,156 @@
+import { DropdownMenuHeader } from "@/components/header/dropdown-menu-header";
+import { CustomTooltip } from "@/components/tooltip/custom-tooltip";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
+import { useState } from "react";
+import { useParams } from "react-router";
+import { useGoal } from "../hooks/use-goal";
+
+type GoalsSectionProps = {
+  currentCount: number;
+};
+
+export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
+  const { teamId, counterId } = useParams();
+  const { isAdmin } = useUserIsAdmin(teamId);
+  const [typeGoals, setTypeGoals] = useState("disponibles");
+  const { goals } = useGoal(teamId, counterId, typeGoals);
+
+  return (
+    <section className="flex flex-col p-4 gap-8 justify-center w-sm">
+      <Card>
+        <Tabs defaultValue="disponibles" value={typeGoals}>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex">
+                <DropdownMenuHeader
+                  menuItems={[
+                    {
+                      to: "goals/create",
+                      label: "Crear",
+                    },
+                  ]}
+                />
+                <p>Metas</p>
+              </div>
+              <TabsList>
+                <TabsTrigger
+                  value="disponibles"
+                  onClick={() => setTypeGoals("disponibles")}
+                  className="cursor-pointer"
+                >
+                  Disponibles
+                </TabsTrigger>
+                <TabsTrigger
+                  value="achieved"
+                  onClick={() => setTypeGoals("achieved")}
+                  className="cursor-pointer"
+                >
+                  Completadas
+                </TabsTrigger>
+              </TabsList>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="">
+            <ScrollArea className="h-96">
+              <TabsContent value="disponibles">
+                {goals.data?.map((goal) => (
+                  <div
+                    className="flex mb-2 items-center justify-between bg-blue-100 p-4 rounded-b-lg"
+                    key={goal.id}
+                  >
+                    <div>
+                      <CustomTooltip label={goal.description}>
+                        <p>
+                          <strong className="line-clamp-2">
+                            {goal.description}
+                          </strong>
+                        </p>
+                      </CustomTooltip>
+                      <p className="text-xs text-gray-600">
+                        Meta: {goal.targetDays} días / Restantes:{" "}
+                        {goal.targetDays - currentCount} días
+                      </p>
+                    </div>
+                    <DropdownMenuHeader
+                      menuItems={[
+                        {
+                          to: "",
+                          label: "Editar",
+                          isDisabled: !isAdmin,
+                        },
+                        {
+                          to: "",
+                          label: "Eliminar",
+                          type: "delete",
+                          isDisabled: !isAdmin,
+                        },
+                        {
+                          to: "",
+                          label: "Clonar",
+                          type: "delete",
+                        },
+                      ]}
+                    />
+                  </div>
+                ))}
+              </TabsContent>
+              <TabsContent value="achieved">
+                {goals.data?.map((goal) => (
+                  <div
+                    className="flex items-center mb-2 justify-between bg-green-100 p-4 rounded-b-lg"
+                    key={goal.id}
+                  >
+                    <div>
+                      <CustomTooltip label={goal.description}>
+                        <p>
+                          <strong className="line-clamp-2">
+                            {goal.description}
+                          </strong>
+                        </p>
+                      </CustomTooltip>
+                      <p className="text-xs text-gray-600">
+                        Meta cumplida: {goal.targetDays} días
+                      </p>
+                      <p className="text-xs text-gray-600 text-end">
+                        {new Date(goal.achievedAt!).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <DropdownMenuHeader
+                      menuItems={[
+                        {
+                          to: "",
+                          label: "Editar",
+                          isDisabled: !isAdmin,
+                        },
+                        {
+                          to: "",
+                          label: "Eliminar",
+                          type: "delete",
+                          isDisabled: !isAdmin,
+                        },
+                        {
+                          to: "",
+                          label: "Reactivar",
+                          type: "delete",
+                          isDisabled: !isAdmin,
+                        },
+                        {
+                          to: "",
+                          label: "Clonar",
+                          type: "delete",
+                        },
+                      ]}
+                    />
+                  </div>
+                ))}
+              </TabsContent>
+            </ScrollArea>
+          </CardContent>
+        </Tabs>
+      </Card>
+    </section>
+  );
+};

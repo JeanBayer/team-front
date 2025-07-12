@@ -1,6 +1,4 @@
-import { DropdownMenuHeader } from "@/components/header/dropdown-menu-header";
 import { Header } from "@/components/header/header";
-import { CustomTooltip } from "@/components/tooltip/custom-tooltip";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,19 +7,15 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { useTeam } from "../../../hooks/use-team";
 import { useCounter } from "../hooks/use-counter";
-import { useGoal } from "./hooks/use-goal";
+import { GoalsSection } from "./components/goals-section";
 
 export const CounterIdPage = () => {
   const { teamId, counterId } = useParams();
-  const [typeGoals, setTypeGoals] = useState("disponibles");
   const { isAdmin } = useUserIsAdmin(teamId);
   const { teamData } = useTeam(teamId);
   const navigate = useNavigate();
@@ -29,7 +23,6 @@ export const CounterIdPage = () => {
     teamId,
     counterId
   );
-  const { goals } = useGoal(teamId, counterId, typeGoals);
 
   if (counter.isLoading) return <div>loading...</div>;
   if (counter.isError) return <div>error...</div>;
@@ -146,139 +139,7 @@ export const CounterIdPage = () => {
 
         <Separator orientation="horizontal" className="lg:w-[1px]! lg:h-96!" />
 
-        <section className="flex flex-col p-4 gap-8 justify-center w-sm">
-          <Card>
-            <Tabs defaultValue="disponibles" value={typeGoals}>
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex">
-                    <DropdownMenuHeader
-                      menuItems={[
-                        {
-                          to: "goals/create",
-                          label: "Crear",
-                        },
-                      ]}
-                    />
-                    <p>Metas</p>
-                  </div>
-                  <TabsList>
-                    <TabsTrigger
-                      value="disponibles"
-                      onClick={() => setTypeGoals("disponibles")}
-                      className="cursor-pointer"
-                    >
-                      Disponibles
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="achieved"
-                      onClick={() => setTypeGoals("achieved")}
-                      className="cursor-pointer"
-                    >
-                      Completadas
-                    </TabsTrigger>
-                  </TabsList>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="">
-                <ScrollArea className="h-96">
-                  <TabsContent value="disponibles">
-                    {goals.data?.map((goal) => (
-                      <div
-                        className="flex mb-2 items-center justify-between bg-blue-100 p-4 rounded-b-lg"
-                        key={goal.id}
-                      >
-                        <div>
-                          <CustomTooltip label={goal.description}>
-                            <p>
-                              <strong className="line-clamp-2">
-                                {goal.description}
-                              </strong>
-                            </p>
-                          </CustomTooltip>
-                          <p className="text-xs text-gray-600">
-                            Meta: {goal.targetDays} días / Restantes:{" "}
-                            {goal.targetDays - counter.data?.currentCount!} días
-                          </p>
-                        </div>
-                        <DropdownMenuHeader
-                          menuItems={[
-                            {
-                              to: "",
-                              label: "Editar",
-                              isDisabled: !isAdmin,
-                            },
-                            {
-                              to: "",
-                              label: "Eliminar",
-                              type: "delete",
-                              isDisabled: !isAdmin,
-                            },
-                            {
-                              to: "",
-                              label: "Clonar",
-                              type: "delete",
-                            },
-                          ]}
-                        />
-                      </div>
-                    ))}
-                  </TabsContent>
-                  <TabsContent value="achieved">
-                    {goals.data?.map((goal) => (
-                      <div
-                        className="flex items-center mb-2 justify-between bg-green-100 p-4 rounded-b-lg"
-                        key={goal.id}
-                      >
-                        <div>
-                          <CustomTooltip label={goal.description}>
-                            <p>
-                              <strong className="line-clamp-2">
-                                {goal.description}
-                              </strong>
-                            </p>
-                          </CustomTooltip>
-                          <p className="text-xs text-gray-600">
-                            Meta cumplida: {goal.targetDays} días
-                          </p>
-                          <p className="text-xs text-gray-600 text-end">
-                            {new Date(goal.achievedAt!).toLocaleDateString()}
-                          </p>
-                        </div>
-                        <DropdownMenuHeader
-                          menuItems={[
-                            {
-                              to: "",
-                              label: "Editar",
-                              isDisabled: !isAdmin,
-                            },
-                            {
-                              to: "",
-                              label: "Eliminar",
-                              type: "delete",
-                              isDisabled: !isAdmin,
-                            },
-                            {
-                              to: "",
-                              label: "Reactivar",
-                              type: "delete",
-                              isDisabled: !isAdmin,
-                            },
-                            {
-                              to: "",
-                              label: "Clonar",
-                              type: "delete",
-                            },
-                          ]}
-                        />
-                      </div>
-                    ))}
-                  </TabsContent>
-                </ScrollArea>
-              </CardContent>
-            </Tabs>
-          </Card>
-        </section>
+        <GoalsSection currentCount={counter.data?.currentCount || 0} />
       </div>
     </div>
   );
