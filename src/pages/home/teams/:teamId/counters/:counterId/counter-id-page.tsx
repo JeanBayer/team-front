@@ -185,7 +185,7 @@ export const CounterIdPage = () => {
                   <TabsContent value="disponibles">
                     {goals.data?.map((goal) => (
                       <div
-                        className="flex items-center justify-between border-2 border-blue-300 p-4 rounded-b-lg first:border-t-2 not-first:border-t-0"
+                        className="flex mb-2 items-center justify-between bg-blue-100 p-4 rounded-b-lg"
                         key={goal.id}
                       >
                         <div>
@@ -227,7 +227,7 @@ export const CounterIdPage = () => {
                   <TabsContent value="achieved">
                     {goals.data?.map((goal) => (
                       <div
-                        className="flex items-center justify-between border-2 border-green-300 p-4 rounded-b-lg first:border-t-2 not-first:border-t-0"
+                        className="flex items-center mb-2 justify-between bg-green-100 p-4 rounded-b-lg"
                         key={goal.id}
                       >
                         <div>
