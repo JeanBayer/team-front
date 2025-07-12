@@ -1,7 +1,9 @@
+import type { IconType } from "@/data/icon-enum";
+
 export interface MenuItem {
   label: string;
   to: string;
   isDisabled?: boolean;
-  type?: "link" | "out" | "delete";
+  type?: IconType;
   onClick?: () => void;
 }

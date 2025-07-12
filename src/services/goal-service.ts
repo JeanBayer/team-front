@@ -52,4 +52,17 @@ export class GoalService {
       throw new Error("Error inesperado");
     }
   }
+
+  static async deleteGoal(teamId: string, counterId: string, goalId: string) {
+    try {
+      const { data } = await instance.delete<Goal>(
+        `/teams/${teamId}/counters/${counterId}/goals/${goalId}`
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
 }

@@ -1,16 +1,10 @@
-import { Delete, Link2, LogOut } from "lucide-react";
+import { ICONS, type IconType } from "@/data/icon-enum";
 
 type FlexibleIconProps = {
   size?: string | number;
   color?: string;
   className?: string;
-  type: "link" | "out" | "delete";
-};
-
-const ICONS = {
-  link: Link2,
-  out: LogOut,
-  delete: Delete,
+  type: IconType;
 };
 
 export const FlexibleIcon = ({

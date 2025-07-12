@@ -9,6 +9,7 @@ import {
   type ModeGoal,
   type TypeGoals,
 } from "@/data/goal-enum";
+import { ICONS_KEYS } from "@/data/icon-enum";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import type { Goal } from "@/types/goal";
 import { useState } from "react";
@@ -25,7 +26,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
   const { teamId, counterId } = useParams();
   const { isAdmin } = useUserIsAdmin(teamId);
   const [typeGoals, setTypeGoals] = useState<TypeGoals>(TYPE_GOALS.AVAILABLE);
-  const { goals } = useGoal(teamId, counterId, typeGoals);
+  const { goals, goalDelete } = useGoal(teamId, counterId, typeGoals);
   const [modeGoal, setModeGoal] = useState<ModeGoal>(MODE_GOAL.EMPTY);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
 
@@ -113,6 +114,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                           {
                             to: "",
                             label: "Editar",
+                            type: ICONS_KEYS.EDIT,
                             isDisabled:
                               !isAdmin || modeGoal !== MODE_GOAL.EMPTY,
                             onClick: () => handleEditGoal(goal),
@@ -120,13 +122,14 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                           {
                             to: "",
                             label: "Eliminar",
-                            type: "delete",
+                            type: ICONS_KEYS.DELETE,
                             isDisabled: !isAdmin,
+                            onClick: () => goalDelete.mutate(goal.id),
                           },
                           {
                             to: "",
                             label: "Clonar",
-                            type: "delete",
+                            type: ICONS_KEYS.COPY,
                           },
                         ]}
                       />
@@ -160,19 +163,20 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                         {
                           to: "",
                           label: "Eliminar",
-                          type: "delete",
+                          type: ICONS_KEYS.DELETE,
                           isDisabled: !isAdmin,
+                          onClick: () => goalDelete.mutate(goal.id),
                         },
                         {
                           to: "",
                           label: "Reactivar",
-                          type: "delete",
+                          type: ICONS_KEYS.REACTIVATE,
                           isDisabled: !isAdmin,
                         },
                         {
                           to: "",
                           label: "Clonar",
-                          type: "delete",
+                          type: ICONS_KEYS.COPY,
                         },
                       ]}
                     />

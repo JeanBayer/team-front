@@ -68,12 +68,30 @@ export const useGoal = (
   });
 
   const goalUpdate = useMutation({
-    mutationFn: (updateCounter: UpdateGoal) =>
-      GoalService.updateGoal(teamId, counterId, updateCounter),
+    mutationFn: (updateGoal: UpdateGoal) =>
+      GoalService.updateGoal(teamId, counterId, updateGoal),
     onSuccess: goalUpdateOptimistic.onSuccess,
     onMutate: goalUpdateOptimistic.onMutate,
     onError: goalUpdateOptimistic.onError,
     onSettled: goalUpdateOptimistic.onSettled,
+  });
+
+  const goalDeleteOptimistic = useHandlerOptimistic<Goal[], string>({
+    queryKey: GOALS_KEY,
+    onMutate: (goalId) => (old) => old.filter((goal) => goal.id !== goalId),
+    onSuccess: () =>
+      toast.success("Meta eliminada correctamente", { richColors: true }),
+    onError: (error) =>
+      toast.error(error?.message || "Hubo un error", { richColors: true }),
+  });
+
+  const goalDelete = useMutation({
+    mutationFn: (goalId: string) =>
+      GoalService.deleteGoal(teamId, counterId, goalId),
+    onSuccess: goalDeleteOptimistic.onSuccess,
+    onMutate: goalDeleteOptimistic.onMutate,
+    onError: goalDeleteOptimistic.onError,
+    onSettled: goalDeleteOptimistic.onSettled,
   });
 
   return {
@@ -93,6 +111,12 @@ export const useGoal = (
       isSuccess: goalUpdate.isSuccess,
       isError: goalUpdate.isError,
       mutate: goalUpdate.mutate,
+    },
+    goalDelete: {
+      isPending: goalDelete.isPending,
+      isSuccess: goalDelete.isSuccess,
+      isError: goalDelete.isError,
+      mutate: goalDelete.mutate,
     },
   };
 };
