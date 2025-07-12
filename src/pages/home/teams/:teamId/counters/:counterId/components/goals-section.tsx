@@ -3,7 +3,12 @@ import { CustomTooltip } from "@/components/tooltip/custom-tooltip";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MODE_GOAL, type ModeGoal } from "@/data/goal-enum";
+import {
+  MODE_GOAL,
+  TYPE_GOALS,
+  type ModeGoal,
+  type TypeGoals,
+} from "@/data/goal-enum";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import { useState } from "react";
 import { useParams } from "react-router";
@@ -17,7 +22,7 @@ type GoalsSectionProps = {
 export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
   const { teamId, counterId } = useParams();
   const { isAdmin } = useUserIsAdmin(teamId);
-  const [typeGoals, setTypeGoals] = useState("disponibles");
+  const [typeGoals, setTypeGoals] = useState<TypeGoals>(TYPE_GOALS.AVAILABLE);
   const { goals } = useGoal(teamId, counterId, typeGoals);
   const [modeGoal, setModeGoal] = useState<ModeGoal>(MODE_GOAL.CREATE);
 
@@ -34,7 +39,9 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                       to: "",
                       label: "Crear",
                       onClick: () => setModeGoal(MODE_GOAL.CREATE),
-                      isDisabled: modeGoal !== MODE_GOAL.EMPTY,
+                      isDisabled:
+                        modeGoal !== MODE_GOAL.EMPTY ||
+                        typeGoals !== TYPE_GOALS.AVAILABLE,
                     },
                   ]}
                 />
@@ -42,15 +49,15 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
               </div>
               <TabsList>
                 <TabsTrigger
-                  value="disponibles"
-                  onClick={() => setTypeGoals("disponibles")}
+                  value={TYPE_GOALS.AVAILABLE}
+                  onClick={() => setTypeGoals(TYPE_GOALS.AVAILABLE)}
                   className="cursor-pointer"
                 >
                   Disponibles
                 </TabsTrigger>
                 <TabsTrigger
-                  value="achieved"
-                  onClick={() => setTypeGoals("achieved")}
+                  value={TYPE_GOALS.ACHIEVED}
+                  onClick={() => setTypeGoals(TYPE_GOALS.ACHIEVED)}
                   className="cursor-pointer"
                 >
                   Completadas
@@ -60,10 +67,11 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
           </CardHeader>
           <CardContent className="">
             <ScrollArea className="h-96">
-              <TabsContent value="disponibles">
+              <TabsContent value={TYPE_GOALS.AVAILABLE}>
                 {modeGoal === MODE_GOAL.CREATE && (
                   <GoalCreate
                     handleCancel={() => setModeGoal(MODE_GOAL.EMPTY)}
+                    handleSuccess={() => setModeGoal(MODE_GOAL.EMPTY)}
                   />
                 )}
                 {goals.data?.map((goal) => (
@@ -107,7 +115,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                   </div>
                 ))}
               </TabsContent>
-              <TabsContent value="achieved">
+              <TabsContent value={TYPE_GOALS.ACHIEVED}>
                 {goals.data?.map((goal) => (
                   <div
                     className="flex items-center mb-2 justify-between bg-green-100 p-4 rounded-b-lg"

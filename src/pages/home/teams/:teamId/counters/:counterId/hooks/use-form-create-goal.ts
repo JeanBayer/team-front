@@ -1,18 +1,21 @@
 import { useFormData } from "@/hooks/use-form-data";
+import type { CreateGoal } from "@/types/goal";
+import { useParams } from "react-router";
+import { useGoal } from "./use-goal";
 
-const INITIAL_CREATE_GOAL = {
+const INITIAL_CREATE_GOAL: CreateGoal = {
   description: "",
   targetDays: 1,
 };
 
 export const useFormCreateGoal = () => {
-  // const { teamId } = useParams();
-  // const { counterCreate } = useCounter(teamId);
+  const { teamId, counterId } = useParams();
+  const { goalCreate } = useGoal(teamId, counterId);
   // const navigate = useNavigate();
 
   const { formData, updateField, handleSubmit, resetFormData } = useFormData(
     INITIAL_CREATE_GOAL,
-    (formData) => console.log(formData)
+    (formData) => goalCreate.mutate(formData)
   );
 
   return {
@@ -20,7 +23,8 @@ export const useFormCreateGoal = () => {
     resetFormData,
     updateField,
     handleSubmit,
-    isPending: false,
-    isError: false,
+    isPending: goalCreate.isPending,
+    isError: goalCreate.isError,
+    isSuccess: goalCreate.isSuccess,
   };
 };

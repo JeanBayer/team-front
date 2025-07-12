@@ -6,4 +6,10 @@ export const MODE_GOAL = {
   EMPTY: "EMPTY",
 } as const;
 
+export const TYPE_GOALS = {
+  AVAILABLE: "disponibles",
+  ACHIEVED: "achieved",
+} as const;
+
 export type ModeGoal = keyof typeof MODE_GOAL;
+export type TypeGoals = (typeof TYPE_GOALS)[keyof typeof TYPE_GOALS];

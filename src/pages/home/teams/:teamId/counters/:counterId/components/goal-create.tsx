@@ -5,17 +5,33 @@ import { Save, X } from "lucide-react";
 import { useFormCreateGoal } from "../hooks/use-form-create-goal";
 
 type GoalCreateProps = {
-  handleCancel: () => void;
+  handleCancel?: () => void;
+  handleSuccess?: () => void;
 };
 
-export const GoalCreate = ({ handleCancel }: GoalCreateProps) => {
-  const { formData, updateField, handleSubmit, resetFormData } =
-    useFormCreateGoal();
+export const GoalCreate = ({
+  handleCancel = () => {},
+  handleSuccess = () => {},
+}: GoalCreateProps) => {
+  const {
+    formData,
+    updateField,
+    handleSubmit,
+    resetFormData,
+    isPending,
+    isSuccess,
+  } = useFormCreateGoal();
 
   function onClickCancelCreateGoal() {
     resetFormData();
     handleCancel();
   }
+
+  if (isSuccess) {
+    resetFormData();
+    handleSuccess();
+  }
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex mb-2 items-center border-2 justify-between p-4 rounded-b-lg">
@@ -54,13 +70,18 @@ export const GoalCreate = ({ handleCancel }: GoalCreateProps) => {
         </div>
 
         <div className="flex flex-col gap-4">
-          <Button type="submit" className="w-7 h-7 cursor-pointer">
+          <Button
+            type="submit"
+            className="w-7 h-7 cursor-pointer"
+            disabled={isPending}
+          >
             <Save size={16} />
           </Button>
           <Button
             className="w-7 h-7 cursor-pointer"
             variant="destructive"
             onClick={onClickCancelCreateGoal}
+            disabled={isPending}
           >
             <X size={16} />
           </Button>

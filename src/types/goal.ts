@@ -8,3 +8,8 @@ export interface Goal {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface CreateGoal {
+  description: string;
+  targetDays: number;
+}
