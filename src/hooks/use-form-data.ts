@@ -1,14 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const useFormData = <T>(
   initialFormData: T,
   callbackSubmit: (formData: T) => void
 ) => {
   const [formData, setFormData] = useState(initialFormData);
-
-  useEffect(() => {
-    setFormData(initialFormData);
-  }, [initialFormData]);
 
   function resetFormData() {
     setFormData(initialFormData);

@@ -1,5 +1,5 @@
 import { instance } from "@/api/api";
-import type { CreateGoal, Goal } from "@/types/goal";
+import type { CreateGoal, Goal, UpdateGoal } from "@/types/goal";
 import { AxiosError } from "axios";
 
 export class GoalService {
@@ -25,6 +25,25 @@ export class GoalService {
       const { data } = await instance.post<Goal>(
         `/teams/${teamId}/counters/${counterId}/goals`,
         createGoal
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async updateGoal(
+    teamId: string,
+    counterId: string,
+    updateGoal: UpdateGoal
+  ) {
+    const { id: goalId, ...body } = updateGoal;
+    try {
+      const { data } = await instance.patch<Goal>(
+        `/teams/${teamId}/counters/${counterId}/goals/${goalId}`,
+        body
       );
       return data;
     } catch (error) {

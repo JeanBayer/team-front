@@ -2,7 +2,7 @@ import { TYPE_GOALS, type TypeGoals } from "@/data/goal-enum";
 import { minute } from "@/helper/time";
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { GoalService } from "@/services/goal-service";
-import type { CreateGoal, Goal } from "@/types/goal";
+import type { CreateGoal, Goal, UpdateGoal } from "@/types/goal";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -19,12 +19,11 @@ export const useGoal = (
     enabled: !!counterId,
   });
 
-  // pm: crear-counter
+  // pm: crear-goal
   const goalCreateOptimistic = useHandlerOptimistic<Goal[], CreateGoal>({
     queryKey: GOALS_KEY,
     onMutate: (mutateData) => (old) =>
       [
-        ...old,
         {
           id: "123",
           description: mutateData.description,
@@ -35,6 +34,7 @@ export const useGoal = (
           createdAt: new Date(),
           updatedAt: new Date(),
         },
+        ...old,
       ],
     onSuccess: () => toast.success("Goal creado", { richColors: true }),
     onError: (error) => toast.error(error?.message, { richColors: true }),
@@ -49,6 +49,33 @@ export const useGoal = (
     onSettled: goalCreateOptimistic.onSettled,
   });
 
+  // pm: update-goal
+  const goalUpdateOptimistic = useHandlerOptimistic<Goal[], UpdateGoal>({
+    queryKey: GOALS_KEY,
+    onMutate: (mutateData) => (old) =>
+      old.map((goal) => {
+        if (goal.id === mutateData.id)
+          return {
+            ...goal,
+            ...mutateData,
+          };
+        return { ...goal };
+      }),
+    onSuccess: () =>
+      toast.success("Goal actualizado correctamente", { richColors: true }),
+    onError: (error) =>
+      toast.error(error?.message || "Hubo un error", { richColors: true }),
+  });
+
+  const goalUpdate = useMutation({
+    mutationFn: (updateCounter: UpdateGoal) =>
+      GoalService.updateGoal(teamId, counterId, updateCounter),
+    onSuccess: goalUpdateOptimistic.onSuccess,
+    onMutate: goalUpdateOptimistic.onMutate,
+    onError: goalUpdateOptimistic.onError,
+    onSettled: goalUpdateOptimistic.onSettled,
+  });
+
   return {
     goals: {
       isLoading: goalsQuery.isLoading,
@@ -60,6 +87,12 @@ export const useGoal = (
       isSuccess: goalCreate.isSuccess,
       isError: goalCreate.isError,
       mutate: goalCreate.mutate,
+    },
+    goalUpdate: {
+      isPending: goalUpdate.isPending,
+      isSuccess: goalUpdate.isSuccess,
+      isError: goalUpdate.isError,
+      mutate: goalUpdate.mutate,
     },
   };
 };

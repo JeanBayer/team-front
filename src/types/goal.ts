@@ -13,3 +13,7 @@ export interface CreateGoal {
   description: string;
   targetDays: number;
 }
+
+export interface UpdateGoal extends Partial<CreateGoal> {
+  id: string;
+}
