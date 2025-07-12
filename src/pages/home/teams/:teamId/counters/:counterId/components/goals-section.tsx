@@ -11,12 +11,11 @@ import {
 } from "@/data/goal-enum";
 import { ICONS_KEYS } from "@/data/icon-enum";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
-import type { Goal } from "@/types/goal";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useGoal } from "../hooks/use-goal";
 import { GoalCreate } from "./goal-create";
-import { GoalUpdate } from "./goal-update";
+import { GoalsAvailable } from "./goals-available";
 
 type GoalsSectionProps = {
   currentCount: number;
@@ -32,11 +31,9 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
     typeGoals
   );
   const [modeGoal, setModeGoal] = useState<ModeGoal>(MODE_GOAL.EMPTY);
-  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
 
-  function handleEditGoal(goal: Goal) {
-    setSelectedGoal(goal);
-    setModeGoal(MODE_GOAL.EDIT);
+  function changeModeGoal(modeGoal: ModeGoal) {
+    setModeGoal(modeGoal);
   }
 
   return (
@@ -81,67 +78,14 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
           <CardContent className="">
             <ScrollArea className="h-96">
               <TabsContent value={TYPE_GOALS.AVAILABLE}>
-                {goals.data?.map((goal) => {
-                  if (
-                    modeGoal === MODE_GOAL.EDIT &&
-                    selectedGoal &&
-                    selectedGoal.id === goal.id
-                  )
-                    return (
-                      <GoalUpdate
-                        goal={selectedGoal}
-                        handleCancel={() => setModeGoal(MODE_GOAL.EMPTY)}
-                        handleSuccess={() => setModeGoal(MODE_GOAL.EMPTY)}
-                      />
-                    );
-
-                  return (
-                    <div
-                      className="flex mb-2 items-center justify-between bg-blue-100 p-4 rounded-b-lg"
-                      key={goal.id}
-                    >
-                      <div>
-                        <CustomTooltip label={goal.description}>
-                          <p>
-                            <strong className="line-clamp-2">
-                              {goal.description}
-                            </strong>
-                          </p>
-                        </CustomTooltip>
-                        <p className="text-xs text-gray-600">
-                          Meta: {goal.targetDays} días / Restantes:{" "}
-                          {goal.targetDays - currentCount} días
-                        </p>
-                      </div>
-                      <DropdownMenuHeader
-                        menuItems={[
-                          {
-                            to: "",
-                            label: "Editar",
-                            type: ICONS_KEYS.EDIT,
-                            isDisabled:
-                              !isAdmin || modeGoal !== MODE_GOAL.EMPTY,
-                            onClick: () => handleEditGoal(goal),
-                          },
-                          {
-                            to: "",
-                            label: "Eliminar",
-                            type: ICONS_KEYS.DELETE,
-                            isDisabled: !isAdmin,
-                            onClick: () => goalDelete.mutate(goal.id),
-                          },
-                          {
-                            to: "",
-                            label: "Clonar",
-                            type: ICONS_KEYS.COPY,
-                            onClick: () => goalClone.mutate(goal.id),
-                          },
-                        ]}
-                      />
-                    </div>
-                  );
-                })}
+                <GoalsAvailable
+                  goals={goals.data || []}
+                  modeGoal={modeGoal}
+                  changeModeGoal={changeModeGoal}
+                  currentCount={currentCount}
+                />
               </TabsContent>
+
               <TabsContent value={TYPE_GOALS.ACHIEVED}>
                 {goals.data?.map((goal) => (
                   <div
