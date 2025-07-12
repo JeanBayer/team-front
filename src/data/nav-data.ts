@@ -53,14 +53,17 @@ const LIST_NAV_SELECTED_TEAM = {
     {
       to: "/teams/%teamId%/retrospectives",
       text: "Retrospectivas",
+      end: false,
     },
     {
       to: "/teams/%teamId%/counters",
       text: "Contadores",
+      end: false,
     },
     {
       to: "/teams/%teamId%/members",
       text: "Miembros",
+      end: false,
     },
   ],
 };

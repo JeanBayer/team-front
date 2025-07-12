@@ -20,6 +20,7 @@ type ListNav = {
   options: {
     to: string;
     text: string;
+    end?: boolean;
   }[];
 };
 
@@ -47,6 +48,7 @@ export const CollapsibleMenu = ({ listNav }: CollapsibleMenuProps) => {
                 classNameElement={classNameElement}
                 to={option.to}
                 text={option.text}
+                end={option.end}
               />
             ))}
           </SidebarMenuSub>
@@ -60,6 +62,7 @@ type CollapsibleMenuButtonProps = {
   classNameElement: string;
   to: string;
   text: string;
+  end?: boolean;
 };
 
 const CollapsibleMenuButton = ({
@@ -87,6 +90,7 @@ const CollapsibleMenuSubItem = ({
   classNameElement,
   to,
   text,
+  end = true,
 }: CollapsibleMenuSubItemProps) => {
   return (
     <SidebarMenuSubItem>
@@ -97,7 +101,7 @@ const CollapsibleMenuSubItem = ({
             ? `${classNameElement} border-blue-200`
             : `${classNameElement} border-transparent hover:border-blue-200`
         }
-        end
+        end={end}
       >
         {text}
       </NavLink>
