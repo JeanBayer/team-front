@@ -94,6 +94,32 @@ export const useGoal = (
     onSettled: goalDeleteOptimistic.onSettled,
   });
 
+  const GOALS_KEY_AVAILABLE = [
+    "TEAMS",
+    teamId,
+    "COUNTER",
+    counterId,
+    "GOALS",
+    TYPE_GOALS.AVAILABLE,
+  ];
+  // pm: clonar-goal
+  const goalCloneOptimistic = useHandlerOptimistic<Goal[], string>({
+    queryKey: GOALS_KEY_AVAILABLE,
+    onMutate: (goalId) => (old) =>
+      [{ ...old.find((goal) => goal.id === goalId)!, id: "123" }, ...old],
+    onSuccess: () => toast.success("Meta clonada", { richColors: true }),
+    onError: (error) => toast.error(error?.message, { richColors: true }),
+  });
+
+  const goalClone = useMutation({
+    mutationFn: (goalId: string) =>
+      GoalService.cloneGoal(teamId, counterId, goalId),
+    onSuccess: goalCloneOptimistic.onSuccess,
+    onMutate: goalCloneOptimistic.onMutate,
+    onError: goalCloneOptimistic.onError,
+    onSettled: goalCloneOptimistic.onSettled,
+  });
+
   return {
     goals: {
       isLoading: goalsQuery.isLoading,
@@ -117,6 +143,12 @@ export const useGoal = (
       isSuccess: goalDelete.isSuccess,
       isError: goalDelete.isError,
       mutate: goalDelete.mutate,
+    },
+    goalClone: {
+      isPending: goalClone.isPending,
+      isSuccess: goalClone.isSuccess,
+      isError: goalClone.isError,
+      mutate: goalClone.mutate,
     },
   };
 };

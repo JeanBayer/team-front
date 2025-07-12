@@ -26,7 +26,11 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
   const { teamId, counterId } = useParams();
   const { isAdmin } = useUserIsAdmin(teamId);
   const [typeGoals, setTypeGoals] = useState<TypeGoals>(TYPE_GOALS.AVAILABLE);
-  const { goals, goalDelete } = useGoal(teamId, counterId, typeGoals);
+  const { goals, goalDelete, goalClone } = useGoal(
+    teamId,
+    counterId,
+    typeGoals
+  );
   const [modeGoal, setModeGoal] = useState<ModeGoal>(MODE_GOAL.EMPTY);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
 
@@ -130,6 +134,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                             to: "",
                             label: "Clonar",
                             type: ICONS_KEYS.COPY,
+                            onClick: () => goalClone.mutate(goal.id),
                           },
                         ]}
                       />
@@ -177,6 +182,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                           to: "",
                           label: "Clonar",
                           type: ICONS_KEYS.COPY,
+                          onClick: () => goalClone.mutate(goal.id),
                         },
                       ]}
                     />
