@@ -1,10 +1,9 @@
+import { minute } from "@/helper/time";
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { CounterService } from "@/services/counter-service";
 import type { Counter, CreateCounter, UpdateCounter } from "@/types/counter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-
-const MINUTE_IN_MS = 1000 * 60;
 
 export const useCounter = (teamId: string = "", counterId: string = "") => {
   const queryClient = useQueryClient();
@@ -14,7 +13,7 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
   const countersQuery = useQuery({
     queryKey: COUNTERS_KEY,
     queryFn: () => CounterService.getCounters(teamId),
-    staleTime: 5 * MINUTE_IN_MS,
+    staleTime: minute(5).toMS(),
     enabled: !!teamId,
   });
 
@@ -23,7 +22,7 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
   const counterQuery = useQuery({
     queryKey: COUNTER_KEY,
     queryFn: () => CounterService.getCounter(teamId, counterId),
-    staleTime: 5 * MINUTE_IN_MS,
+    staleTime: minute(5).toMS(),
     enabled: !!counterId,
   });
 

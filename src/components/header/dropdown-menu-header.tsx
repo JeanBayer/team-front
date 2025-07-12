@@ -19,7 +19,7 @@ export function DropdownMenuHeader({ menuItems }: DropdownMenuProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <EllipsisVertical size={16} className="cursor-pointer" />
+        <EllipsisVertical size={16} className="cursor-pointer shrink-0" />
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start">
         {menuItems?.map((item, index) => (
