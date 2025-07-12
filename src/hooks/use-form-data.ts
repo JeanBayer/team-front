@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useFormData = <T>(
   initialFormData: T,
@@ -6,7 +6,15 @@ export const useFormData = <T>(
 ) => {
   const [formData, setFormData] = useState(initialFormData);
 
-  function updateField(key: string, value: string) {
+  useEffect(() => {
+    setFormData(initialFormData);
+  }, [initialFormData]);
+
+  function resetFormData() {
+    setFormData(initialFormData);
+  }
+
+  function updateField(key: string, value: string | number) {
     setFormData((prev) => {
       return {
         ...prev,
@@ -22,6 +30,7 @@ export const useFormData = <T>(
 
   return {
     formData,
+    resetFormData,
     updateField,
     handleSubmit,
   };

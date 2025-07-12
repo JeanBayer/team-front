@@ -3,10 +3,12 @@ import { CustomTooltip } from "@/components/tooltip/custom-tooltip";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MODE_GOAL, type ModeGoal } from "@/data/goal-enum";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useGoal } from "../hooks/use-goal";
+import { GoalCreate } from "./goal-create";
 
 type GoalsSectionProps = {
   currentCount: number;
@@ -17,6 +19,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
   const { isAdmin } = useUserIsAdmin(teamId);
   const [typeGoals, setTypeGoals] = useState("disponibles");
   const { goals } = useGoal(teamId, counterId, typeGoals);
+  const [modeGoal, setModeGoal] = useState<ModeGoal>(MODE_GOAL.CREATE);
 
   return (
     <section className="flex flex-col p-4 gap-8 justify-center w-sm">
@@ -28,8 +31,10 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                 <DropdownMenuHeader
                   menuItems={[
                     {
-                      to: "goals/create",
+                      to: "",
                       label: "Crear",
+                      onClick: () => setModeGoal(MODE_GOAL.CREATE),
+                      isDisabled: modeGoal !== MODE_GOAL.EMPTY,
                     },
                   ]}
                 />
@@ -56,6 +61,11 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
           <CardContent className="">
             <ScrollArea className="h-96">
               <TabsContent value="disponibles">
+                {modeGoal === MODE_GOAL.CREATE && (
+                  <GoalCreate
+                    handleCancel={() => setModeGoal(MODE_GOAL.EMPTY)}
+                  />
+                )}
                 {goals.data?.map((goal) => (
                   <div
                     className="flex mb-2 items-center justify-between bg-blue-100 p-4 rounded-b-lg"
