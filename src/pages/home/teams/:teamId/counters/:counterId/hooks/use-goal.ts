@@ -3,7 +3,7 @@ import { minute } from "@/helper/time";
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { GoalService } from "@/services/goal-service";
 import type { CreateGoal, Goal, UpdateGoal } from "@/types/goal";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useGoal = (
@@ -11,6 +11,7 @@ export const useGoal = (
   counterId: string = "",
   typeGoals: TypeGoals = TYPE_GOALS.AVAILABLE
 ) => {
+  const queryClient = useQueryClient();
   const GOALS_KEY = ["TEAMS", teamId, "COUNTER", counterId, "GOALS", typeGoals];
   const goalsQuery = useQuery({
     queryKey: GOALS_KEY,
@@ -102,6 +103,7 @@ export const useGoal = (
     "GOALS",
     TYPE_GOALS.AVAILABLE,
   ];
+
   // pm: clonar-goal
   const goalCloneOptimistic = useHandlerOptimistic<Goal[], string>({
     queryKey: GOALS_KEY_AVAILABLE,
@@ -118,6 +120,35 @@ export const useGoal = (
     onMutate: goalCloneOptimistic.onMutate,
     onError: goalCloneOptimistic.onError,
     onSettled: goalCloneOptimistic.onSettled,
+  });
+
+  const GOALS_KEY_ACHIEVED = [
+    "TEAMS",
+    teamId,
+    "COUNTER",
+    counterId,
+    "GOALS",
+    TYPE_GOALS.ACHIEVED,
+  ];
+
+  // pm: reactivar-goal
+  const goalReactivateOptimistic = useHandlerOptimistic<Goal[], string>({
+    queryKey: GOALS_KEY_ACHIEVED,
+    onMutate: (goalId) => (old) => old.filter((goal) => goal.id !== goalId),
+    onSuccess: () => {
+      toast.success("Meta reactivada", { richColors: true });
+      queryClient.invalidateQueries({ queryKey: GOALS_KEY_AVAILABLE });
+    },
+    onError: (error) => toast.error(error?.message, { richColors: true }),
+  });
+
+  const goalReactivate = useMutation({
+    mutationFn: (goalId: string) =>
+      GoalService.reactivateGoal(teamId, counterId, goalId),
+    onSuccess: goalReactivateOptimistic.onSuccess,
+    onMutate: goalReactivateOptimistic.onMutate,
+    onError: goalReactivateOptimistic.onError,
+    onSettled: goalReactivateOptimistic.onSettled,
   });
 
   return {
@@ -149,6 +180,12 @@ export const useGoal = (
       isSuccess: goalClone.isSuccess,
       isError: goalClone.isError,
       mutate: goalClone.mutate,
+    },
+    goalReactivate: {
+      isPending: goalReactivate.isPending,
+      isSuccess: goalReactivate.isSuccess,
+      isError: goalReactivate.isError,
+      mutate: goalReactivate.mutate,
     },
   };
 };

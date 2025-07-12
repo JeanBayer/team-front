@@ -26,7 +26,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
   const { teamId, counterId } = useParams();
   const { isAdmin } = useUserIsAdmin(teamId);
   const [typeGoals, setTypeGoals] = useState<TypeGoals>(TYPE_GOALS.AVAILABLE);
-  const { goals, goalDelete, goalClone } = useGoal(
+  const { goals, goalDelete, goalClone, goalReactivate } = useGoal(
     teamId,
     counterId,
     typeGoals
@@ -177,6 +177,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
                           label: "Reactivar",
                           type: ICONS_KEYS.REACTIVATE,
                           isDisabled: !isAdmin,
+                          onClick: () => goalReactivate.mutate(goal.id),
                         },
                         {
                           to: "",

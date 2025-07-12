@@ -78,4 +78,21 @@ export class GoalService {
       throw new Error("Error inesperado");
     }
   }
+
+  static async reactivateGoal(
+    teamId: string,
+    counterId: string,
+    goalId: string
+  ) {
+    try {
+      const { data } = await instance.post<Goal>(
+        `/teams/${teamId}/counters/${counterId}/goals/${goalId}/reactivate`
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
 }
