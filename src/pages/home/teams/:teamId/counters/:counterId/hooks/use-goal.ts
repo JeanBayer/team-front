@@ -36,7 +36,7 @@ export const useGoal = (
         },
         ...old,
       ],
-    onSuccess: () => toast.success("Goal creado", { richColors: true }),
+    onSuccess: () => toast.success("Meta creada", { richColors: true }),
     onError: (error) => toast.error(error?.message, { richColors: true }),
   });
 
@@ -62,7 +62,7 @@ export const useGoal = (
         return { ...goal };
       }),
     onSuccess: () =>
-      toast.success("Goal actualizado correctamente", { richColors: true }),
+      toast.success("Meta actualizada correctamente", { richColors: true }),
     onError: (error) =>
       toast.error(error?.message || "Hubo un error", { richColors: true }),
   });

@@ -26,7 +26,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
   const { isAdmin } = useUserIsAdmin(teamId);
   const [typeGoals, setTypeGoals] = useState<TypeGoals>(TYPE_GOALS.AVAILABLE);
   const { goals } = useGoal(teamId, counterId, typeGoals);
-  const [modeGoal, setModeGoal] = useState<ModeGoal>(MODE_GOAL.CREATE);
+  const [modeGoal, setModeGoal] = useState<ModeGoal>(MODE_GOAL.EMPTY);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
 
   function handleEditGoal(goal: Goal) {
