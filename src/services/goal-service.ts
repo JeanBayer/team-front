@@ -3,10 +3,10 @@ import type { Goal } from "@/types/goal";
 import { AxiosError } from "axios";
 
 export class GoalService {
-  static async getGoals(teamId: string, counterId: string) {
+  static async getGoals(teamId: string, counterId: string, typeGoals: string) {
     try {
       const { data } = await instance.get<Goal[]>(
-        `/teams/${teamId}/counters/${counterId}/goals`
+        `/teams/${teamId}/counters/${counterId}/goals?type=${typeGoals}`
       );
       return data;
     } catch (error) {
