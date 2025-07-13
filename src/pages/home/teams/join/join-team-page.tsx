@@ -53,7 +53,7 @@ export const JoinTeamPage = () => {
                   id="password-equipo"
                   placeholder="password"
                   value={formData.joinPassword}
-                  onChange={(e) => updateField("password", e.target.value)}
+                  onChange={(e) => updateField("joinPassword", e.target.value)}
                   required
                 />
               </div>
