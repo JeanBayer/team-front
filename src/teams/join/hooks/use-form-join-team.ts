@@ -3,8 +3,8 @@ import { useMembership } from "@/teams/hooks/use-membership";
 import { useNavigate } from "react-router";
 
 const initialFormData = {
-  id: "ddf18cf4-c06a-4d82-bbb6-29514cb1f633",
-  joinPassword: "123",
+  id: "",
+  joinPassword: "",
 };
 
 export const useFormJoinTeam = () => {
