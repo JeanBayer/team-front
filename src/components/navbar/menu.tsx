@@ -10,7 +10,7 @@ import {
   getUserNavList,
 } from "@/data/nav-data";
 import { deleteAuthData } from "@/helper/extract-data";
-import { useTeam } from "@/pages/home/teams/hooks/use-team";
+import { useTeam } from "@/teams/hooks/use-team";
 import { LogOut } from "lucide-react";
 import { NavLink, useNavigate, useParams } from "react-router";
 

@@ -1,23 +1,23 @@
+import { CreateAccountPage } from "@/auth/create-account/create-account-page";
+import { LoginPage } from "@/auth/login/login-page";
 import { NotProtectedRoute } from "@/components/routes/not-protected-route";
 import { ProtectedRoute } from "@/components/routes/protected-route";
-import { CreateAccountPage } from "@/pages/create-account/create-account-page";
-import { HomeLayout } from "@/pages/home/home-layout";
-import { HomePage } from "@/pages/home/home-page";
-import { CounterIdPage } from "@/pages/home/teams/:teamId/counters/:counterId/counter-id-page";
-import { EditCounterPage } from "@/pages/home/teams/:teamId/counters/:counterId/edit/edit-counter-page";
-import { CounterPage } from "@/pages/home/teams/:teamId/counters/counter-page";
-import { CreateCounterPage } from "@/pages/home/teams/:teamId/counters/create/create-counter-page";
-import { RetroIdPage } from "@/pages/home/teams/:teamId/retros/:retroId/retro-id-page";
-import { CreateRetroPage } from "@/pages/home/teams/:teamId/retros/create/create-retro-page";
-import { RetrosPage } from "@/pages/home/teams/:teamId/retros/retros-page";
-import { TeamIdPage } from "@/pages/home/teams/:teamId/team-id-page";
-import { CreateTeamPage } from "@/pages/home/teams/create/create-team-page";
-import { JoinTeamPage } from "@/pages/home/teams/join/join-team-page";
-import { TeamsPage } from "@/pages/home/teams/teams-page";
-import { LandingPage } from "@/pages/landing/landing-page";
-import { LoginPage } from "@/pages/login/login-page";
+import { CounterIdPage } from "@/counters/:counterId/counter-id-page";
+import { EditCounterPage } from "@/counters/:counterId/edit/edit-counter-page";
+import { CounterPage } from "@/counters/counter-page";
+import { CreateCounterPage } from "@/counters/create/create-counter-page";
+import { HomeLayout } from "@/home/home-layout";
+import { HomePage } from "@/home/home-page";
+import { LandingPage } from "@/landing/landing-page";
+import { MembersPage } from "@/members/members-page";
+import { RetroIdPage } from "@/retros/:retroId/retro-id-page";
+import { CreateRetroPage } from "@/retros/create/create-retro-page";
+import { RetrosPage } from "@/retros/retros-page";
+import { TeamIdPage } from "@/teams/:teamId/team-id-page";
+import { CreateTeamPage } from "@/teams/create/create-team-page";
+import { JoinTeamPage } from "@/teams/join/join-team-page";
+import { TeamsPage } from "@/teams/teams-page";
 import { createBrowserRouter } from "react-router";
-import { MembersPage } from "./pages/home/teams/:teamId/members/members-page";
 
 export const router = createBrowserRouter([
   {
