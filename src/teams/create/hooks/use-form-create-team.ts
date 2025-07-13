@@ -3,8 +3,8 @@ import { useTeam } from "@/teams/hooks/use-team";
 import { useNavigate } from "react-router";
 
 const initialFormData = {
-  name: "team with counter - increment",
-  joinPassword: "123",
+  name: "",
+  joinPassword: "",
 };
 
 export const useFormCreateTeam = () => {

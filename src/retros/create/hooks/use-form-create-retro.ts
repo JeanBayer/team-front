@@ -3,7 +3,7 @@ import { useRetro } from "@/retros/hooks/use-retro";
 import { useNavigate, useParams } from "react-router";
 
 const initialFormData = {
-  retrospectiveName: "Retro name N1",
+  retrospectiveName: "",
 };
 
 export const useFormCreateRetro = () => {

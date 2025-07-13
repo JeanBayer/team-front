@@ -2,9 +2,9 @@ import { useCreateAccount } from "@/auth/create-account/hooks/use-create-account
 import { useFormData } from "@/hooks/use-form-data";
 
 const initialFormData = {
-  name: "jhan",
-  email: "jhanbayer@gmail.com",
-  password: "123-Jhan",
+  name: "",
+  email: "",
+  password: "",
 };
 
 export const useFormCreateAccount = () => {

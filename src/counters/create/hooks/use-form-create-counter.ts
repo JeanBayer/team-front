@@ -3,9 +3,9 @@ import { useFormData } from "@/hooks/use-form-data";
 import { useNavigate, useParams } from "react-router";
 
 const initialFormData = {
-  name: "Counter 1",
-  incrementButtonLabel: "increment",
-  resetButtonLabel: "reset",
+  name: "",
+  incrementButtonLabel: "",
+  resetButtonLabel: "",
 };
 
 export const useFormCreateCounter = () => {
