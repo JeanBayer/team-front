@@ -1,3 +1,5 @@
+import { BackgroundProvider } from "@/components/backgrounds/background-provider";
+import { ThemeBackground } from "@/components/backgrounds/theme-background";
 import { AppSidebar } from "@/components/navbar/sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Outlet } from "react-router";
@@ -6,9 +8,16 @@ export const HomeLayout = () => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="p-4 w-full">
-        <SidebarTrigger />
-        <Outlet />
+      <main className="min-h-screen w-full bg-[#f8fafc] relative">
+        <div className="w-full flex justify-between py-2 px-4">
+          <SidebarTrigger className="relative z-10" />
+          <ThemeBackground />
+        </div>
+        <BackgroundProvider>
+          <div className="relative z-10 p-4 w-full">
+            <Outlet />
+          </div>
+        </BackgroundProvider>
       </main>
     </SidebarProvider>
   );
