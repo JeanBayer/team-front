@@ -12,9 +12,9 @@ import {
 } from "../ui/dropdown-menu";
 
 export const ThemeBackground = () => {
-  const selectedBackground = useStore((state) => state.selectedBackground);
-  const setSelectedBackground = useStore(
-    (state) => state.setSelectedBackground
+  const selectedBackgroundId = useStore((state) => state.selectedBackgroundId);
+  const setSelectedBackgroundId = useStore(
+    (state) => state.setSelectedBackgroundId
   );
 
   return (
@@ -27,13 +27,13 @@ export const ThemeBackground = () => {
           <React.Fragment key={background.id}>
             <DropdownMenuItem
               className={clsx(
-                selectedBackground?.id === background.id &&
+                selectedBackgroundId === background.id &&
                   "border-2 border-blue-200 bg-blue-200"
               )}
             >
               <div
                 className="flex justify-between items-center w-full"
-                onClick={() => setSelectedBackground(background.id)}
+                onClick={() => setSelectedBackgroundId(background.id)}
               >
                 {background.name}
               </div>
