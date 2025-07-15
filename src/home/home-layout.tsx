@@ -9,7 +9,7 @@ export const HomeLayout = () => {
     <SidebarProvider>
       <AppSidebar />
       <main className="min-h-screen w-full bg-[#f8fafc] relative">
-        <div className="w-full flex justify-between py-2 px-4">
+        <div className="w-full flex justify-between pt-4 px-4">
           <SidebarTrigger className="relative z-10" />
           <ThemeBackground />
         </div>

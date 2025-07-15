@@ -17,7 +17,7 @@ export const Header = ({
   breadcrumbPage,
 }: HeaderProps) => {
   return (
-    <header className="pt-4">
+    <header>
       <BreadcrumbHeader
         breadcrumbPage={breadcrumbPage}
         breadcrumbList={breadcrumbList}

@@ -88,7 +88,7 @@ export const CounterIdPage = () => {
               </CardContent>
               <CardFooter className="w-full">
                 {!counter.data?.alreadyModifiedToday && (
-                  <div className="w-full flex flex-col sm:flex-row justify-between gap-4">
+                  <div className="w-full flex flex-wrap flex-col sm:flex-row justify-between gap-4">
                     <Button
                       onClick={counterIncrement.mutate}
                       className="cursor-pointer min-w-32"
