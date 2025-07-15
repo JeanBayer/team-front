@@ -1,3 +1,4 @@
+import { DropdownMenuHeader } from "@/components/header/dropdown-menu-header";
 import { Header } from "@/components/header/header";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -9,8 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ICONS_KEYS } from "@/data/icon-enum";
 import { useMembershipList } from "@/hooks/use-membership-list";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
+import { useMembership } from "@/members/hooks/use-membership";
 import { useTeam } from "@/teams/hooks/use-team";
 import { ShieldUser, User } from "lucide-react";
 import { useParams } from "react-router";
@@ -20,8 +23,9 @@ export const MembersPage = () => {
   const { memberships } = useMembershipList(teamId);
   const { isAdmin } = useUserIsAdmin(teamId);
   const { teamData } = useTeam(teamId);
+  const { promoteToAdmin, demoteToAdmin, memberLeaveUser } =
+    useMembership(teamId);
 
-  console.log({ isAdmin });
   return (
     <div>
       <Header
@@ -42,8 +46,8 @@ export const MembersPage = () => {
         ]}
         breadcrumbPage="Miembros del equipo"
       />
-      <div className="py-8">
-        <Table className="max-w-xl mx-auto">
+      <div className="mt-10 p-4 bg-card rounded-xl max-w-2xl mx-auto">
+        <Table className="max-w-xl mx-auto bg-card">
           <TableCaption>Lista de miembros</TableCaption>
           <TableHeader>
             <TableRow>
@@ -65,13 +69,13 @@ export const MembersPage = () => {
                   {membership.isAdmin ? (
                     <Badge
                       variant="secondary"
-                      className="bg-blue-500 text-white dark:bg-blue-600"
+                      className="bg-blue-500 text-white dark:bg-blue-600 w-full"
                     >
                       <ShieldUser size={16} />
                       Admin
                     </Badge>
                   ) : (
-                    <Badge variant="secondary" className="text-white">
+                    <Badge variant="secondary" className="text-black w-full">
                       <User size={16} />
                       User
                     </Badge>
@@ -80,7 +84,44 @@ export const MembersPage = () => {
                 <TableCell className="text-center">
                   {membership.user.sprintWins}
                 </TableCell>
-                <TableCell className="text-right">menu</TableCell>
+                <TableCell className="text-center">
+                  <div className="flex justify-center">
+                    <DropdownMenuHeader
+                      menuItems={[
+                        {
+                          to: "",
+                          label: "Sacar del equipo",
+                          type: ICONS_KEYS.DELETE,
+                          isDisabled: !isAdmin || memberLeaveUser.isPending,
+                          onClick: () =>
+                            memberLeaveUser.mutate(membership.userId),
+                        },
+                        {
+                          to: "",
+                          label: "Promover a admin",
+                          type: ICONS_KEYS.ADMIN,
+                          isDisabled:
+                            !isAdmin ||
+                            membership.isAdmin ||
+                            promoteToAdmin.isPending,
+                          onClick: () =>
+                            promoteToAdmin.mutate(membership.userId),
+                        },
+                        {
+                          to: "",
+                          label: "Retirar admin",
+                          type: ICONS_KEYS.DEMOTE,
+                          isDisabled:
+                            !isAdmin ||
+                            !membership.isAdmin ||
+                            demoteToAdmin.isPending,
+                          onClick: () =>
+                            demoteToAdmin.mutate(membership.userId),
+                        },
+                      ]}
+                    />
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

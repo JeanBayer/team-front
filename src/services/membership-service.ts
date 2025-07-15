@@ -24,8 +24,9 @@ export class MembershipService {
       const { data } = await instance.delete(`teams/${teamId}/users`);
       return data;
     } catch (error) {
-      console.error("leaveTeam error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
@@ -36,8 +37,9 @@ export class MembershipService {
       );
       return data;
     } catch (error) {
-      console.error("myMembership error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
@@ -48,8 +50,46 @@ export class MembershipService {
       );
       return data;
     } catch (error) {
-      console.error("getMemberships error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async leaveUser(teamId: string, userId: string) {
+    try {
+      const { data } = await instance.delete(`teams/${teamId}/users/${userId}`);
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async promoteAdminUser(teamId: string, userId: string) {
+    try {
+      const { data } = await instance.post(
+        `teams/${teamId}/users/${userId}/admin`
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async demoteAdminUser(teamId: string, userId: string) {
+    try {
+      const { data } = await instance.delete(
+        `teams/${teamId}/users/${userId}/admin`
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 }

@@ -1,4 +1,13 @@
-import { Copy, Delete, Link2, LogOut, Pencil, RefreshCcw } from "lucide-react";
+import {
+  Copy,
+  Delete,
+  Link2,
+  LogOut,
+  Pencil,
+  RefreshCcw,
+  ShieldUser,
+  UserMinus,
+} from "lucide-react";
 
 export const ICONS = {
   link: Link2,
@@ -7,6 +16,8 @@ export const ICONS = {
   edit: Pencil,
   copy: Copy,
   reactivate: RefreshCcw,
+  admin: ShieldUser,
+  demote: UserMinus,
 } as const;
 
 export const ICONS_KEYS = {
@@ -16,6 +27,8 @@ export const ICONS_KEYS = {
   EDIT: "edit",
   COPY: "copy",
   REACTIVATE: "reactivate",
+  ADMIN: "admin",
+  DEMOTE: "demote",
 } as const;
 
 export type IconType = keyof typeof ICONS;

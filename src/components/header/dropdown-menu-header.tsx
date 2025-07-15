@@ -21,7 +21,7 @@ export function DropdownMenuHeader({ menuItems }: DropdownMenuProps) {
       <DropdownMenuTrigger asChild>
         <EllipsisVertical size={16} className="cursor-pointer shrink-0" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40" align="start">
+      <DropdownMenuContent className="w-42" align="start">
         {menuItems?.map((item, index) => (
           <React.Fragment key={item.label}>
             <DropdownMenuItem disabled={item.isDisabled}>
