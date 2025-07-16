@@ -1,5 +1,10 @@
 import { instance } from "@/api/api";
-import type { AuthCreate, AuthLogin, AuthResponse } from "@/types/auth";
+import type {
+  AuthCreate,
+  AuthLogin,
+  AuthResponse,
+  RequestReset,
+} from "@/types/auth";
 import { AxiosError } from "axios";
 
 export class AuthService {
@@ -8,6 +13,20 @@ export class AuthService {
       const { data } = await instance.post<AuthResponse>(
         "/auth/register",
         authCreate
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async requestReset(requestReset: RequestReset) {
+    try {
+      const { data } = await instance.post<AuthResponse>(
+        "/auth/request-reset",
+        requestReset
       );
       return data;
     } catch (error) {

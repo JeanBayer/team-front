@@ -14,3 +14,5 @@ export interface AuthResponse {
 }
 
 export interface UserAuth extends Pick<User, "id" | "email" | "name"> {}
+
+export interface RequestReset extends Pick<AuthCreate, "email"> {}

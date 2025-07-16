@@ -18,6 +18,7 @@ import { CreateTeamPage } from "@/teams/create/create-team-page";
 import { JoinTeamPage } from "@/teams/join/join-team-page";
 import { TeamsPage } from "@/teams/teams-page";
 import { createBrowserRouter } from "react-router";
+import { RequestResetPage } from "./auth/request-reset/request-reset-page";
 import { EditTeamPage } from "./teams/:teamId/edit/edit-team-page";
 
 export const router = createBrowserRouter([
@@ -42,6 +43,22 @@ export const router = createBrowserRouter([
     element: (
       <NotProtectedRoute>
         <CreateAccountPage />
+      </NotProtectedRoute>
+    ),
+  },
+  {
+    path: "/request-reset",
+    element: (
+      <NotProtectedRoute>
+        <RequestResetPage />
+      </NotProtectedRoute>
+    ),
+  },
+  {
+    path: "/reset-account",
+    element: (
+      <NotProtectedRoute>
+        <h1>hola</h1>
       </NotProtectedRoute>
     ),
   },

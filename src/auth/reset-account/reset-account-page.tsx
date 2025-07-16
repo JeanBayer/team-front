@@ -4,23 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
 import { Loader2Icon } from "lucide-react";
-import { Link } from "react-router";
 
-export const LoginPage = () => {
+export const ResetAccountPage = () => {
   const { formData, updateField, handleSubmit, isPending } = useFormLogin();
   return (
     <main className="p-4 w-full">
       <Header
-        title="Login"
+        title="Restablecer Contraseña"
         breadcrumbList={[
           {
             to: "/landing",
             label: "Landing",
           },
+          {
+            to: "/login",
+            label: "Login",
+          },
         ]}
-        breadcrumbPage="Login"
+        breadcrumbPage="Restablecer Contraseña"
       />
       <section className="flex gap-8 flex-wrap justify-center py-8 px-4 md:px-12 max-w-lg mx-auto">
         <Card className="w-full p-6">
@@ -64,17 +66,6 @@ export const LoginPage = () => {
                 {isPending && <Loader2Icon className="animate-spin" />}
                 Entrar
               </Button>
-
-              <Separator />
-
-              <div className="grid w-full items-center gap-3">
-                <Link
-                  to="/request-reset"
-                  className="text-center text-xs underline "
-                >
-                  Restablecer contraseña
-                </Link>
-              </div>
             </form>
           </CardContent>
         </Card>
