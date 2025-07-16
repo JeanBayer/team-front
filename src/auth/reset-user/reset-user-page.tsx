@@ -1,17 +1,24 @@
-import { useFormLogin } from "@/auth/login/hooks/use-form-login";
 import { Header } from "@/components/header/header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "@/components/ui/input-otp";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Loader2Icon } from "lucide-react";
+import { Link } from "react-router";
+import { useFormResetUser } from "./hooks/use-form-reset-user";
 
-export const ResetAccountPage = () => {
-  const { formData, updateField, handleSubmit, isPending } = useFormLogin();
+export const ResetUserPage = () => {
+  const { formData, updateField, handleSubmit, isPending } = useFormResetUser();
   return (
     <main className="p-4 w-full">
       <Header
-        title="Restablecer Contraseña"
+        title="Ingresar Codigo"
         breadcrumbList={[
           {
             to: "/landing",
@@ -21,8 +28,12 @@ export const ResetAccountPage = () => {
             to: "/login",
             label: "Login",
           },
+          {
+            to: "/request-reset",
+            label: "Restablecer contraseña",
+          },
         ]}
-        breadcrumbPage="Restablecer Contraseña"
+        breadcrumbPage="Ingresar Codigo"
       />
       <section className="flex gap-8 flex-wrap justify-center py-8 px-4 md:px-12 max-w-lg mx-auto">
         <Card className="w-full p-6">
@@ -58,6 +69,28 @@ export const ResetAccountPage = () => {
                 />
               </div>
 
+              <div className="grid w-full max-w-md items-center justify-center gap-3">
+                <Label htmlFor="code" className="text-center w-full">
+                  Codigo
+                </Label>
+                <InputOTP
+                  id="code"
+                  maxLength={6}
+                  value={formData.code.toString()}
+                  onChange={(value) => updateField("code", value)}
+                  required
+                >
+                  <InputOTPGroup>
+                    <InputOTPSlot index={0} />
+                    <InputOTPSlot index={1} />
+                    <InputOTPSlot index={2} />
+                    <InputOTPSlot index={3} />
+                    <InputOTPSlot index={4} />
+                    <InputOTPSlot index={5} />
+                  </InputOTPGroup>
+                </InputOTP>
+              </div>
+
               <Button
                 type="submit"
                 disabled={isPending}
@@ -66,6 +99,20 @@ export const ResetAccountPage = () => {
                 {isPending && <Loader2Icon className="animate-spin" />}
                 Entrar
               </Button>
+
+              <Separator />
+
+              <div className="grid w-full items-center gap-3">
+                <Link
+                  to={{
+                    pathname: "/request-reset",
+                    search: `?email=${formData.email}`,
+                  }}
+                  className="text-center text-xs underline "
+                >
+                  Generar el codigo nuevamente
+                </Link>
+              </div>
             </form>
           </CardContent>
         </Card>

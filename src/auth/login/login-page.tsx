@@ -69,7 +69,10 @@ export const LoginPage = () => {
 
               <div className="grid w-full items-center gap-3">
                 <Link
-                  to="/request-reset"
+                  to={{
+                    pathname: "/request-reset",
+                    search: `?email=${formData.email}`,
+                  }}
                   className="text-center text-xs underline "
                 >
                   Restablecer contraseña

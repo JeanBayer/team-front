@@ -1,24 +1,26 @@
 import { useFormData } from "@/hooks/use-form-data";
 import { useSearchParams } from "react-router";
-import { useRequestReset } from "./use-request-reset";
+import { useResetUser } from "./use-reset-user";
 
 const initialFormData = {
   email: "",
+  password: "",
+  code: "",
 };
 
-export const useFormRequestReset = () => {
+export const useFormResetUser = () => {
   const [searchParams] = useSearchParams({ email: "" });
-  const requestResetMutation = useRequestReset();
+  const resetUserMutation = useResetUser();
   const { formData, updateField, handleSubmit } = useFormData(
     { ...initialFormData, email: searchParams.get("email") || "" },
-    (formData) => requestResetMutation.mutate(formData)
+    (formData) => resetUserMutation.mutate(formData)
   );
 
   return {
     formData,
     updateField,
     handleSubmit,
-    isPending: requestResetMutation.isPending,
-    isError: requestResetMutation.isError,
+    isPending: resetUserMutation.isPending,
+    isError: resetUserMutation.isError,
   };
 };

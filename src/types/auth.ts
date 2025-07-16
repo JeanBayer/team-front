@@ -16,3 +16,7 @@ export interface AuthResponse {
 export interface UserAuth extends Pick<User, "id" | "email" | "name"> {}
 
 export interface RequestReset extends Pick<AuthCreate, "email"> {}
+
+export interface ResetUser extends Pick<AuthCreate, "email" | "password"> {
+  code: string;
+}

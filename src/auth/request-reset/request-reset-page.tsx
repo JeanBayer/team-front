@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
 import { Loader2Icon } from "lucide-react";
+import { Link } from "react-router";
 import { useFormRequestReset } from "./hooks/use-form-request-reset";
 
 export const RequestResetPage = () => {
@@ -12,7 +14,7 @@ export const RequestResetPage = () => {
   return (
     <main className="p-4 w-full">
       <Header
-        title="Restablecer Contraseña"
+        title="Generar Codigo"
         breadcrumbList={[
           {
             to: "/landing",
@@ -23,7 +25,7 @@ export const RequestResetPage = () => {
             label: "Login",
           },
         ]}
-        breadcrumbPage="Restablecer Contraseña"
+        breadcrumbPage="Generar Codigo"
       />
       <section className="flex gap-8 flex-wrap justify-center py-8 px-4 md:px-12 max-w-lg mx-auto">
         <Card className="w-full p-6">
@@ -55,6 +57,20 @@ export const RequestResetPage = () => {
                 {isPending && <Loader2Icon className="animate-spin" />}
                 Enviar correo
               </Button>
+
+              <Separator />
+
+              <div className="grid w-full items-center gap-3">
+                <Link
+                  to={{
+                    pathname: "/reset-user",
+                    search: `?email=${formData.email}`,
+                  }}
+                  className="text-center text-xs underline "
+                >
+                  Ya generaste el codigo? Ingresa aqui
+                </Link>
+              </div>
             </form>
           </CardContent>
         </Card>

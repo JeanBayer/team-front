@@ -3,16 +3,16 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
-export const useRequestReset = () => {
+export const useResetUser = () => {
   const navigate = useNavigate();
 
   const mutation = useMutation({
-    mutationFn: AuthService.requestReset,
+    mutationFn: AuthService.resetUser,
     onSuccess: (_result, data) => {
-      toast.success("Te hemos enviado el codigo a tu email", {
+      toast.success("Usuario restablecido correctamente", {
         richColors: true,
       });
-      navigate(`/reset-user?email=${data.email}`);
+      navigate(`/login?email=${data.email}&password=${data.password}`);
     },
     onError: (error) => toast.error(error.message, { richColors: true }),
   });

@@ -1,5 +1,6 @@
 import { useLogin } from "@/auth/login/hooks/use-login";
 import { useFormData } from "@/hooks/use-form-data";
+import { useSearchParams } from "react-router";
 
 const initialFormData = {
   email: "",
@@ -7,9 +8,14 @@ const initialFormData = {
 };
 
 export const useFormLogin = () => {
+  const [searchParams] = useSearchParams({ email: "", password: "" });
   const createMutation = useLogin();
   const { formData, updateField, handleSubmit } = useFormData(
-    initialFormData,
+    {
+      ...initialFormData,
+      email: searchParams.get("email") || "",
+      password: searchParams.get("password") || "",
+    },
     (formData) => createMutation.mutate(formData)
   );
 

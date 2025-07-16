@@ -4,6 +4,7 @@ import type {
   AuthLogin,
   AuthResponse,
   RequestReset,
+  ResetUser,
 } from "@/types/auth";
 import { AxiosError } from "axios";
 
@@ -24,9 +25,20 @@ export class AuthService {
 
   static async requestReset(requestReset: RequestReset) {
     try {
+      const { data } = await instance.post("/auth/request-reset", requestReset);
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async resetUser(resetUser: ResetUser) {
+    try {
       const { data } = await instance.post<AuthResponse>(
-        "/auth/request-reset",
-        requestReset
+        "/auth/reset-user",
+        resetUser
       );
       return data;
     } catch (error) {
