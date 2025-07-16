@@ -82,23 +82,23 @@ export const CounterIdPage = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="flex-1">
-                <p className="text-center text-xl">
+                <p className="text-center text-2xl">
                   <strong>{counter.data?.currentCount}</strong>
                 </p>
               </CardContent>
               <CardFooter className="w-full">
                 {!counter.data?.alreadyModifiedToday && (
-                  <div className="w-full flex flex-wrap flex-col sm:flex-row justify-between gap-4">
+                  <div className="w-full flex flex-wrap flex-col justify-center sm:flex-row sm:justify-between gap-4">
                     <Button
                       onClick={counterIncrement.mutate}
-                      className="cursor-pointer min-w-32"
+                      className="cursor-pointer min-w-30 max-w-full w-full sm:w-auto"
                     >
                       {counter.data?.incrementButtonLabel}
                     </Button>
                     <Button
                       onClick={counterReset.mutate}
                       variant="destructive"
-                      className="cursor-pointer min-w-32"
+                      className="cursor-pointer min-w-30 max-w-full w-full sm:w-auto"
                     >
                       {counter.data?.resetButtonLabel}
                     </Button>
@@ -111,25 +111,29 @@ export const CounterIdPage = () => {
           <div className="w-xs flex justify-between gap-4">
             <Card className="flex-1 hover:shadow-lg hover:border-blue-300 transition-all duration-300 ">
               <CardContent>
-                <div className="flex flex-col gap-2 justify-between text-center text-xs">
+                <div className="flex flex-col gap-2 justify-between text-center">
                   <p className="text-sm">
                     <strong>{counter.data?.longestStreak}</strong>
                   </p>
                   <p>
-                    <strong>Contador mas alto</strong>
+                    <strong className="text-gray-500 text-xs">
+                      Contador mas alto
+                    </strong>
                   </p>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="flex-1 hover:shadow-lg hover:border-blue-300 transition-all duration-300 ">
+            <Card className="flex-1 hover:shadow-lg hover:border-blue-300 transition-all duration-300">
               <CardContent>
-                <div className="flex flex-col gap-2 justify-between text-center text-xs">
+                <div className="flex flex-col gap-2 justify-between text-center">
                   <p className="text-sm">
                     <strong>{counter.data?.lastResetDuration}</strong>
                   </p>
                   <p>
-                    <strong>Contador mas reciente</strong>
+                    <strong className="text-gray-500 text-xs">
+                      Contador mas reciente
+                    </strong>
                   </p>
                 </div>
               </CardContent>

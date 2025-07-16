@@ -24,7 +24,7 @@ export function DropdownMenuHeader({ menuItems }: DropdownMenuProps) {
       <DropdownMenuContent className="w-42" align="start">
         {menuItems?.map((item, index) => (
           <React.Fragment key={item.label}>
-            <DropdownMenuItem disabled={item.isDisabled}>
+            <DropdownMenuItem disabled={item.isDisabled} asChild>
               <Link
                 to={item.to}
                 className="flex justify-between items-center w-full"

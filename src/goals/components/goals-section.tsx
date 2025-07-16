@@ -31,7 +31,7 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
 
   return (
     <section className="flex flex-col p-4 gap-8 justify-center w-sm">
-      <Card>
+      <Card aria-hidden={false}>
         <Tabs defaultValue="disponibles" value={typeGoals}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">

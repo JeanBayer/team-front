@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useFormUpdateGoal } from "@/goals/hooks/use-form-update-goal";
+import { useAutoFocus } from "@/hooks/use-auto-focus";
 import type { Goal } from "@/types/goal";
 import { Save, X } from "lucide-react";
 
@@ -16,6 +17,7 @@ export const GoalUpdate = ({
   handleCancel = () => {},
   handleSuccess = () => {},
 }: GoalUpdateProps) => {
+  const descriptionRef = useAutoFocus();
   const { formData, updateField, handleSubmit, resetFormData, isPending } =
     useFormUpdateGoal({
       initialData: {
@@ -51,6 +53,8 @@ export const GoalUpdate = ({
               type="text"
               id="description-goal"
               placeholder="Goal"
+              ref={descriptionRef}
+              autoFocus
               value={formData.description}
               onChange={(e) => updateField("description", e.target.value)}
             />

@@ -19,8 +19,8 @@ export function BreadcrumbHeader({
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {breadcrumbList?.map((item) => (
-          <CustomBreadCrumbItem breadcrumbList={item} />
+        {breadcrumbList?.map((item, index) => (
+          <CustomBreadCrumbItem breadcrumbList={item} key={index} />
         ))}
         <BreadcrumbItem>
           <BreadcrumbPage>{breadcrumbPage}</BreadcrumbPage>
