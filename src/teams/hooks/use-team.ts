@@ -1,4 +1,5 @@
 import { TeamService } from "@/services/team-service";
+import type { UpdateTeam } from "@/types/team";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -40,6 +41,15 @@ export const useTeam = (teamId: string = "") => {
     onError: (error) => toast.error(error.message, { richColors: true }),
   });
 
+  // pm: update-team
+  const teamUpdate = useMutation({
+    mutationFn: (updateTeam: UpdateTeam) =>
+      TeamService.updateTeam(teamId, updateTeam),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["TEAMS", teamId] }),
+    onError: (error) => toast.error(error.message, { richColors: true }),
+  });
+
   return {
     teamsData: {
       isLoading: teamsQuery.isLoading,
@@ -61,6 +71,12 @@ export const useTeam = (teamId: string = "") => {
       isSuccess: teamCreate.isSuccess,
       isError: teamCreate.isError,
       mutate: teamCreate.mutate,
+    },
+    teamUpdate: {
+      isPending: teamUpdate.isPending,
+      isSuccess: teamUpdate.isSuccess,
+      isError: teamUpdate.isError,
+      mutate: teamUpdate.mutate,
     },
   };
 };

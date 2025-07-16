@@ -1,5 +1,10 @@
 import { instance } from "@/api/api";
-import type { BasicTeam, CreateTeam, RankingUser } from "@/types/team";
+import type {
+  BasicTeam,
+  CreateTeam,
+  RankingUser,
+  UpdateTeam,
+} from "@/types/team";
 import { AxiosError } from "axios";
 
 export class TeamService {
@@ -26,6 +31,20 @@ export class TeamService {
   static async createTeam(createTeam: CreateTeam) {
     try {
       const { data } = await instance.post<BasicTeam>("/teams", createTeam);
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async updateTeam(teamId: string, updateTeam: UpdateTeam) {
+    try {
+      const { data } = await instance.patch<BasicTeam>(
+        `/teams/${teamId}`,
+        updateTeam
+      );
       return data;
     } catch (error) {
       if (error instanceof AxiosError)

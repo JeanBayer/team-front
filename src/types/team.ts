@@ -10,6 +10,8 @@ export interface CreateTeam {
   joinPassword: string;
 }
 
+export interface UpdateTeam extends Partial<CreateTeam> {}
+
 export interface JoinTeam {
   id: string;
   joinPassword: string;
