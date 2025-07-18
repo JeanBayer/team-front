@@ -98,7 +98,7 @@ export const TeamIdPage = () => {
             </Card>
           </Link>
 
-          <Link to="miembros" className="inline-block cursor-pointer">
+          <Link to="members" className="inline-block cursor-pointer">
             <Card className="w-32 h-32 hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col items-center justify-center">
               <CardContent className="">
                 <h4 className="text-center text-lg font-semibold text-blue-500">
