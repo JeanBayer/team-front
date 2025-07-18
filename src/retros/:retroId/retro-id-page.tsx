@@ -4,6 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { useMembershipList } from "@/hooks/use-membership-list";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import { useFormSprintWinnerVote } from "@/retros/:retroId/hooks/use-form-sprint-winner-vote";
@@ -14,6 +26,7 @@ import { useThankYouRetrospective } from "@/thank-you/hooks/use-thank-you-retros
 import { Loader2Icon } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router";
+import { useFormCreateThankYou } from "./hooks/use-form-create-thank-you";
 
 export const RetroIdPage = () => {
   const { teamId, retroId } = useParams();
@@ -25,6 +38,12 @@ export const RetroIdPage = () => {
     useFormSprintWinnerVote();
   const { voteStatus } = useVoteSprint(teamId, retroId);
   const { thankYou } = useThankYouRetrospective(teamId, retroId);
+  const {
+    formData: formDataThankYou,
+    handleSubmit: handleSubmitThankYou,
+    updateField: updateFieldThankYou,
+    isPending: isPendingThankYou,
+  } = useFormCreateThankYou();
 
   useEffect(() => {
     if (!!voteStatus.data?.myVote?.id)
@@ -35,7 +54,9 @@ export const RetroIdPage = () => {
   if (retro.isError) return <div>error...</div>;
 
   const isDisabledSprintWinnerSubmit =
-    !!voteStatus.data?.myVote?.id || isPending;
+    !!voteStatus.data?.myVote?.id ||
+    isPending ||
+    retro?.data?.status === "CLOSED";
 
   return (
     <div>
@@ -138,20 +159,76 @@ export const RetroIdPage = () => {
         </Card>
       </section>
 
-      <section className="flex gap-8 flex-wrap justify-center py-8 px-4 md:px-12 min-w-xs max-w-sm md:max-w-2xl mx-auto">
+      <Separator className="w-[40vw]! mx-auto bg-gray-300" decorative={false} />
+
+      <section className="flex gap-10 flex-wrap justify-center md:justify-between py-8 px-4 md:px-12 min-w-xs max-w-sm md:max-w-2xl mx-auto">
         {thankYou.data?.map(({ receiver, message, giver, id }) => (
-          <Card className="w-50" key={id}>
+          <Card className="w-66" key={id}>
             <CardHeader>
               <CardTitle className="text-center">{receiver.name}</CardTitle>
             </CardHeader>
-            <CardContent>
-              <h4 className="text-sm">{message}</h4>
-              <p className="text-xs text-gray-500 text-right pt-3">
-                {giver.name}
-              </p>
+            <CardContent className="flex flex-1 flex-col gap-4">
+              <ScrollArea className="h-26">
+                <h4 className="text-sm flex-1">{message}</h4>
+              </ScrollArea>
+              <p className="text-xs text-gray-500 text-right">{giver.name}</p>
             </CardContent>
           </Card>
         ))}
+      </section>
+
+      <section className="flex gap-8 flex-wrap justify-center py-8 px-4 md:px-12 min-w-xs max-w-sm md:max-w-2xl mx-auto">
+        <Card className="w-full p-6">
+          <CardHeader>
+            <CardTitle>Agradecimientos</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form
+              onSubmit={handleSubmitThankYou}
+              className="w-full flex flex-col gap-8"
+            >
+              <Select
+                defaultValue={formDataThankYou.userId}
+                value={formDataThankYou.userId}
+                onValueChange={(value) => updateFieldThankYou("userId", value)}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Elige un miembro del equipo" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Miembro</SelectLabel>
+                    {memberships.data?.map(({ userId, user }) => {
+                      return (
+                        <SelectItem id={userId} value={userId}>
+                          {user.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              <div className="grid w-full max-w-md items-center gap-3">
+                <Label htmlFor="mensaje-agradecimiento">Mensaje:</Label>
+                <Textarea
+                  id="mensaje-agradecimiento"
+                  placeholder="Agradezco a "
+                  value={formDataThankYou.message}
+                  onChange={(e) =>
+                    updateFieldThankYou("message", e.target.value)
+                  }
+                  required
+                />
+              </div>
+
+              <Button type="submit" value="Enviar" disabled={isPendingThankYou}>
+                {isPending && <Loader2Icon className="animate-spin" />}
+                Enviar
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
       </section>
     </div>
   );
