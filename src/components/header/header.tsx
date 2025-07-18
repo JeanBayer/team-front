@@ -8,6 +8,7 @@ type HeaderProps = {
   menuItems?: MenuItem[];
   breadcrumbList?: BreadcrumbItemList[];
   breadcrumbPage: string;
+  children?: React.ReactNode;
 };
 
 export const Header = ({
@@ -15,6 +16,7 @@ export const Header = ({
   menuItems = [],
   breadcrumbList = [],
   breadcrumbPage,
+  children,
 }: HeaderProps) => {
   return (
     <header>
@@ -29,6 +31,7 @@ export const Header = ({
         {menuItems.length > 0 ? (
           <DropdownMenuHeader menuItems={menuItems} />
         ) : null}
+        {children}
       </div>
     </header>
   );
