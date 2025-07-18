@@ -1,5 +1,6 @@
 import { instance } from "@/api/api";
 import type { CreateRetrospective, Retrospective } from "@/types/retrospective";
+import { AxiosError } from "axios";
 
 export class RetrospectiveService {
   static async createRetrospective(
@@ -13,8 +14,9 @@ export class RetrospectiveService {
       );
       return data;
     } catch (error) {
-      console.error("createRetrospective error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
@@ -25,8 +27,9 @@ export class RetrospectiveService {
       );
       return data;
     } catch (error) {
-      console.error("getRetrospectives error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
@@ -37,8 +40,9 @@ export class RetrospectiveService {
       );
       return data;
     } catch (error) {
-      console.error("getRetrospective error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 }

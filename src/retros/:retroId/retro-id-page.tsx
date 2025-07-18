@@ -10,6 +10,7 @@ import { useFormSprintWinnerVote } from "@/retros/:retroId/hooks/use-form-sprint
 import { useVoteSprint } from "@/retros/:retroId/hooks/use-vote-sprint";
 import { useRetro } from "@/retros/hooks/use-retro";
 import { useTeam } from "@/teams/hooks/use-team";
+import { useThankYouRetrospective } from "@/thank-you/hooks/use-thank-you-retrospective";
 import { Loader2Icon } from "lucide-react";
 import { useEffect } from "react";
 import { useParams } from "react-router";
@@ -23,6 +24,7 @@ export const RetroIdPage = () => {
   const { formData, handleSubmit, updateField, isPending } =
     useFormSprintWinnerVote();
   const { voteStatus } = useVoteSprint(teamId, retroId);
+  const { thankYou } = useThankYouRetrospective(teamId, retroId);
 
   useEffect(() => {
     if (!!voteStatus.data?.myVote?.id)
@@ -134,6 +136,22 @@ export const RetroIdPage = () => {
             </form>
           </CardContent>
         </Card>
+      </section>
+
+      <section className="flex gap-8 flex-wrap justify-center py-8 px-4 md:px-12 min-w-xs max-w-sm md:max-w-2xl mx-auto">
+        {thankYou.data?.map(({ receiver, message, giver, id }) => (
+          <Card className="w-50" key={id}>
+            <CardHeader>
+              <CardTitle className="text-center">{receiver.name}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <h4 className="text-sm">{message}</h4>
+              <p className="text-xs text-gray-500 text-right pt-3">
+                {giver.name}
+              </p>
+            </CardContent>
+          </Card>
+        ))}
       </section>
     </div>
   );
