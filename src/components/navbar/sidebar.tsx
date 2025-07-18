@@ -4,7 +4,6 @@ import {
   SelectedTeamMenu,
   TeamsMenu,
   ThankYouMenu,
-  UsersMenu,
 } from "@/components/navbar/menu";
 import {
   Sidebar,
@@ -37,7 +36,7 @@ export const AppSidebar = () => {
       </SidebarHeader>
       <SidebarContent>
         <HomeMenu />
-        <UsersMenu />
+        {/* <UsersMenu /> */}
         <TeamsMenu />
         <ThankYouMenu />
         <SelectedTeamMenu />

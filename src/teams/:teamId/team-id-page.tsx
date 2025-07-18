@@ -1,17 +1,32 @@
 import { Header } from "@/components/header/header";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ICONS_KEYS } from "@/data/icon-enum";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import { useLeaveTeam } from "@/teams/:teamId/hooks/use-leave-team";
 import { useTeam } from "@/teams/hooks/use-team";
 import { Link, useParams } from "react-router";
+import { toast } from "sonner";
+import { useCopyToClipboard } from "usehooks-ts";
 
 export const TeamIdPage = () => {
   const { teamId } = useParams();
   const { isAdmin } = useUserIsAdmin(teamId);
   const { handleLeave } = useLeaveTeam();
   const { teamRanking, teamData } = useTeam(teamId);
+  const [, copy] = useCopyToClipboard();
 
   if (!teamId) return <div>sin id</div>;
+
+  function handleCopy() {
+    copy(`
+      id: ${teamId}
+      name: ${teamData.data?.name}
+      `).then(() =>
+      toast.success("Id copiado", {
+        richColors: true,
+      })
+    );
+  }
 
   return (
     <div>
@@ -26,8 +41,14 @@ export const TeamIdPage = () => {
           {
             to: "",
             label: "Salirse",
-            type: "out",
+            type: ICONS_KEYS.OUT,
             onClick: () => handleLeave(teamId),
+          },
+          {
+            to: "",
+            label: "Compartir",
+            type: ICONS_KEYS.SHARE,
+            onClick: () => handleCopy(),
           },
           {
             to: "retrospectives",

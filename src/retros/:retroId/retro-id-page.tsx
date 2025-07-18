@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { ICONS_KEYS } from "@/data/icon-enum";
 import { useMembershipList } from "@/hooks/use-membership-list";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import { useFormSprintWinnerVote } from "@/retros/:retroId/hooks/use-form-sprint-winner-vote";
@@ -73,15 +74,15 @@ export const RetroIdPage = () => {
       <Header
         title={retro.data?.retrospectiveName || ""}
         menuItems={[
-          {
-            to: "edit",
-            label: "Editar",
-            isDisabled: !isAdmin,
-          },
+          // {
+          //   to: "edit",
+          //   label: "Editar",
+          //   isDisabled: !isAdmin,
+          // },
           {
             to: "",
-            label: "Terminar",
-            type: "out",
+            label: "Cerrar",
+            type: ICONS_KEYS.EYE_CLOSED,
             onClick: () => retroClose.mutate(),
             isDisabled: !isAdmin || retro?.data?.status === "CLOSED",
           },

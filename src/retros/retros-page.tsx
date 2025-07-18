@@ -45,7 +45,7 @@ export const RetrosPage = () => {
               {status === "CREATED" && (
                 <Badge
                   variant="default"
-                  className="text-[8px] absolute top-1 -right-5"
+                  className="text-[8px] absolute top-1 -right-5 z-10"
                 >
                   Abierto
                 </Badge>
@@ -53,7 +53,7 @@ export const RetrosPage = () => {
               {status === "CLOSED" && (
                 <Badge
                   variant="destructive"
-                  className="text-[8px] absolute top-1 -right-5"
+                  className="text-[8px] absolute top-1 -right-5 z-10"
                 >
                   Cerrado
                 </Badge>
@@ -68,9 +68,15 @@ export const RetrosPage = () => {
                 </CardHeader>
                 <CardContent className="p-0">
                   {sprintWinner?.name && (
-                    <p className="text-center text-2xl">
-                      <span className="text-sm">Elegido del sprint: </span>
-                      <strong className="text-2xl">{sprintWinner?.name}</strong>
+                    <p className="text-center">
+                      <span className="text-xs text-gray-500">
+                        Elegido del sprint:{" "}
+                      </span>
+                      <CustomTooltip label={sprintWinner?.name}>
+                        <strong className="text-sm font-semibold line-clamp-1">
+                          {sprintWinner?.name}
+                        </strong>
+                      </CustomTooltip>
                     </p>
                   )}
                 </CardContent>
