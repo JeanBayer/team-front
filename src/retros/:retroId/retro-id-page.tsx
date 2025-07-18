@@ -2,6 +2,11 @@ import { Header } from "@/components/header/header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -23,8 +28,8 @@ import { useVoteSprint } from "@/retros/:retroId/hooks/use-vote-sprint";
 import { useRetro } from "@/retros/hooks/use-retro";
 import { useTeam } from "@/teams/hooks/use-team";
 import { useThankYouRetrospective } from "@/thank-you/hooks/use-thank-you-retrospective";
-import { Loader2Icon } from "lucide-react";
-import { useEffect } from "react";
+import { ChevronsUpDown, Loader2Icon } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useFormCreateThankYou } from "./hooks/use-form-create-thank-you";
 
@@ -44,6 +49,7 @@ export const RetroIdPage = () => {
     updateField: updateFieldThankYou,
     isPending: isPendingThankYou,
   } = useFormCreateThankYou();
+  const [isOpenThankYou, setIsOpenThankYou] = useState(false);
 
   useEffect(() => {
     if (!!voteStatus.data?.myVote?.id)
@@ -161,6 +167,10 @@ export const RetroIdPage = () => {
 
       <Separator className="w-[40vw]! mx-auto bg-gray-300" decorative={false} />
 
+      <h2 className="text-center text-2xl font-bold mt-10 mb-4">
+        Agradecimientos
+      </h2>
+
       <section className="flex gap-10 flex-wrap justify-center md:justify-between py-8 px-4 md:px-12 min-w-xs max-w-sm md:max-w-2xl mx-auto">
         {thankYou.data?.map(({ receiver, message, giver, id }) => (
           <Card className="w-66" key={id}>
@@ -177,57 +187,86 @@ export const RetroIdPage = () => {
         ))}
       </section>
 
-      <section className="flex gap-8 flex-wrap justify-center py-8 px-4 md:px-12 min-w-xs max-w-sm md:max-w-2xl mx-auto">
-        <Card className="w-full p-6">
-          <CardHeader>
-            <CardTitle>Agradecimientos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <form
-              onSubmit={handleSubmitThankYou}
-              className="w-full flex flex-col gap-8"
-            >
-              <Select
-                defaultValue={formDataThankYou.userId}
-                value={formDataThankYou.userId}
-                onValueChange={(value) => updateFieldThankYou("userId", value)}
-              >
-                <SelectTrigger className="w-[180px]">
-                  <SelectValue placeholder="Elige un miembro del equipo" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Miembro</SelectLabel>
-                    {memberships.data?.map(({ userId, user }) => {
-                      return (
-                        <SelectItem id={userId} value={userId}>
-                          {user.name}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+      <section className="sticky bottom-1 flex gap-4 flex-wrap justify-center py-8 px-4 md:px-12 min-w-xs max-w-sm md:max-w-xl mx-auto">
+        <Card
+          className={`w-full transition-colors duration-700 ease-in-out p-2 ${
+            isOpenThankYou ? "bg-card" : "bg-blue-200"
+          } bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100`}
+        >
+          <Collapsible open={isOpenThankYou} onOpenChange={setIsOpenThankYou}>
+            <CollapsibleTrigger asChild>
+              <CardHeader>
+                <CardTitle className="flex items-center justify-between">
+                  Agradecimientos
+                  <Button variant="ghost" size="icon" className="size-8">
+                    <ChevronsUpDown />
+                    <span className="sr-only">Toggle</span>
+                  </Button>
+                </CardTitle>
+              </CardHeader>
+            </CollapsibleTrigger>
+            <CollapsibleContent>
+              <CardContent className="p-6">
+                <form
+                  onSubmit={handleSubmitThankYou}
+                  className="w-full flex flex-col gap-8"
+                >
+                  <div className="grid w-full max-w-md items-center gap-3">
+                    <Label htmlFor="miembro">Miembro:</Label>
+                    <Select
+                      defaultValue={formDataThankYou.userId}
+                      value={formDataThankYou.userId}
+                      onValueChange={(value) =>
+                        updateFieldThankYou("userId", value)
+                      }
+                    >
+                      <SelectTrigger className="w-[240px] bg-card">
+                        <SelectValue
+                          id="miembro"
+                          placeholder="Elige un miembro del equipo"
+                        />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Miembro</SelectLabel>
+                          {memberships.data?.map(({ userId, user }) => {
+                            return (
+                              <SelectItem id={userId} value={userId}>
+                                {user.name}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-              <div className="grid w-full max-w-md items-center gap-3">
-                <Label htmlFor="mensaje-agradecimiento">Mensaje:</Label>
-                <Textarea
-                  id="mensaje-agradecimiento"
-                  placeholder="Agradezco a "
-                  value={formDataThankYou.message}
-                  onChange={(e) =>
-                    updateFieldThankYou("message", e.target.value)
-                  }
-                  required
-                />
-              </div>
+                  <div className="grid w-full max-w-md items-center gap-3">
+                    <Label htmlFor="mensaje-agradecimiento">Mensaje:</Label>
+                    <Textarea
+                      id="mensaje-agradecimiento"
+                      placeholder="Agradezco a "
+                      value={formDataThankYou.message}
+                      onChange={(e) =>
+                        updateFieldThankYou("message", e.target.value)
+                      }
+                      required
+                      className="bg-card"
+                    />
+                  </div>
 
-              <Button type="submit" value="Enviar" disabled={isPendingThankYou}>
-                {isPending && <Loader2Icon className="animate-spin" />}
-                Enviar
-              </Button>
-            </form>
-          </CardContent>
+                  <Button
+                    type="submit"
+                    value="Enviar"
+                    disabled={isPendingThankYou}
+                  >
+                    {isPending && <Loader2Icon className="animate-spin" />}
+                    Enviar
+                  </Button>
+                </form>
+              </CardContent>
+            </CollapsibleContent>
+          </Collapsible>
         </Card>
       </section>
     </div>
