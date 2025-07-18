@@ -45,4 +45,17 @@ export class RetrospectiveService {
       throw new Error("Error inesperado");
     }
   }
+
+  static async closeRetrospective(teamId: string, retroId: string) {
+    try {
+      const { data } = await instance.post<Retrospective>(
+        `/teams/${teamId}/retrospectives/${retroId}/close`
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
 }

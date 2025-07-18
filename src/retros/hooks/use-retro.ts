@@ -18,9 +18,9 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
   });
 
   // pm: listar-retrospective
-  const COUNTER_KEY = ["TEAMS", teamId, "RETROSPECTIVES", retroId];
+  const RETRO_KEY = ["TEAMS", teamId, "RETROSPECTIVES", retroId];
   const retroQuery = useQuery({
-    queryKey: COUNTER_KEY,
+    queryKey: RETRO_KEY,
     queryFn: () => RetrospectiveService.getRetrospective(teamId, retroId),
     staleTime: 5 * MINUTE_IN_MS,
     enabled: !!retroId,
@@ -59,6 +59,26 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
     onSettled: retroCreateOptimistic.onSettled,
   });
 
+  // pm: close-retrospective
+  const retroCloseOptimistic = useHandlerOptimistic<Retrospective, null>({
+    queryKey: RETRO_KEY,
+    onMutate: () => (old) => ({
+      ...old,
+      status: "CLOSED",
+    }),
+    onSuccess: () =>
+      toast.success("Retrospectiva cerrada", { richColors: true }),
+    onError: (error) => toast.error(error?.message, { richColors: true }),
+  });
+
+  const retroClose = useMutation({
+    mutationFn: () => RetrospectiveService.closeRetrospective(teamId, retroId),
+    onSuccess: retroCloseOptimistic.onSuccess,
+    onMutate: retroCloseOptimistic.onMutate,
+    onError: retroCloseOptimistic.onError,
+    onSettled: retroCloseOptimistic.onSettled,
+  });
+
   // pm: increment-counter
   // const counterIncrementOptimistic = useHandlerOptimistic<Counter>({
   //   queryKey: COUNTER_KEY,
@@ -93,6 +113,12 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
       isSuccess: retroCreate.isSuccess,
       isError: retroCreate.isError,
       mutate: retroCreate.mutate,
+    },
+    retroClose: {
+      isPending: retroClose.isPending,
+      isSuccess: retroClose.isSuccess,
+      isError: retroClose.isError,
+      mutate: retroClose.mutate as () => void,
     },
   };
 };
