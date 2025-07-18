@@ -1,32 +1,84 @@
+import { Header } from "@/components/header/header";
+import { CustomTooltip } from "@/components/tooltip/custom-tooltip";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRetro } from "@/retros/hooks/use-retro";
+import { useTeam } from "@/teams/hooks/use-team";
 import { Link, useParams } from "react-router";
 
 export const RetrosPage = () => {
   const { teamId } = useParams();
+  const { teamData } = useTeam(teamId);
   const { retros } = useRetro(teamId);
 
   return (
     <div>
-      <header>
-        <Link to="..">Volver</Link>
-        <h1>RetrosPage</h1>
-        <Link to="create">Crear</Link>
-      </header>
-      <main>
-        <section>
-          {retros.data?.map((retro) => (
-            <Link to={`${retro.id}`} key={retro.id}>
-              <div>
-                <h3>{retro.retrospectiveName}</h3>
-                <p>{retro.status}</p>
-                {retro.sprintWinner?.name ? (
-                  <p>Elegido: {retro.sprintWinner?.name}</p>
-                ) : null}
+      <Header
+        title={"Retrospectivas"}
+        menuItems={[
+          {
+            to: "create",
+            label: "Crear",
+          },
+        ]}
+        breadcrumbList={[
+          {
+            to: "/",
+            label: "Home",
+          },
+          {
+            to: "/teams",
+            label: "Mis equipos",
+          },
+          {
+            to: `/teams/${teamId}`,
+            label: teamData.data?.name || "",
+          },
+        ]}
+        breadcrumbPage="Retrospectivas"
+      />
+
+      <section className="flex gap-8 flex-wrap justify-center p-8 max-w-2xl mx-auto">
+        {retros.data?.map(({ id, retrospectiveName, status, sprintWinner }) => (
+          <Link to={`${id}`} className="inline-block cursor-pointer" key={id}>
+            <Card className="w-40 h-40 hover:shadow-lg hover:border-blue-300 transition-all duration-300 gap-4 relative p-0">
+              {status === "CREATED" && (
+                <Badge
+                  variant="default"
+                  className="text-[8px] absolute top-1 -right-5"
+                >
+                  Abierto
+                </Badge>
+              )}
+              {status === "CLOSED" && (
+                <Badge
+                  variant="destructive"
+                  className="text-[8px] absolute top-1 -right-5"
+                >
+                  Cerrado
+                </Badge>
+              )}
+              <div className="relative w-full h-full overflow-hidden p-4 flex flex-col">
+                <CardHeader className="flex-1 p-0">
+                  <CustomTooltip label={retrospectiveName}>
+                    <CardTitle className="text-center text-sm font-semibold text-blue-500 line-clamp-3">
+                      {retrospectiveName}
+                    </CardTitle>
+                  </CustomTooltip>
+                </CardHeader>
+                <CardContent className="p-0">
+                  {sprintWinner?.name && (
+                    <p className="text-center text-2xl">
+                      <span className="text-sm">Elegido del sprint: </span>
+                      <strong className="text-2xl">{sprintWinner?.name}</strong>
+                    </p>
+                  )}
+                </CardContent>
               </div>
-            </Link>
-          ))}
-        </section>
-      </main>
+            </Card>
+          </Link>
+        ))}
+      </section>
     </div>
   );
 };

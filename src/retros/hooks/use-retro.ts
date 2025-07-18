@@ -1,15 +1,17 @@
+import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { RetrospectiveService } from "@/services/retrospective-service";
-import type { CreateRetrospective } from "@/types/retrospective";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import type { CreateRetrospective, Retrospective } from "@/types/retrospective";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { v4 as uuidv4 } from "uuid";
 
 const MINUTE_IN_MS = 1000 * 60;
 
 export const useRetro = (teamId: string = "", retroId: string = "") => {
-  const queryClient = useQueryClient();
-
   // pm: listar-retrospectives
+  const RETROS_KEY = ["TEAMS", teamId, "RETROSPECTIVES"];
   const retrosQuery = useQuery({
-    queryKey: ["TEAMS", teamId, "RETROSPECTIVES"],
+    queryKey: RETROS_KEY,
     queryFn: () => RetrospectiveService.getRetrospectives(teamId),
     staleTime: 5 * MINUTE_IN_MS,
     enabled: !!teamId,
@@ -25,14 +27,36 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
   });
 
   // pm: crear-retrospective
+  const retroCreateOptimistic = useHandlerOptimistic<
+    Retrospective[],
+    CreateRetrospective
+  >({
+    queryKey: RETROS_KEY,
+    onMutate: (mutateData) => (old) =>
+      [
+        ...old,
+        {
+          id: uuidv4(),
+          retrospectiveName: mutateData.retrospectiveName,
+          retrospectiveNumber: 1,
+          status: "CREATED",
+          sprintWinner: null,
+          teamId,
+          createdAt: new Date(),
+        },
+      ],
+    onSuccess: () =>
+      toast.success("Retrospectiva creada", { richColors: true }),
+    onError: (error) => toast.error(error?.message, { richColors: true }),
+  });
+
   const retroCreate = useMutation({
     mutationFn: (createRetrospective: CreateRetrospective) =>
       RetrospectiveService.createRetrospective(teamId, createRetrospective),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["TEAMS", teamId, "RETROSPECTIVES"],
-      });
-    },
+    onSuccess: retroCreateOptimistic.onSuccess,
+    onMutate: retroCreateOptimistic.onMutate,
+    onError: retroCreateOptimistic.onError,
+    onSettled: retroCreateOptimistic.onSettled,
   });
 
   // pm: increment-counter

@@ -16,7 +16,7 @@ export const useFormCreateRetro = () => {
     (formData) => retroCreate.mutate(formData)
   );
 
-  if (retroCreate.isSuccess) navigate(-1);
+  if (retroCreate.isSuccess) navigate(`/teams/${teamId}/retrospectives`);
 
   return {
     formData,
