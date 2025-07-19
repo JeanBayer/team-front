@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useRetro } from "@/retros/hooks/use-retro";
 import { useTeam } from "@/teams/hooks/use-team";
 import { Link, useParams } from "react-router";
-import { RetrosPageLoading } from "./loaders/retros-page-loading";
+import { RetrosPageLoading } from "./components/loaders/retros-page-loading";
 
 export const RetrosPage = () => {
   const { teamId } = useParams();
