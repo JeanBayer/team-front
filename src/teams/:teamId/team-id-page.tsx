@@ -1,5 +1,5 @@
 import { Header } from "@/components/header/header";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { ICONS_KEYS } from "@/data/icon-enum";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
 import { useLeaveTeam } from "@/teams/:teamId/hooks/use-leave-team";
@@ -7,12 +7,13 @@ import { useTeam } from "@/teams/hooks/use-team";
 import { Link, useParams } from "react-router";
 import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
+import { RankingWinner } from "../components/ranking-winner";
 
 export const TeamIdPage = () => {
   const { teamId } = useParams();
   const { isAdmin } = useUserIsAdmin(teamId);
   const { handleLeave } = useLeaveTeam();
-  const { teamRanking, teamData } = useTeam(teamId);
+  const { teamData } = useTeam(teamId);
   const [, copy] = useCopyToClipboard();
 
   if (!teamId) return <div>sin id</div>;
@@ -32,37 +33,41 @@ export const TeamIdPage = () => {
     <div>
       <Header
         title={teamData.data?.name || ""}
-        menuItems={[
-          {
-            to: "edit",
-            label: "Editar",
-            isDisabled: !isAdmin,
-          },
-          {
-            to: "",
-            label: "Salirse",
-            type: ICONS_KEYS.OUT,
-            onClick: () => handleLeave(teamId),
-          },
-          {
-            to: "",
-            label: "Compartir",
-            type: ICONS_KEYS.SHARE,
-            onClick: () => handleCopy(),
-          },
-          {
-            to: "retrospectives",
-            label: "Retros",
-          },
-          {
-            to: "counters",
-            label: "Contadores",
-          },
-          {
-            to: "members",
-            label: "Miembros",
-          },
-        ]}
+        menuItems={
+          teamData.isLoading
+            ? []
+            : [
+                {
+                  to: "edit",
+                  label: "Editar",
+                  isDisabled: !isAdmin,
+                },
+                {
+                  to: "",
+                  label: "Salirse",
+                  type: ICONS_KEYS.OUT,
+                  onClick: () => handleLeave(teamId),
+                },
+                {
+                  to: "",
+                  label: "Compartir",
+                  type: ICONS_KEYS.SHARE,
+                  onClick: () => handleCopy(),
+                },
+                {
+                  to: "retrospectives",
+                  label: "Retros",
+                },
+                {
+                  to: "counters",
+                  label: "Contadores",
+                },
+                {
+                  to: "members",
+                  label: "Miembros",
+                },
+              ]
+        }
         breadcrumbList={[
           {
             to: "/",
@@ -109,23 +114,7 @@ export const TeamIdPage = () => {
           </Link>
         </section>
 
-        <section className="w-2xs">
-          <Card className="w-full p-4">
-            <CardHeader>
-              <CardTitle>Ranking elegido del sprint</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ol className="flex flex-col gap-4">
-                {teamRanking.data?.map((user) => (
-                  <li key={user.id} className="flex">
-                    <span className="flex-1">{user.name}</span>
-                    <span>{user.teamSprintWinner}</span>
-                  </li>
-                ))}
-              </ol>
-            </CardContent>
-          </Card>
-        </section>
+        <RankingWinner />
       </div>
     </div>
   );

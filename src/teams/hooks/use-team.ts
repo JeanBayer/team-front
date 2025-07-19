@@ -23,9 +23,6 @@ export const useTeam = (teamId: string = "") => {
     enabled: !!teamId,
   });
 
-  // pm: editar-team [ADMIN]
-  // TODO:
-
   // pm: ranking-winner
   const teamRankingQuery = useQuery({
     queryKey: ["TEAMS", teamId, "RANKING"],

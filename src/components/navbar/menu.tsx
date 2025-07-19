@@ -13,6 +13,7 @@ import { deleteAuthData } from "@/helper/extract-data";
 import { useTeam } from "@/teams/hooks/use-team";
 import { LogOut } from "lucide-react";
 import { NavLink, useNavigate, useParams } from "react-router";
+import { Skeleton } from "../ui/skeleton";
 
 export const HomeMenu = () => {
   const classNameElement =
@@ -72,6 +73,7 @@ export const SelectedTeamMenu = () => {
   const { teamId } = useParams();
   const { teamData } = useTeam(teamId);
 
+  if (teamData.isLoading) return <Skeleton className="w-36 h-8 ml-4" />;
   if (!teamId || !teamData.data) return null;
 
   const selectedTeamList = getSelectedTeamNavList(teamId, teamData.data.name);

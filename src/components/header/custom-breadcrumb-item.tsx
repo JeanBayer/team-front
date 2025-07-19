@@ -1,5 +1,6 @@
 import type { BreadcrumbItemList } from "@/types/breadcrumb";
 import { Link } from "react-router";
+import { Fallback } from "../loaders/fallback";
 import {
   BreadcrumbEllipsis,
   BreadcrumbItem,
@@ -25,7 +26,12 @@ export const CustomBreadCrumbItem = ({
       <>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to={breadcrumbList.to}>{breadcrumbList.label}</Link>
+            <Fallback
+              isLoading={breadcrumbList.label.length === 0}
+              loadingComponent={<span>Cargando...</span>}
+            >
+              <Link to={breadcrumbList.to}>{breadcrumbList.label}</Link>
+            </Fallback>
           </BreadcrumbLink>
         </BreadcrumbItem>
 

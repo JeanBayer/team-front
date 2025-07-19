@@ -1,5 +1,7 @@
 import type { BreadcrumbItemList } from "@/types/breadcrumb";
 import type { MenuItem } from "@/types/header";
+import { Fallback } from "../loaders/fallback";
+import { Skeleton } from "../ui/skeleton";
 import { BreadcrumbHeader } from "./breadcrumb-header";
 import { DropdownMenuHeader } from "./dropdown-menu-header";
 
@@ -25,9 +27,14 @@ export const Header = ({
         breadcrumbList={breadcrumbList}
       />
       <div className="flex items-center justify-center my-4 gap-4">
-        <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
-          {title}
-        </h1>
+        <Fallback
+          isLoading={!title}
+          loadingComponent={<Skeleton className="w-3xs h-9 rounded-none" />}
+        >
+          <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
+            {title}
+          </h1>
+        </Fallback>
         {menuItems.length > 0 ? (
           <DropdownMenuHeader menuItems={menuItems} />
         ) : null}

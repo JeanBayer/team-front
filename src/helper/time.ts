@@ -8,3 +8,6 @@ export const minute = (minutes: number) => {
 };
 
 export const secondsToMs = (seconds: number) => seconds * 1000;
+
+export const sleep = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
