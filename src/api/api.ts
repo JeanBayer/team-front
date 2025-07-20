@@ -4,7 +4,9 @@ import {
   extractAuthData,
   updateAuthData,
 } from "@/helper/extract-data";
+import { sleep } from "@/helper/time";
 import axios from "axios";
+import { toast } from "sonner";
 
 export const instance = axios.create({
   baseURL: envs.VITE_BASE_URL,
@@ -32,6 +34,11 @@ instance.interceptors.response.use(
     if (error.status === 401) {
       deleteAuthData();
       window.location.href = "/landing";
+    } else if (error.status === 403) {
+      toast.error(error.response?.data.message || "No autorizado");
+      sleep(3000).then(() => {
+        window.location.href = "/";
+      });
     }
     return Promise.reject(error);
   }

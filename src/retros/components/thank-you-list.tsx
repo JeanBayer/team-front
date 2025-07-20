@@ -20,13 +20,13 @@ export const ThankYouList = () => {
           loadingComponent={<ThankYouListLoading />}
         >
           {thankYou.data?.map(({ receiver, message, giver, id }) => (
-            <Card className="w-66" key={id}>
+            <Card className="w-66 h-66" key={id}>
               <CardHeader>
                 <CardTitle className="text-center">{receiver.name}</CardTitle>
               </CardHeader>
-              <CardContent className="flex flex-1 flex-col gap-4">
-                <ScrollArea className="h-26">
-                  <h4 className="text-sm flex-1">{message}</h4>
+              <CardContent className="flex flex-1 flex-col gap-4 justify-between">
+                <ScrollArea className="h-34">
+                  <h4 className="text-sm">{message}</h4>
                 </ScrollArea>
                 <p className="text-xs text-gray-500 text-right">
                   ~ {giver.name}

@@ -2,6 +2,7 @@ import z from "zod";
 
 const EnvSchema = z.object({
   VITE_BASE_URL: z.string(),
+  VITE_WS_URL: z.string(),
 });
 
 const env = EnvSchema.safeParse(import.meta.env);

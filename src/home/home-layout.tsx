@@ -2,9 +2,12 @@ import { BackgroundProvider } from "@/components/backgrounds/background-provider
 import { ThemeBackground } from "@/components/backgrounds/theme-background";
 import { AppSidebar } from "@/components/navbar/sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { Outlet } from "react-router";
+import { useReactQuerySubscription } from "@/hooks/use-react-query-subscription";
+import { Outlet, useParams } from "react-router";
 
 export const HomeLayout = () => {
+  const { teamId } = useParams();
+  useReactQuerySubscription(teamId);
   return (
     <SidebarProvider>
       <AppSidebar />

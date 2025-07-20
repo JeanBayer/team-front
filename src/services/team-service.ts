@@ -13,8 +13,9 @@ export class TeamService {
       const { data } = await instance.get<BasicTeam[]>("/teams");
       return data;
     } catch (error) {
-      console.error("getTeams error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
@@ -23,8 +24,9 @@ export class TeamService {
       const { data } = await instance.get<BasicTeam>(`/teams/${teamId}`);
       return data;
     } catch (error) {
-      console.error("getTeam error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
@@ -60,8 +62,9 @@ export class TeamService {
       );
       return data;
     } catch (error) {
-      console.error("getTeamRanking error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 }
