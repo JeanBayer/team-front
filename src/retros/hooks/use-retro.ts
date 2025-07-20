@@ -1,13 +1,15 @@
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { RetrospectiveService } from "@/services/retrospective-service";
 import type { CreateRetrospective, Retrospective } from "@/types/retrospective";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
 
 const MINUTE_IN_MS = 1000 * 60;
 
 export const useRetro = (teamId: string = "", retroId: string = "") => {
+  const queryClient = useQueryClient();
+
   // pm: listar-retrospectives
   const RETROS_KEY = ["TEAMS", teamId, "RETROSPECTIVES"];
   const retrosQuery = useQuery({
@@ -66,8 +68,10 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
       ...old,
       status: "CLOSED",
     }),
-    onSuccess: () =>
-      toast.success("Retrospectiva cerrada", { richColors: true }),
+    onSuccess: () => {
+      toast.success("Retrospectiva cerrada", { richColors: true });
+      queryClient.invalidateQueries({ queryKey: RETROS_KEY });
+    },
     onError: (error) => toast.error(error?.message, { richColors: true }),
   });
 

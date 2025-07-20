@@ -6,8 +6,6 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import type { Membership } from "@/types/membership";
 import {
   Select,
   SelectContent,
@@ -16,7 +14,9 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue,
-} from "@radix-ui/react-select";
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import type { Membership } from "@/types/membership";
 import { ChevronsUpDown, Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { useFormCreateThankYou } from "../:retroId/hooks/use-form-create-thank-you";
@@ -34,7 +34,8 @@ export const ThankYouForm = ({ memberships }: ThankYouFormProps) => {
   } = useFormCreateThankYou();
   const [isOpenThankYou, setIsOpenThankYou] = useState(false);
 
-  const isDisabledThankYouSubmit = isPendingThankYou;
+  const isDisabledThankYouSubmit =
+    isPendingThankYou || !formDataThankYou.userId;
 
   return (
     <section className="sticky bottom-1 flex gap-4 flex-wrap justify-center py-8 px-4 md:px-12 min-w-xs max-w-sm md:max-w-lg mx-auto">
@@ -47,7 +48,7 @@ export const ThankYouForm = ({ memberships }: ThankYouFormProps) => {
           <CollapsibleTrigger asChild>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
-                Agradecimientos
+                Mandar Agradecimiento
                 <Button variant="ghost" size="icon" className="size-8">
                   <ChevronsUpDown />
                   <span className="sr-only">Toggle</span>
@@ -62,13 +63,14 @@ export const ThankYouForm = ({ memberships }: ThankYouFormProps) => {
                 className="w-full flex flex-col gap-8"
               >
                 <div className="grid w-full max-w-md items-center gap-3">
-                  <Label htmlFor="miembro">Miembro:</Label>
+                  <Label htmlFor="miembro">Compañero/a:</Label>
                   <Select
                     defaultValue={formDataThankYou.userId}
                     value={formDataThankYou.userId}
                     onValueChange={(value) =>
                       updateFieldThankYou("userId", value)
                     }
+                    required
                   >
                     <SelectTrigger className="w-[240px] bg-card">
                       <SelectValue
@@ -96,6 +98,7 @@ export const ThankYouForm = ({ memberships }: ThankYouFormProps) => {
                   <Textarea
                     id="mensaje-agradecimiento"
                     placeholder="Agradezco a "
+                    minLength={3}
                     value={formDataThankYou.message}
                     onChange={(e) =>
                       updateFieldThankYou("message", e.target.value)

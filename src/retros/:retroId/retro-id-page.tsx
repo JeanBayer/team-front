@@ -24,20 +24,24 @@ export const RetroIdPage = () => {
     <div>
       <Header
         title={retro.data?.retrospectiveName || ""}
-        menuItems={[
-          // {
-          //   to: "edit",
-          //   label: "Editar",
-          //   isDisabled: !isAdmin,
-          // },
-          {
-            to: "",
-            label: "Cerrar",
-            type: ICONS_KEYS.EYE_CLOSED,
-            onClick: () => retroClose.mutate(),
-            isDisabled: !isAdmin || retro?.data?.status === "CLOSED",
-          },
-        ]}
+        menuItems={
+          retro.isLoading
+            ? []
+            : [
+                // {
+                //   to: "edit",
+                //   label: "Editar",
+                //   isDisabled: !isAdmin,
+                // },
+                {
+                  to: "",
+                  label: "Cerrar",
+                  type: ICONS_KEYS.EYE_CLOSED,
+                  onClick: () => retroClose.mutate(),
+                  isDisabled: !isAdmin || retro?.data?.status === "CLOSED",
+                },
+              ]
+        }
         breadcrumbList={[
           {
             to: "/",
