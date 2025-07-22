@@ -1,5 +1,6 @@
 import { DropdownMenuHeader } from "@/components/header/dropdown-menu-header";
 import { Header } from "@/components/header/header";
+import { Fallback } from "@/components/loaders/fallback";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -17,6 +18,7 @@ import { useMembership } from "@/members/hooks/use-membership";
 import { useTeam } from "@/teams/hooks/use-team";
 import { ShieldUser, User } from "lucide-react";
 import { useParams } from "react-router";
+import { TableBodyLoader } from "./components/loaders/table-body-loader";
 
 export const MembersPage = () => {
   const { teamId } = useParams();
@@ -59,71 +61,76 @@ export const MembersPage = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {memberships.data?.map((membership) => (
-              <TableRow key={membership.userId}>
-                <TableCell className="font-medium">
-                  {membership.user.name}
-                </TableCell>
-                <TableCell>{membership.user.email}</TableCell>
-                <TableCell className="text-center">
-                  {membership.isAdmin ? (
-                    <Badge
-                      variant="secondary"
-                      className="bg-blue-500 text-white dark:bg-blue-600 w-full"
-                    >
-                      <ShieldUser size={16} />
-                      Admin
-                    </Badge>
-                  ) : (
-                    <Badge variant="secondary" className="text-black w-full">
-                      <User size={16} />
-                      User
-                    </Badge>
-                  )}
-                </TableCell>
-                <TableCell className="text-center">
-                  {membership.user.sprintWins}
-                </TableCell>
-                <TableCell className="text-center">
-                  <div className="flex justify-center">
-                    <DropdownMenuHeader
-                      menuItems={[
-                        {
-                          to: "",
-                          label: "Sacar del equipo",
-                          type: ICONS_KEYS.DELETE,
-                          isDisabled: !isAdmin || memberLeaveUser.isPending,
-                          onClick: () =>
-                            memberLeaveUser.mutate(membership.userId),
-                        },
-                        {
-                          to: "",
-                          label: "Promover a admin",
-                          type: ICONS_KEYS.ADMIN,
-                          isDisabled:
-                            !isAdmin ||
-                            membership.isAdmin ||
-                            promoteToAdmin.isPending,
-                          onClick: () =>
-                            promoteToAdmin.mutate(membership.userId),
-                        },
-                        {
-                          to: "",
-                          label: "Retirar admin",
-                          type: ICONS_KEYS.DEMOTE,
-                          isDisabled:
-                            !isAdmin ||
-                            !membership.isAdmin ||
-                            demoteToAdmin.isPending,
-                          onClick: () =>
-                            demoteToAdmin.mutate(membership.userId),
-                        },
-                      ]}
-                    />
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+            <Fallback
+              isLoading={memberships.isLoading}
+              loadingComponent={<TableBodyLoader />}
+            >
+              {memberships.data?.map((membership) => (
+                <TableRow key={membership.userId}>
+                  <TableCell className="font-medium">
+                    {membership.user.name}
+                  </TableCell>
+                  <TableCell>{membership.user.email}</TableCell>
+                  <TableCell className="text-center">
+                    {membership.isAdmin ? (
+                      <Badge
+                        variant="secondary"
+                        className="bg-blue-500 text-white dark:bg-blue-600 w-full"
+                      >
+                        <ShieldUser size={16} />
+                        Admin
+                      </Badge>
+                    ) : (
+                      <Badge variant="secondary" className="text-black w-full">
+                        <User size={16} />
+                        User
+                      </Badge>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {membership.user.sprintWins}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <div className="flex justify-center">
+                      <DropdownMenuHeader
+                        menuItems={[
+                          {
+                            to: "",
+                            label: "Sacar del equipo",
+                            type: ICONS_KEYS.DELETE,
+                            isDisabled: !isAdmin || memberLeaveUser.isPending,
+                            onClick: () =>
+                              memberLeaveUser.mutate(membership.userId),
+                          },
+                          {
+                            to: "",
+                            label: "Promover a admin",
+                            type: ICONS_KEYS.ADMIN,
+                            isDisabled:
+                              !isAdmin ||
+                              membership.isAdmin ||
+                              promoteToAdmin.isPending,
+                            onClick: () =>
+                              promoteToAdmin.mutate(membership.userId),
+                          },
+                          {
+                            to: "",
+                            label: "Retirar admin",
+                            type: ICONS_KEYS.DEMOTE,
+                            isDisabled:
+                              !isAdmin ||
+                              !membership.isAdmin ||
+                              demoteToAdmin.isPending,
+                            onClick: () =>
+                              demoteToAdmin.mutate(membership.userId),
+                          },
+                        ]}
+                      />
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </Fallback>
           </TableBody>
         </Table>
       </div>
