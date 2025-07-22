@@ -25,6 +25,7 @@ export const useGoal = (
     queryKey: GOALS_KEY,
     onMutate: (mutateData) => (old) =>
       [
+        ...old,
         {
           id: "123",
           description: mutateData.description,
@@ -35,7 +36,6 @@ export const useGoal = (
           createdAt: new Date(),
           updatedAt: new Date(),
         },
-        ...old,
       ],
     onSuccess: () => toast.success("Meta creada", { richColors: true }),
     onError: (error) => toast.error(error?.message, { richColors: true }),
@@ -108,7 +108,7 @@ export const useGoal = (
   const goalCloneOptimistic = useHandlerOptimistic<Goal[], string>({
     queryKey: GOALS_KEY_AVAILABLE,
     onMutate: (goalId) => (old) =>
-      [{ ...old.find((goal) => goal.id === goalId)!, id: "123" }, ...old],
+      [...old, { ...old.find((goal) => goal.id === goalId)!, id: "123" }],
     onSuccess: () => toast.success("Meta clonada", { richColors: true }),
     onError: (error) => toast.error(error?.message, { richColors: true }),
   });

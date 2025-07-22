@@ -1,4 +1,5 @@
 import { DropdownMenuHeader } from "@/components/header/dropdown-menu-header";
+import { Fallback } from "@/components/loaders/fallback";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -14,6 +15,7 @@ import { GoalsAvailable } from "@/goals/components/goals-available";
 import { useGoal } from "@/goals/hooks/use-goal";
 import { useState } from "react";
 import { useParams } from "react-router";
+import { GoalListLoader } from "./loaders/goal-list-loader";
 
 type GoalsSectionProps = {
   currentCount: number;
@@ -71,15 +73,25 @@ export const GoalsSection = ({ currentCount }: GoalsSectionProps) => {
           <CardContent className="">
             <ScrollArea className="h-96">
               <TabsContent value={TYPE_GOALS.AVAILABLE}>
-                <GoalsAvailable
-                  goals={goals.data || []}
-                  modeGoal={modeGoal}
-                  changeModeGoal={changeModeGoal}
-                  currentCount={currentCount}
-                />
+                <Fallback
+                  isLoading={goals.isLoading}
+                  loadingComponent={<GoalListLoader />}
+                >
+                  <GoalsAvailable
+                    goals={goals.data || []}
+                    modeGoal={modeGoal}
+                    changeModeGoal={changeModeGoal}
+                    currentCount={currentCount}
+                  />
+                </Fallback>
               </TabsContent>
               <TabsContent value={TYPE_GOALS.ACHIEVED}>
-                <GoalsAchieved goals={goals.data || []} />
+                <Fallback
+                  isLoading={goals.isLoading}
+                  loadingComponent={<GoalListLoader />}
+                >
+                  <GoalsAchieved goals={goals.data || []} />
+                </Fallback>
               </TabsContent>
             </ScrollArea>
             <div>
