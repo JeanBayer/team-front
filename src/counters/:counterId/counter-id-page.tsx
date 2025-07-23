@@ -16,7 +16,7 @@ export const CounterIdPage = () => {
   const { isAdmin } = useUserIsAdmin(teamId);
   const { teamData } = useTeam(teamId);
   const navigate = useNavigate();
-  const { counter, counterIncrement, counterReset, counterDelete } = useCounter(
+  const { counter, counterIncrement, counterDelete } = useCounter(
     teamId,
     counterId
   );
@@ -79,7 +79,6 @@ export const CounterIdPage = () => {
             <CounterDetailCard
               counter={counter.data!}
               handleCounterIncrement={counterIncrement.mutate}
-              handleCounterReset={counterReset.mutate}
             />
           </Fallback>
 

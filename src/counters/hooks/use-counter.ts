@@ -1,7 +1,12 @@
 import { minute } from "@/helper/time";
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { CounterService } from "@/services/counter-service";
-import type { Counter, CreateCounter, UpdateCounter } from "@/types/counter";
+import type {
+  Counter,
+  CreateCounter,
+  ResetCounter,
+  UpdateCounter,
+} from "@/types/counter";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -70,7 +75,11 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       currentCount: old.currentCount + 1,
       alreadyModifiedToday: true,
     }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: COUNTERS_KEY }),
+    onSuccess: () => {
+      toast.success("Counter incrementado", { richColors: true });
+      queryClient.invalidateQueries({ queryKey: COUNTERS_KEY });
+    },
+    onError: (error) => toast.error(error?.message, { richColors: true }),
   });
 
   const counterIncrement = useMutation({
@@ -82,24 +91,13 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
   });
 
   // pm: reset-counter
-  const counterResetOptimistic = useHandlerOptimistic<Counter, any>({
-    queryKey: COUNTER_KEY,
-    onMutate: () => (old) => ({
-      ...old,
-      currentCount: 0,
-      lastResetDuration: old.currentCount,
-      alreadyModifiedToday: true,
-    }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: COUNTERS_KEY }),
-  });
-
   const counterReset = useMutation({
-    mutationFn: () =>
-      CounterService.resetCounter(teamId, counterId, { nameEvent: "sacar" }),
-    onSuccess: counterResetOptimistic.onSuccess,
-    onMutate: counterResetOptimistic.onMutate,
-    onError: counterResetOptimistic.onError,
-    onSettled: counterResetOptimistic.onSettled,
+    mutationFn: (resetCounter: ResetCounter) =>
+      CounterService.resetCounter(teamId, counterId, resetCounter),
+    onSuccess: () => {
+      toast.success("Counter reseteado", { richColors: true });
+      queryClient.invalidateQueries({ queryKey: COUNTERS_KEY });
+    },
   });
 
   // pm: delete counter
@@ -126,8 +124,8 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       ...mutateData,
     }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: COUNTERS_KEY });
       toast.success("Counter actualizado correctamente", { richColors: true });
+      queryClient.invalidateQueries({ queryKey: COUNTERS_KEY });
     },
     onError: (error) => toast.error(error?.message, { richColors: true }),
   });
@@ -168,7 +166,7 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
       isPending: counterReset.isPending,
       isSuccess: counterReset.isSuccess,
       isError: counterReset.isError,
-      mutate: counterReset.mutate as () => void,
+      mutate: counterReset.mutate,
     },
     counterDelete: {
       isPending: counterDelete.isPending,

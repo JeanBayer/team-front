@@ -7,17 +7,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Counter } from "@/types/counter";
+import { ButtonDialogReset } from "./button-dialog-reset";
 
 type CounterDetailCardProps = {
   counter: Counter;
   handleCounterIncrement?: () => void;
-  handleCounterReset?: () => void;
 };
 
 export const CounterDetailCard = ({
   counter,
   handleCounterIncrement,
-  handleCounterReset,
 }: CounterDetailCardProps) => {
   return (
     <Card className="w-xs min-h-52 hover:shadow-lg hover:border-blue-300 transition-all duration-300 ">
@@ -43,13 +42,7 @@ export const CounterDetailCard = ({
             >
               {counter?.incrementButtonLabel}
             </Button>
-            <Button
-              onClick={handleCounterReset}
-              variant="destructive"
-              className="cursor-pointer min-w-30 max-w-full w-full sm:w-auto"
-            >
-              {counter?.resetButtonLabel}
-            </Button>
+            <ButtonDialogReset>{counter?.resetButtonLabel}</ButtonDialogReset>
           </div>
         )}
       </CardFooter>
