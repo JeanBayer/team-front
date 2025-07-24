@@ -9,10 +9,8 @@ import { TimerInitial } from "./timer-initial";
 export const Timer = () => {
   const [initialState, setInitialState] = useState(true);
   const { teamId } = useParams();
-  const { timer } = useTimer(teamId);
-  const [play, { stop }] = useSound(TIMER_SOUND.BOB_ESPONJA_ESTAN_LISTOS);
-
-  console.log({ timer });
+  const { timer, timerCancel } = useTimer(teamId);
+  const [play] = useSound(TIMER_SOUND.BOB_ESPONJA_ESTAN_LISTOS);
 
   if (timer.isLoading || !teamId) return null;
 
@@ -26,6 +24,10 @@ export const Timer = () => {
           play();
           timer.refetch();
           setInitialState(true);
+        }}
+        onCancel={() => {
+          setInitialState(true);
+          timerCancel.mutate();
         }}
       />
     );

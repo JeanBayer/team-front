@@ -21,7 +21,7 @@ export const ThemeBackground = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="relative z-10">
-        <Button variant="ghost">
+        <Button variant="ghost" className="cursor-pointer">
           <Palette size={16} className="cursor-pointer shrink-0" />
         </Button>
       </DropdownMenuTrigger>

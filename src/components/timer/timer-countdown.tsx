@@ -1,19 +1,30 @@
-import { TimerIcon } from "lucide-react";
+import { CircleSlash, TimerIcon } from "lucide-react";
 import Countdown, { type CountdownRenderProps } from "react-countdown";
 import { Badge } from "../ui/badge";
+import { Button } from "../ui/button";
 
 type TimerCountdownProps = {
   date: string;
   onComplete: () => void;
+  onCancel: () => void;
 };
 
-export const TimerCountdown = ({ date, onComplete }: TimerCountdownProps) => (
-  <Countdown date={date} renderer={renderer} onComplete={onComplete} />
+export const TimerCountdown = ({
+  date,
+  onComplete,
+  onCancel,
+}: TimerCountdownProps) => (
+  <div className="flex items-center gap-1 relative z-10">
+    <Countdown date={date} renderer={renderer} onComplete={onComplete} />
+    <Button variant="destructive" onClick={onCancel} className="cursor-pointer">
+      <CircleSlash className="inline h-4 w-4" />
+    </Button>
+  </div>
 );
 
 const renderer = ({ minutes, seconds }: CountdownRenderProps) => {
   return (
-    <div className="w-full flex justify-end relative z-10">
+    <div className="w-full flex justify-end">
       <Badge className="text-sm p-2">
         {minutes.toString().padStart(2, "0")}:
         {seconds.toString().padStart(2, "0")}

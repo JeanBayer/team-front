@@ -1,5 +1,6 @@
 import { useFormData } from "@/hooks/use-form-data";
 import { useTimer } from "@/hooks/use-timer";
+import { Loader2Icon } from "lucide-react";
 import { useParams } from "react-router";
 import { Button } from "../ui/button";
 import {
@@ -94,8 +95,11 @@ export const TimerForm = () => {
         </div>
         <Button
           type="submit"
+          value="Empezar"
           className="w-full sm:w-24 cursor-pointer max-w-[260px]"
+          disabled={timerCreate.isPending}
         >
+          {timerCreate.isPending && <Loader2Icon className="animate-spin" />}
           Empezar
         </Button>
       </form>

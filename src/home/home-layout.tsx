@@ -15,8 +15,10 @@ export const HomeLayout = () => {
       <main className="min-h-screen w-full bg-[#f8fafc] relative">
         <div className="w-full flex justify-between pt-4 px-4">
           <SidebarTrigger className="relative z-10" />
-          <Timer />
-          <ThemeBackground />
+          <div className="flex">
+            <Timer />
+            <ThemeBackground />
+          </div>
         </div>
         <BackgroundProvider>
           <div className="relative z-10 p-4 w-full">

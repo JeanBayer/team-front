@@ -7,7 +7,7 @@ export const TimerInitial = () => (
   <div className="w-full flex justify-end relative z-10">
     <Dialog>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="cursor-pointer">
           <TimerIcon className="h-4 w-4" />
         </Button>
       </DialogTrigger>

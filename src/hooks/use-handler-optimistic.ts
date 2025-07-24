@@ -20,8 +20,6 @@ export const useHandlerOptimistic = <T, E>({
     await queryClient.cancelQueries({ queryKey });
     const previousData = queryClient.getQueryData<T>(queryKey);
 
-    if (!previousData) return { previousData };
-
     queryClient.setQueryData(queryKey, onMutate(mutateData));
 
     return { previousData };
