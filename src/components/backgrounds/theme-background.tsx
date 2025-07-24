@@ -3,6 +3,7 @@ import { useStore } from "@/store/use-store";
 import clsx from "clsx";
 import { Palette } from "lucide-react";
 import React from "react";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +21,9 @@ export const ThemeBackground = () => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="relative z-10">
-        <Palette size={16} className="cursor-pointer shrink-0" />
+        <Button variant="ghost">
+          <Palette size={16} className="cursor-pointer shrink-0" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-40" align="start">
         {BACKGROUNDS?.map((background, index) => (

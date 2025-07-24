@@ -1,5 +1,4 @@
 import { Header } from "@/components/header/header";
-import { Timer } from "@/components/timer/timer";
 import { Card, CardContent } from "@/components/ui/card";
 import { ICONS_KEYS } from "@/data/icon-enum";
 import { useUserIsAdmin } from "@/hooks/use-user-is-admin";
@@ -32,7 +31,6 @@ export const TeamIdPage = () => {
 
   return (
     <div>
-      <Timer />
       <div>
         <Header
           title={teamData.data?.name || ""}
