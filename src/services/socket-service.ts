@@ -1,21 +1,21 @@
-import { io, Socket } from 'socket.io-client';
-import { envs } from '../config/envs';
+import { io, Socket } from "socket.io-client";
+import { envs } from "../config/envs";
 
 class SocketService {
   public socket: Socket;
 
   constructor() {
     this.socket = io(envs.VITE_WS_URL, {
-      transports: ['websocket'],
-      autoConnect: false,
+      transports: ["websocket"],
+      autoConnect: true,
     });
 
-    this.socket.on('connect', () => {
-      console.log('✅ WebSocket connected!');
+    this.socket.on("connect", () => {
+      console.log("✅ WebSocket connected!");
     });
 
-    this.socket.on('disconnect', () => {
-      console.log('❌ WebSocket disconnected!');
+    this.socket.on("disconnect", () => {
+      console.log("❌ WebSocket disconnected!");
     });
   }
 
@@ -32,11 +32,11 @@ class SocketService {
   }
 
   public joinTeam(teamId: string) {
-    this.socket.emit('joinTeam', teamId);
+    this.socket.emit("joinTeam", teamId);
   }
 
   public leaveTeam(teamId: string) {
-    this.socket.emit('leaveTeam', teamId);
+    this.socket.emit("leaveTeam", teamId);
   }
 }
 
