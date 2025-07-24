@@ -1,11 +1,10 @@
 import { instance } from "@/api/api";
-import { DateChile, sleep } from "@/helper/time";
+import { DateChile } from "@/helper/time";
 import type { CreateTimer, Timer } from "@/types/timer";
 import { AxiosError } from "axios";
 
 export class TimerService {
   static async getTimer(teamId: string) {
-    await sleep(10000);
     try {
       const { data } = await instance.get<Timer | undefined>(
         `/teams/${teamId}/timers`
