@@ -26,13 +26,13 @@ export const UserPage = () => {
 
       <div className="p-8 max-w-3xl mx-auto">
         <section className="flex flex-col md:flex-row gap-8 items-center justify-center">
-          <Card className="w-sm md:w-2xs h-52 md:h-44 hover:shadow-lg hover:border-blue-300 transition-all duration-300">
+          <Card className="w-full max-sm:max-w-56 sm:w-sm md:w-xs h-52 md:h-44 hover:shadow-lg hover:border-blue-300 transition-all duration-300">
             <CardContent className="flex-1 flex flex-col gap-4">
-              <p className="text-xl flex flex-col gap-2">
+              <p className="text-sm sm:text-xl flex flex-col gap-2">
                 <span className="text-xs text-gray-500">Nombre: </span>
                 <strong>{user.data?.name}</strong>
               </p>
-              <p className="text-xl flex flex-col gap-2">
+              <p className="text-sm sm:text-xl flex flex-col gap-2">
                 <span className="text-xs text-gray-500">Email: </span>
                 <strong>{user.data?.email}</strong>
               </p>
@@ -43,10 +43,10 @@ export const UserPage = () => {
             className="md:w-[1px]! md:h-52!"
           />
           <Card className="w-52 h-52 md:w-44 md:h-44 hover:shadow-lg hover:border-blue-300 transition-all duration-300 gap-4 relative p-0">
-            <CardContent className="absolute top-[60px] md:top-[50px] left-[49%] transform -translate-x-1/2 z-10">
+            <CardContent className="absolute top-[60px] md:top-[45px] left-[49%] transform -translate-x-1/2 z-10">
               <Badge
                 variant="secondary"
-                className="bg-blue-400 text-white rounded-3xl"
+                className="bg-blue-400 text-white rounded-3xl text-2xl w-10"
               >
                 {user.data?.sprintWins}
               </Badge>
