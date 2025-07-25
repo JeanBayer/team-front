@@ -83,7 +83,7 @@ export const TeamIdPage = () => {
         />
 
         <div className="flex gap-8 flex-wrap justify-center p-8 max-w-3xl mx-auto">
-          <section className="flex flex-wrap gap-4 max-w-sm">
+          <section className="flex content-start flex-wrap gap-4 max-w-sm">
             <Link to="retrospectives" className="inline-block cursor-pointer">
               <Card className="w-32 h-32 hover:shadow-lg hover:border-blue-300 transition-all duration-300 flex flex-col items-center justify-center">
                 <CardContent className="">
