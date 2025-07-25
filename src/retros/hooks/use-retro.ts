@@ -1,6 +1,10 @@
 import { useHandlerOptimistic } from "@/hooks/use-handler-optimistic";
 import { RetrospectiveService } from "@/services/retrospective-service";
-import type { CreateRetrospective, Retrospective } from "@/types/retrospective";
+import type {
+  CreateRetrospective,
+  Retrospective,
+  UpdateRetrospective,
+} from "@/types/retrospective";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { v4 as uuidv4 } from "uuid";
@@ -61,6 +65,36 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
     onSettled: retroCreateOptimistic.onSettled,
   });
 
+  // pm: update-retrospective
+  const retroUpdateOptimistic = useHandlerOptimistic<
+    Retrospective,
+    UpdateRetrospective
+  >({
+    queryKey: RETRO_KEY,
+    onMutate: (mutateData) => (old) => ({
+      ...old,
+      ...mutateData,
+    }),
+    onSuccess: () => {
+      toast.success("Retrospectiva actualizada", { richColors: true });
+      queryClient.invalidateQueries({ queryKey: RETROS_KEY });
+    },
+    onError: (error) => toast.error(error?.message, { richColors: true }),
+  });
+
+  const retroUpdate = useMutation({
+    mutationFn: (updateRetrospective: UpdateRetrospective) =>
+      RetrospectiveService.updateRetrospective(
+        teamId,
+        retroId,
+        updateRetrospective
+      ),
+    onSuccess: retroUpdateOptimistic.onSuccess,
+    onMutate: retroUpdateOptimistic.onMutate,
+    onError: retroUpdateOptimistic.onError,
+    onSettled: retroUpdateOptimistic.onSettled,
+  });
+
   // pm: close-retrospective
   const retroCloseOptimistic = useHandlerOptimistic<Retrospective, null>({
     queryKey: RETRO_KEY,
@@ -83,24 +117,6 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
     onSettled: retroCloseOptimistic.onSettled,
   });
 
-  // pm: increment-counter
-  // const counterIncrementOptimistic = useHandlerOptimistic<Counter>({
-  //   queryKey: COUNTER_KEY,
-  //   onMutate: (old) => ({
-  //     ...old,
-  //     currentCount: old.currentCount + 1,
-  //     alreadyModifiedToday: true,
-  //   }),
-  // });
-
-  // const counterIncrement = useMutation({
-  //   mutationFn: () => CounterService.incrementCounter(teamId, retroId),
-  //   onSuccess: counterIncrementOptimistic.onSuccess,
-  //   onMutate: counterIncrementOptimistic.onMutate,
-  //   onError: counterIncrementOptimistic.onError,
-  //   onSettled: counterIncrementOptimistic.onSettled,
-  // });
-
   return {
     retros: {
       isLoading: retrosQuery.isLoading,
@@ -117,6 +133,12 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
       isSuccess: retroCreate.isSuccess,
       isError: retroCreate.isError,
       mutate: retroCreate.mutate,
+    },
+    retroUpdate: {
+      isPending: retroUpdate.isPending,
+      isSuccess: retroUpdate.isSuccess,
+      isError: retroUpdate.isError,
+      mutate: retroUpdate.mutate,
     },
     retroClose: {
       isPending: retroClose.isPending,

@@ -20,6 +20,7 @@ import { TeamsPage } from "@/teams/teams-page";
 import { createBrowserRouter } from "react-router";
 import { RequestResetPage } from "./auth/request-reset/request-reset-page";
 import { ResetUserPage } from "./auth/reset-user/reset-user-page";
+import { EditRetroPage } from "./retros/:retroId/edit/retro-edit-page";
 import { EditTeamPage } from "./teams/:teamId/edit/edit-team-page";
 
 export const router = createBrowserRouter([
@@ -100,7 +101,10 @@ export const router = createBrowserRouter([
                   { path: "create", element: <CreateRetroPage /> },
                   {
                     path: ":retroId",
-                    children: [{ index: true, element: <RetroIdPage /> }],
+                    children: [
+                      { index: true, element: <RetroIdPage /> },
+                      { path: "edit", element: <EditRetroPage /> },
+                    ],
                   },
                 ],
               },

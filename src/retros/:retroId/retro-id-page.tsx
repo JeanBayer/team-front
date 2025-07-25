@@ -28,11 +28,11 @@ export const RetroIdPage = () => {
           retro.isLoading
             ? []
             : [
-                // {
-                //   to: "edit",
-                //   label: "Editar",
-                //   isDisabled: !isAdmin,
-                // },
+                {
+                  to: "edit",
+                  label: "Editar",
+                  isDisabled: !isAdmin,
+                },
                 {
                   to: "",
                   label: "Cerrar",

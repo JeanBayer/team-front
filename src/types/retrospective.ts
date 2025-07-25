@@ -17,3 +17,5 @@ export interface SprintWinner {
 export interface CreateRetrospective {
   retrospectiveName: string;
 }
+
+export interface UpdateRetrospective extends CreateRetrospective {}

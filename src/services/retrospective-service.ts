@@ -1,5 +1,9 @@
 import { instance } from "@/api/api";
-import type { CreateRetrospective, Retrospective } from "@/types/retrospective";
+import type {
+  CreateRetrospective,
+  Retrospective,
+  UpdateRetrospective,
+} from "@/types/retrospective";
 import { AxiosError } from "axios";
 
 export class RetrospectiveService {
@@ -11,6 +15,24 @@ export class RetrospectiveService {
       const { data } = await instance.post<Retrospective>(
         `/teams/${teamId}/retrospectives`,
         createRetrospective
+      );
+      return data;
+    } catch (error) {
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
+    }
+  }
+
+  static async updateRetrospective(
+    teamId: string,
+    retroId: string,
+    updateRetrospective: UpdateRetrospective
+  ) {
+    try {
+      const { data } = await instance.patch<Retrospective>(
+        `/teams/${teamId}/retrospectives/${retroId}`,
+        updateRetrospective
       );
       return data;
     } catch (error) {
