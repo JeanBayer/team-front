@@ -7,7 +7,6 @@ import type {
 } from "@/types/retrospective";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { v4 as uuidv4 } from "uuid";
 
 const MINUTE_IN_MS = 1000 * 60;
 
@@ -32,37 +31,11 @@ export const useRetro = (teamId: string = "", retroId: string = "") => {
     enabled: !!retroId,
   });
 
-  // pm: crear-retrospective
-  const retroCreateOptimistic = useHandlerOptimistic<
-    Retrospective[],
-    CreateRetrospective
-  >({
-    queryKey: RETROS_KEY,
-    onMutate: (mutateData) => (old) =>
-      [
-        ...old,
-        {
-          id: uuidv4(),
-          retrospectiveName: mutateData.retrospectiveName,
-          retrospectiveNumber: 1,
-          status: "CREATED",
-          sprintWinner: null,
-          teamId,
-          createdAt: new Date(),
-        },
-      ],
-    onSuccess: () =>
-      toast.success("Retrospectiva creada", { richColors: true }),
-    onError: (error) => toast.error(error?.message, { richColors: true }),
-  });
-
   const retroCreate = useMutation({
     mutationFn: (createRetrospective: CreateRetrospective) =>
       RetrospectiveService.createRetrospective(teamId, createRetrospective),
-    onSuccess: retroCreateOptimistic.onSuccess,
-    onMutate: retroCreateOptimistic.onMutate,
-    onError: retroCreateOptimistic.onError,
-    onSettled: retroCreateOptimistic.onSettled,
+    onSuccess: () =>
+      toast.success("Retrospectiva creada", { richColors: true }),
   });
 
   // pm: update-retrospective

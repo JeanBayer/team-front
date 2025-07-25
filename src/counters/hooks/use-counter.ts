@@ -31,40 +31,10 @@ export const useCounter = (teamId: string = "", counterId: string = "") => {
     enabled: !!counterId,
   });
 
-  // pm: crear-counter
-  const counterCreateOptimistic = useHandlerOptimistic<
-    Counter[],
-    CreateCounter
-  >({
-    queryKey: COUNTERS_KEY,
-    onMutate: (mutateData) => (old) =>
-      [
-        ...old,
-        {
-          id: "123",
-          alreadyModifiedToday: false,
-          currentCount: 0,
-          name: mutateData.name,
-          incrementButtonLabel: mutateData.incrementButtonLabel,
-          resetButtonLabel: mutateData.resetButtonLabel,
-          longestStreak: 0,
-          lastResetDuration: 0,
-          teamId,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ],
-    onSuccess: () => toast.success("Counter creado", { richColors: true }),
-    onError: (error) => toast.error(error?.message, { richColors: true }),
-  });
-
   const counterCreate = useMutation({
     mutationFn: (createCounter: CreateCounter) =>
       CounterService.createCounter(teamId, createCounter),
-    onSuccess: counterCreateOptimistic.onSuccess,
-    onMutate: counterCreateOptimistic.onMutate,
-    onError: counterCreateOptimistic.onError,
-    onSettled: counterCreateOptimistic.onSettled,
+    onSuccess: () => toast.success("Counter creado", { richColors: true }),
   });
 
   // pm: increment-counter
