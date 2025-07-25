@@ -12,23 +12,29 @@ import {
 } from "@/components/ui/sidebar";
 import { useUser } from "@/hooks/use-user";
 import { ShieldUser } from "lucide-react";
+import { Link } from "react-router";
 import { Fallback } from "../loaders/fallback";
 import { AdminConditional } from "../membership/admin-conditional";
 import { Badge } from "../ui/badge";
 import { Skeleton } from "../ui/skeleton";
 
 export const AppSidebar = () => {
-  const userData = useUser();
+  const { user } = useUser();
 
   return (
     <Sidebar>
       <SidebarHeader>
         <div className="flex items-center">
           <Fallback
-            isLoading={userData.isLoading}
+            isLoading={user.isLoading}
             loadingComponent={<Skeleton className="w-full h-8" />}
           >
-            <h3 className="flex-1 text-center p-2">{userData.data?.name}</h3>
+            <Link
+              to="/user"
+              className="flex-1 p-2 hover:underline cursor-pointer transition-all duration-300"
+            >
+              <h3 className="text-center">{user.data?.name}</h3>
+            </Link>
           </Fallback>
           <AdminConditional>
             <Badge

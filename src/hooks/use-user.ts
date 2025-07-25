@@ -11,9 +11,10 @@ export const useUser = () => {
   });
 
   return {
-    isLoading: userQuery.isLoading,
-    isError: userQuery.isError,
-    isSuccess: userQuery.isSuccess,
-    data: userQuery.data,
+    user: {
+      isLoading: userQuery.isLoading,
+      isError: userQuery.isError,
+      data: userQuery.data,
+    },
   };
 };

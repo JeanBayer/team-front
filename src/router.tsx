@@ -22,6 +22,7 @@ import { RequestResetPage } from "./auth/request-reset/request-reset-page";
 import { ResetUserPage } from "./auth/reset-user/reset-user-page";
 import { EditRetroPage } from "./retros/:retroId/edit/retro-edit-page";
 import { EditTeamPage } from "./teams/:teamId/edit/edit-team-page";
+import { UserPage } from "./user/user-page";
 
 export const router = createBrowserRouter([
   {
@@ -137,6 +138,10 @@ export const router = createBrowserRouter([
             element: <JoinTeamPage />,
           },
         ],
+      },
+      {
+        path: "/user",
+        element: <UserPage />,
       },
     ],
   },

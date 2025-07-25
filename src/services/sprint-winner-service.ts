@@ -1,5 +1,6 @@
 import { instance } from "@/api/api";
 import type { VoteSprintWinner, VoteStatus } from "@/types/sprint-winner";
+import { AxiosError } from "axios";
 
 export class SprintWinnerService {
   static async voteWinner(
@@ -14,8 +15,9 @@ export class SprintWinnerService {
       );
       return data;
     } catch (error) {
-      console.error("voteWinner error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
 
@@ -26,20 +28,9 @@ export class SprintWinnerService {
       );
       return data;
     } catch (error) {
-      console.error("getVoteStatus error", error);
-      throw new Error("error");
+      if (error instanceof AxiosError)
+        throw new Error(error.response?.data.message);
+      throw new Error("Error inesperado");
     }
   }
-
-  // static async getRetrospective(teamId: string, retroId: string) {
-  //   try {
-  //     const { data } = await instance.get<Retrospective>(
-  //       `/teams/${teamId}/retrospectives/${retroId}`
-  //     );
-  //     return data;
-  //   } catch (error) {
-  //     console.error("getRetrospective error", error);
-  //     throw new Error("error");
-  //   }
-  // }
 }

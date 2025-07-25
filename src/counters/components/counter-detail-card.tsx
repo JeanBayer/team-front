@@ -19,7 +19,7 @@ export const CounterDetailCard = ({
   handleCounterIncrement,
 }: CounterDetailCardProps) => {
   return (
-    <Card className="w-xs min-h-52 hover:shadow-lg hover:border-blue-300 transition-all duration-300 ">
+    <Card className="w-xs min-h-52 hover:shadow-lg hover:border-blue-300 transition-all duration-300">
       <CardHeader className="flex-1">
         <CardTitle className="text-center text-lg font-semibold text-blue-500 line-clamp-3">
           <h3>{counter?.name}</h3>

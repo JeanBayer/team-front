@@ -6,3 +6,7 @@ export interface User {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface UpdateUser extends Partial<Pick<User, "name">> {
+  password?: string;
+}
